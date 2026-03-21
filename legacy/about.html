@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About AiPDF Search</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            background: linear-gradient(to bottom, #0f172a, #1e293b, #000);
+        }
+    </style>
+
+
+
+</head>
+<body class="min-h-screen text-slate-100">
+
+
+<div class="max-w-3xl mx-auto px-4 py-10">
+
+    <header class="mb-8 flex items-center justify-between">
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">
+            About <span class="text-lime-400">AiPDF</span> Renamer&Search
+        </h1>
+
+        <a href="index.php"
+           class="text-sm text-cyan-400 hover:text-cyan-300 underline">
+            Back to AiPDF Renamer
+        </a>
+    </header>
+    <!--About AiPDF Combined Functionality -->
+    <div class="bg-slate-900/80 border border-slate-700 rounded-xl shadow-xl p-8 mb-6">
+        <h2 class="text-2xl font-semibold mb-4">
+            Idea Behind <span class="text-lime-400">AiPDF</span> Renamer & Search
+        </h2>
+
+        <p class="text-slate-300 leading-relaxed mb-4">
+            Are you a Graduate students, postdocs, or Professors drowning in thousands of poorly named research paper PDFs? Look no further, the AiPDF Rename&Search web app is here to help.
+        </p>
+
+        <p class="text-slate-300 leading-relaxed mb-4">
+            AiPDF consist of two cooperating tools: a standalone Ai PDF Renamer (no-login required)
+            and a  Library&Search environment (log-in required). The idea is to support researchers PhD 
+            students and professors) who manage large personal collections of PDFs downloaded from journals, ArXiv,
+            and conferences, where filenames are often inconsistent, cryptic, or missing
+            metadata. Whith auto-download names like 1-s2.0-S0012821X18307103-main.pdf being common.
+        </p>
+
+        <p class="text-slate-300 leading-relaxed mb-4">
+            <span class="text-lime-400 font-semibold">Part 1: AiPDF Renamer</span> is used as a preprocessing step. It helps you generate
+            clean, structured filenames that encode key citation information such as
+            publication year, lead author surname, shortened title, and venue. These
+            renamed files can be saved back to your local machine with a consistent name.
+        </p>
+
+        <p class="text-slate-300 leading-relaxed mb-4">
+            <span class="text-lime-400 font-semibold">Part 2: AiPDF Library&Search</span> is where those curated PDFs are uploaded into a
+            database under a personal login. Once stored, they can be searched in two ways:
+            via standard string matching on filenames, or using an AI-based embedding
+            vector search that ranks documents by semantic similarity to a query. 
+        </p>
+
+        <p class="text-slate-300 leading-relaxed"></p>
+            Together, the two parts provide a full Ai enhanced PDF managing workflow: first tidy and standardize filenames,
+            then store and retrieve them using both exact and semantic search. The described in more detail below.
+        </p>
+    </div>
+
+    <!-- License Files -->
+    <div class="bg-slate-900/80 border border-slate-700 rounded-xl shadow-xl p-8 mb-6">
+        <h2 class="text-2xl font-semibold mb-4">
+            Required LLM License Files Setup
+        </h2>
+
+        <p class="text-slate-300 leading-relaxed mb-4">
+            To run the AiPDF web application, you will need to provide two small text-based
+            license files. These files simply contain your OpenAI API Base URL, API Key,
+            and the model name. You will manually create these files on your computer. We cannot provide downloads text files are blocked by the web host. Make sure use correct file format for different parts of the web application. They are not the same!
+        </p>
+
+        <p class="text-slate-300 leading-relaxed font-semibold mb-2">
+            File 1 — PDF Renamer:
+            <span class="text-cyan-300">chatgpt_license.txt</span>
+        </p>
+
+    <pre class="bg-slate-800 text-cyan-300 p-4 rounded-lg text-sm overflow-x-auto mb-6">
+    API_BASE_URL=https://api.openai.com/v1/chat/completions
+    API_KEY=sk-xxxxx-your-key-here
+    MODEL=gpt-4o-mini
+    </pre>
+
+        <p class="text-slate-300 leading-relaxed font-semibold mb-2">
+            File 2 — PDF Library & Embedding Search:
+            <span class="text-cyan-300">chatgpt_license_embeddings.txt</span>
+        </p>
+
+    <pre class="bg-slate-800 text-cyan-300 p-4 rounded-lg text-sm overflow-x-auto mb-6">
+    API_BASE_URL=https://api.openai.com/v1/embeddings
+    API_KEY=sk-xxxxx-your-key-here
+    MODEL=text-embedding-3-large
+    </pre>
+
+        <p class="text-slate-300 leading-relaxed mb-4">
+            Create each file using Notepad or any plain-text editor and select them when the web app asks for it. The text file name does not matter but file content does. When the application asks you to upload
+            a license file, choose the one appropriate for that part of the system. Important note: Since TinkerHost does not support HTTPS on free accounts,
+            please delete your API keys after use for security.
+        </p>
+
+
+        <p class="text-slate-300 leading-relaxed mb-4">
+            To create an OpenAI API key, visit: 
+            <a href="https://platform.openai.com/api-keys" class="text-cyan-300 hover:underline">
+                https://platform.openai.com/api-keys
+            </a>
+            (be sure to load at least $5 in credit to enable API usage. In some regions, OpenAI provides $10 of free credit, but this is not guaranteed. Each query typically costs less than 0.1 cents). For testing purposes the developers can provide temporary test API keys upon request 
+            (<span class="text-cyan-300">rkruger@iastate.edu</span> or 
+            <span class="text-cyan-300">gnelson2@iastate.edu</span>). 
+        </p>
+    </div>
+
+
+
+
+    <!-- About AiPDF Renamer -->
+    <div class="bg-slate-900/80 border border-slate-700 rounded-xl shadow-xl p-8 mb-6">
+        <h2 class="text-2xl font-semibold mb-4">
+            Part 1: About <span class="text-lime-400">Ai</span> PDF Renamer
+        </h2>
+
+        <p class="text-slate-300 leading-relaxed mb-4">
+            AiPDF Renamer is a PHP tool that standardizes research PDF filenames using metadata extracted
+            from the first page. The tool is configured with a small license file: the user uploads a text file
+            containing API_BASE_URL, API_KEY, and MODEL on separate lines. A single POST handler reads these
+            values, stores them in session variables, and uses resolve_completions_url() to form the final
+            chat-completion endpoint. Resetting the session clears all stored credentials.
+        </p>
+
+        <p class="text-slate-300 leading-relaxed mb-4">
+            After the API settings are loaded, the workflow is as follows: The user uploads a PDF either through
+            a normal PHP POST upload or the drag-and-drop interface. PDF.js runs in the browser and renders the first
+            page into a base64 PNG, one high-resolution version for the model and a smaller one for preview. Both the
+            image and any manual metadata edits are sent back to index.php, where the POST handler stores the PDF in
+            $_SESSION['pdf_data'] and the current metadata fields in $_SESSION['extracted'].
+        </p>
+
+        <p class="text-slate-300 leading-relaxed mb-4">
+            Pressing “Extract” triggers a server-side call to the configured vision-enabled model. PHP sends the
+            base64 image along with a strict JSON schema prompt using file_get_contents, receives the model’s JSON
+            response, and updates the metadata fields. When downloading, the server reads $_SESSION['pdf_data'],
+            constructs the filename using either the edited pdf_filename or a stem produced by
+            build_filename_stem/build_filename, and streams the file back to the browser with the proper headers.
+        </p>
+
+        <p class="text-slate-300 leading-relaxed">
+            All renaming logic happens entirely on the server. JavaScript is used only for PDF rendering and
+            drag-and-drop; all API calls, validation, and filename-safety rules are handled in PHP.
+        </p>
+    </div>
+
+<!-- Combined Features: AiPDF Library&Search -->
+<div class="bg-slate-900/80 border border-slate-700 rounded-xl shadow-xl p-8 mb-6">
+    <h2 class="text-2xl font-semibold mb-4">
+            Part 2: About <span class="text-lime-400">Ai</span> PDF Library&Search
+    </h2>
+
+    <div class="space-y-8">
+
+        <!-- Subfeature 1: User Accounts & Authentication -->
+        <div>
+            <h3 class="text-xl font-semibold mb-3">
+                Feature 1: User Accounts & Authentication
+            </h3>
+
+            <p class="text-slate-300 leading-relaxed mb-4">
+                The user account and authentication system was built using PHP, MySQL, HTML, and Tailwind CSS.
+                The goal was to create a simple system where users could create an account or log in, and then
+                upload and manage their own PDF files privately. Development began by creating the authentication
+                system in login.php, along with the database logic for user accounts inside
+                db.php. User passwords are hashed for security, and PHP sessions are used to keep
+                users logged in as they move between pages.
+            </p>
+
+            <p class="text-slate-300 leading-relaxed">
+                Finally, logout.php clears the user’s session and returns them to the login page. Together, these
+                components provide a basic but robust separation between users, ensuring that each person only
+                has access to their own private PDF library.
+            </p>
+        </div>
+
+        <hr class="border-slate-700">
+
+        <!-- Subfeature 2: PDF Library & Search (text matching) -->
+        <div>
+            <h3 class="text-xl font-semibold mb-3">
+                Feature 2: PDF Library & Search (sql table insertion/delete and basic exact text matching search)
+            </h3>
+
+            <p class="text-slate-300 leading-relaxed mb-4">
+                The PDF Library & standard string search portion of this project was developed using PHP, MySQL, HTML, and Tailwind CSS.
+                Once the login system was working, the next focus was building the main dashboard in
+                test.php. This page allows logged-in users to upload, search, download, and delete
+                their PDFs. File uploads originally supported just one PDF at a time, but the design was later
+                expanded to support bulk uploading using a simple for loop that processes each file
+                one by one. Uploaded PDFs are stored directly in the database inside the pdf_files
+                table along with the user’s ID so that each file remains private to the one that uploads it.
+            </p>
+
+            <p class="text-slate-300 leading-relaxed mb-4">
+                In test.php, the initial search functionality used simple
+                string text matching, requiring the exact filename match before returning the PDF. This was eventually
+                replaced with a vector-based search system, allowing users to find PDFs based on
+                semantic similarity instead of string text matching. With this approach, users can enter keywords
+                or partial text, and the system can still identify relevant PDFs, even when filenames do not
+                match exactly. This change made searching feel much more natural and useful.
+            </p>
+
+            <p class="text-slate-300 leading-relaxed">
+                Additional features were split into their own files to keep the project organized. The file
+                download.php is responsible for securely sending PDFs back to the user when they
+                click “Download”, while delete_pdf.php handles removing a file from the database
+                after checking that it belongs to the logged-in user. Throughout the project, Tailwind CSS was used to
+                style each page, keeping the interface clean, modern, and consistent without adding unnecessary
+                complexity.
+            </p>
+        </div>
+
+        <hr class="border-slate-700">
+
+        <!-- Subfeature 3: AI Embedding Vector Search -->
+        <div>
+            <h3 class="text-xl font-semibold mb-3">
+                Feature 3: <span class="text-lime-400">Ai</span> PDF Embedding Vector Search
+            </h3>
+
+            <p class="text-slate-300 leading-relaxed mb-4">
+                Feature 3 adds an embedding-based search option on top of the normal filename search.
+                Instead of comparing text strings, AiPDF converts both the search query and each PDF filename
+                into numeric vectors. Files whose vectors point in a similar direction are treated as more relevant.
+            </p>
+
+            <p class="text-slate-300 leading-relaxed mb-4">
+                The embedding API is configured through the same license-file used in Part 1, just with a different
+                endpoint and an embedding model. These settings are read once, stored in the session, and reused for
+                all searches.
+            </p>
+
+            <p class="text-slate-300 leading-relaxed mb-4">
+                When a search is submitted, AiPDFsearchPage.php checks whether the user selected “string” or “vector”
+                mode. For vector mode, it loads all filenames for the current user, obtains an embedding for the query,
+                and compares it against an embedding for each filename. The Top-K most similar filenames are returned
+                first.
+            </p>
+
+            <p class="text-slate-300 leading-relaxed">
+                The scoring logic comes from embeddings_helper.php. get_embedding_vector sends a minimal JSON request
+                to the embedding model and returns a vector. cosine_similarity computes similarity using a single pass
+                through both vectors. semantic_search_filenames embeds the query, embeds each filename (after removing
+                .pdf), scores them, sorts the list, and returns the top matches. At the moment this is brute-force and
+                recomputes everything on each query; a future version may cache embeddings in the database.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+</html>

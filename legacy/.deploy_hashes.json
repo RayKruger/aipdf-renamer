@@ -1,0 +1,13 @@
+{
+  "about.html": "7613b897f52089f4c5edc5030d61ae98",
+  "AiPDFsearchPage.php": "b49f700a361ddd351f3dee686ee0fa5e",
+  "auto_deploy_on_server_ftp.bat": "1d69b7a36047202523e594912e41b0b1",
+  "db.php": "6b09ac6cbf96bf712a0dd7cbc4932802",
+  "delete_pdf.php": "d6efac2723b8437197958043b2172dd4",
+  "download.php": "c2018141a61af4e0f41591ef485ad099",
+  "embeddings_helper.php": "ddc37bbef9225a45e3176bff48b4f211",
+  "index.php": "923d077b571ecf70a061f1283727c886",
+  "login.php": "d55b98abe7c0277f48b737ac1ed1ad28",
+  "logout.php": "ce188482fce683dfabb41783c3587159",
+  "start_local_php_server.bat": "caf7334efa662d45f3b42c1d86c6c8a1"
+}

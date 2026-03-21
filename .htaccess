@@ -1,0 +1,6 @@
+AddType text/plain .txt
+AddType application/octet-stream .txt
+<FilesMatch "\.txt$">
+    ForceType application/octet-stream
+    Header set Content-Disposition attachment
+</FilesMatch>
