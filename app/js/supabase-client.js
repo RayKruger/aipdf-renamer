@@ -1,6 +1,6 @@
 // Supabase initialization (assuming script loaded via CDN)
-const SUPABASE_URL = "https://jgwzhmbqpyozejfoqhmg.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_z6HhLEDqqxsUoCa-QZOUDg_ujSZWTBf";
+const SUPABASE_URL = "https://igfhwaijhwvknllhdgyk.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_CcepDJdXIA5Gw0891FVemw_i4AGgbtB";
 
 // Initialize the Supabase client
 // Note: When using the CDN script, 'supabase' is the global object
