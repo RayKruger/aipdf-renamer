@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Renamer | AiPDF</title>
+    <title>AiPDF Renamer</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- PDF.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        window.pdfjsLib = window['pdfjs-dist/build/pdf'];
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
     
     <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -18,53 +22,77 @@
     <link rel="stylesheet" href="css/style.css">
     
     <style>
+        body {
+            background: linear-gradient(to bottom, #0f172a, #1e293b, #000);
+        }
+        .glass {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
         .drop-zone {
-            border: 2px dashed #334155;
             transition: all 0.3s ease;
         }
         .drop-zone.dragover {
             border-color: #22d3ee;
             background: rgba(34, 211, 238, 0.05);
+            filter: brightness(1.25);
         }
         canvas {
             max-width: 100%;
             height: auto;
-            border-radius: 8px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+        /* Match legacy input styles */
+        input, textarea {
+            background: rgba(17, 24, 39, 0.6) !important;
+            border: 1px solid #374151 !important;
+        }
+        input:focus, textarea:focus {
+            border-color: #22d3ee !important;
+            ring: 2px rgba(34, 211, 238, 0.5);
         }
     </style>
 </head>
-<body class="text-slate-100 min-h-screen bg-slate-950">
+<body class="font-sans text-gray-100 min-h-screen">
 
-    <!-- Navbar -->
-    <nav class="glass border-b border-slate-700/50 px-6 py-4 mb-8">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <a href="index.html" class="text-xl font-extrabold tracking-tight flex items-center gap-2">
-                <span class="text-lime-400">AiPDF</span>
-                <span class="text-white">Renamer</span>
-            </a>
+    <!-- Navbar/Header (Legacy Look) -->
+    <header class="w-full pt-10 pb-6">
+        <div class="max-w-6xl mx-auto px-4 flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-100 flex items-center gap-3">
+                    <span class="text-lime-400">AiPDF</span>
+                    <span class="text-white">Renamer</span>
+                </h1>
+                <p class="text-gray-300 text-sm mt-1">
+                    AI-powered PDF renamer and bibliography extraction
+                </p>
+            </div>
             
-            <div class="flex items-center gap-4 text-sm">
-                <span id="user-email" class="text-slate-400 font-medium"></span>
-                <button id="logout-btn" class="text-rose-400 hover:text-rose-300 font-semibold px-3 py-1 rounded-lg hover:bg-rose-500/10 transition">
-                    Logout
-                </button>
+            <div class="flex items-center gap-5">
+                <div class="flex items-center gap-3 text-sm border-r border-slate-700 pr-5">
+                    <span id="user-email" class="text-slate-400 font-medium"></span>
+                    <button id="logout-btn" class="text-rose-400 hover:text-rose-300 font-semibold transition">
+                        Logout
+                    </button>
+                </div>
+                <a href="index.html" class="text-gray-300 hover:text-white transition text-sm">About</a>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <main class="max-w-6xl mx-auto px-6 pb-20 fade-in">
+    <main class="max-w-6xl mx-auto px-4 space-y-10 pb-20">
         
-        <!-- API Config Card -->
-        <section class="mb-8">
-            <details class="glass rounded-2xl overflow-hidden group">
+        <!-- API Config (Dropdown Kept As Is) -->
+        <section>
+            <details class="bg-slate-900/60 border border-slate-700 rounded-2xl shadow-xl overflow-hidden group">
                 <summary class="p-6 cursor-pointer flex items-center justify-between hover:bg-slate-800/30 transition">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center text-cyan-400">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
                         </div>
                         <div>
-                            <h2 class="font-bold">LLM API Configuration</h2>
+                            <h2 class="font-bold text-white">LLM API Configuration</h2>
                             <p class="text-xs text-slate-500">Set your API endpoint and keys (saved locally)</p>
                         </div>
                     </div>
@@ -74,15 +102,15 @@
                 <div class="p-6 border-t border-slate-800/50 bg-slate-900/30 grid md:grid-cols-3 gap-4">
                     <div class="space-y-1">
                         <label class="text-[10px] font-bold text-slate-500 uppercase">API Base URL</label>
-                        <input id="api-base" type="text" placeholder="https://api.openai.com/v1" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-500 transition">
+                        <input id="api-base" type="text" placeholder="https://api.openai.com/v1" class="w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition">
                     </div>
                     <div class="space-y-1">
                         <label class="text-[10px] font-bold text-slate-500 uppercase">Model ID</label>
-                        <input id="api-model" type="text" placeholder="gpt-4o-mini" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-500 transition">
+                        <input id="api-model" type="text" placeholder="gpt-4o-mini" class="w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition">
                     </div>
                     <div class="space-y-1">
                         <label class="text-[10px] font-bold text-slate-500 uppercase">API Key</label>
-                        <input id="api-key" type="password" placeholder="sk-..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-500 transition">
+                        <input id="api-key" type="password" placeholder="sk-..." class="w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition">
                     </div>
                     <div class="md:col-span-3 flex justify-end gap-3 mt-2">
                          <button id="clear-api" class="text-xs text-slate-500 hover:text-rose-400">Clear Saved</button>
@@ -92,86 +120,93 @@
             </details>
         </section>
 
-        <div class="grid lg:grid-cols-2 gap-8 items-start">
+        <!-- Main Tool (Legacy Look) -->
+        <div class="bg-slate-900/60 border border-slate-700 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
             
-            <!-- Left Column: PDF Drop & Preview -->
-            <div class="space-y-6">
-                <div id="drop-zone" class="drop-zone h-64 rounded-3xl flex flex-col items-center justify-center text-center p-8 bg-slate-900/40 cursor-pointer">
-                    <div class="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center mb-4 text-slate-400 group-hover:bg-cyan-500/20 transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
-                    </div>
-                    <h3 class="font-bold text-lg">Drop your research paper here</h3>
-                    <p class="text-slate-500 text-sm mt-1">Or click to browse files (PDF only)</p>
-                    <input type="file" id="pdf-input" class="hidden" accept="application/pdf">
-                </div>
-
-                <div id="preview-container" class="hidden glass p-6 rounded-3xl animate-fadeIn">
-                    <h3 class="text-xs font-bold text-slate-500 uppercase mb-4 tracking-widest">Document Preview</h3>
-                    <div id="pdf-canvas-wrapper" class="flex justify-center bg-slate-950 p-4 rounded-xl border border-slate-800">
-                        <canvas id="pdf-canvas"></canvas>
-                    </div>
-                </div>
+            <!-- DROP ZONE -->
+            <div id="drop-zone" class="drop-zone p-10 w-full block text-center rounded-xl cursor-pointer bg-gray-900/40 border-2 border-dashed border-[#58b9d9] hover:bg-gray-800/40 hover:border-cyan-300">
+                <div class="font-medium text-white mb-1">Drag & Drop your PDF here</div>
+                <div class="text-xs text-gray-500">...or click to choose a file</div>
+                <input id="pdf-input" type="file" accept="application/pdf" class="hidden" />
             </div>
 
-            <!-- Right Column: Metadata & Rename -->
-            <div id="editor-container" class="hidden space-y-6 animate-fadeIn">
-                <div class="glass p-8 rounded-3xl space-y-6">
-                    <div class="flex items-center justify-between">
-                         <h2 class="text-xl font-bold">Extracted Metadata</h2>
-                         <button id="extract-btn" class="bg-lime-500 hover:bg-lime-400 text-slate-900 text-xs font-extrabold px-4 py-2 rounded-lg transition-transform hover:scale-105">
-                            Extract with AI
-                         </button>
+            <!-- PREVIEW + FIELDS GRID -->
+            <div class="grid grid-cols-1 md:grid-cols-[270px,1fr] gap-10 mt-8">
+                <!-- Preview -->
+                <div class="space-y-2">
+                    <div class="text-xs font-bold text-gray-300 uppercase tracking-widest">PDF Preview (First Page)</div>
+                    <div class="w-[270px] min-h-[390px] flex items-center justify-center bg-gray-800/60 border border-gray-700 rounded-lg overflow-hidden p-2">
+                        <canvas id="pdf-canvas"></canvas>
+                        <span id="preview-placeholder" class="text-[10px] text-gray-500">Waiting for PDF…</span>
+                    </div>
+                </div>
+
+                <!-- Fields -->
+                <div class="space-y-4">
+                    <div class="text-sm text-gray-300 mb-2">
+                        <span class="font-bold text-lime-400">Ai Extracted</span> Metadata (you may edit manually)
                     </div>
 
-                    <div class="space-y-4">
+                    <div class="grid grid-cols-1 gap-4 text-xs">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Year</label>
-                                <input id="meta-year" type="text" placeholder="2024" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-cyan-500 outline-none">
+                                <label class="text-gray-400 font-bold block mb-1">Year:</label>
+                                <input id="meta-year" type="text" placeholder="2024" class="w-full px-3 py-2 rounded focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Author</label>
-                                <input id="meta-author" type="text" placeholder="Kruger" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-cyan-500 outline-none">
+                                <label class="text-gray-400 font-bold block mb-1">Lead Author (Surname):</label>
+                                <input id="meta-author" type="text" placeholder="Author" class="w-full px-3 py-2 rounded focus:outline-none">
                             </div>
                         </div>
+                        
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Publication Venue</label>
-                            <input id="meta-venue" type="text" placeholder="Nature Communications" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-cyan-500 outline-none">
+                            <label class="text-gray-400 font-bold block mb-1">Journal / Venue:</label>
+                            <input id="meta-venue" type="text" placeholder="Nature" class="w-full px-3 py-2 rounded focus:outline-none">
                         </div>
+
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Full Title</label>
-                            <textarea id="meta-title" rows="3" placeholder="Enter the paper title..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-cyan-500 outline-none resize-none"></textarea>
+                            <label class="text-gray-400 font-bold block mb-1">Title (full):</label>
+                            <textarea id="meta-title" rows="2" placeholder="Full title of the paper..." class="w-full px-3 py-2 rounded focus:outline-none resize-none"></textarea>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-800">
+                            <label class="text-lime-400 font-bold block mb-1 uppercase tracking-tight">Proposed Ai File Name:</label>
+                            <div id="preview-filename" class="w-full px-3 py-3 rounded font-mono bg-black/40 border border-lime-400/30 text-lime-400 break-all min-h-[44px] flex items-center">
+                                ...waiting for input
+                            </div>
                         </div>
                     </div>
-
-                    <div class="pt-6 border-t border-slate-800">
-                        <label class="block text-[10px] font-bold text-lime-400 uppercase mb-2 tracking-widest">Resulting Filename</label>
-                        <div id="preview-filename" class="bg-black/40 p-4 rounded-xl border border-lime-400/30 text-lime-400 font-mono text-sm break-all">
-                            ...waiting for input
-                        </div>
-                    </div>
-
-                    <button id="download-btn" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-4 rounded-2xl transition hover:shadow-cyan-500/20 shadow-lg flex items-center justify-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                        Download Renamed PDF
-                    </button>
                 </div>
             </div>
 
+            <!-- BUTTONS (Legacy Colors) -->
+            <div class="flex flex-wrap gap-4 pt-6 border-t border-slate-800">
+                <button id="extract-btn" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold shadow-lg transition transform hover:scale-105">
+                    Extract Fields
+                </button>
+
+                <button id="download-btn" class="px-6 py-2.5 bg-green-600 hover:bg-green-500 text-white rounded-lg font-bold shadow-lg transition transform hover:scale-105">
+                    Download Renamed PDF
+                </button>
+
+                <button id="clear-btn" class="px-6 py-2.5 bg-red-600 hover:bg-red-500 text-white rounded-lg font-bold shadow-lg transition transform hover:scale-105">
+                    Clear All
+                </button>
+            </div>
+
+            <!-- RAW OUTPUT -->
+            <div class="mt-8">
+                <div class="text-xs text-cyan-300 mb-2 font-bold uppercase tracking-widest">Raw Model Response</div>
+                <textarea id="raw-log" rows="4" readonly class="w-full text-[11px] px-3 py-2 rounded font-mono text-gray-400 resize-none"></textarea>
+            </div>
         </div>
-    <!-- Footer -->
-    <footer class="py-12 px-6 border-t border-slate-800 bg-slate-950 mt-20">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden">
-            <div class="flex flex-col items-center md:items-start">
-                 <h1 class="text-xl font-extrabold tracking-tight flex items-center gap-2 mb-2">
-                    <span class="text-lime-400">AiPDF</span>
-                    <span class="text-white">Renamer</span>
-                </h1>
-                <p class="text-slate-500 text-xs">© Designed & Built by Ray Kruger</p>
-            </div>
-            <div class="text-slate-500 text-xs text-center md:text-right">
-                HTML • JS • Tailwind CSS • Supabase • Vercel
-            </div>
+    </main>
+
+    <!-- Footer (Legacy Look) -->
+    <footer class="w-full px-5 py-6 bg-slate-900/40 border-t border-slate-800 mt-auto">
+        <div class="max-w-6xl mx-auto flex flex-col items-center justify-center space-y-1 text-gray-400 text-xs">
+            <p>© Designed & Built by Ray Kruger</p>
+            <p>HTML • JS • Tailwind CSS • Supabase • Vercel ⚡⚡</p>
         </div>
     </footer>
 
