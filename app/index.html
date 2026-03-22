@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AiPDF Renamer | Professional Research PDF Management</title>
-    
+
     <!-- Meta Tags for SEO -->
-    <meta name="description" content="AiPDF Renamer uses AI to automatically extract metadata and rename your research paper PDFs with a professional, consistent format.">
-    
+    <meta name="description"
+        content="AiPDF Renamer uses AI to automatically extract metadata and rename your research paper PDFs with a professional, consistent format.">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
+
     <!-- Custom Styles -->
     <link rel="stylesheet" href="css/style.css">
 
@@ -24,6 +26,7 @@
         }
     </style>
 </head>
+
 <body class="text-slate-100 overflow-x-hidden">
 
     <!-- Navbar -->
@@ -33,11 +36,17 @@
                 <span class="text-lime-400">AiPDF</span>
                 <span class="text-white">Renamer</span>
             </h1>
-            
+
             <div class="flex items-center gap-6">
-                <button id="auth-btn" class="bg-slate-800 border border-slate-700 hover:bg-slate-700 text-white font-semibold py-2 px-6 rounded-full transition-all flex items-center gap-2">
+                <button id="auth-btn"
+                    class="bg-slate-800 border border-slate-700 hover:bg-slate-700 text-white font-semibold py-2 px-6 rounded-full transition-all flex items-center gap-2">
                     Login
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                        <polyline points="10 17 15 12 10 7" />
+                        <line x1="15" y1="12" x2="3" y2="12" />
+                    </svg>
                 </button>
             </div>
         </div>
@@ -52,58 +61,68 @@
                 <span class="text-lime-400">Correctly. Precisely. With AI.</span>
             </h2>
             <p class="text-xl text-slate-400 mb-4 max-w-2xl mx-auto leading-relaxed">
-                Tired of <code class="bg-slate-800 px-2 py-0.5 rounded text-slate-300">1-s2.0-main.pdf</code>? 
+                Tired of <code class="bg-slate-800 px-2 py-0.5 rounded text-slate-300">1-s2.0-main.pdf</code>?
                 Use AI to extract metadata and generate consistent, professional filenames in seconds.
             </p>
             <p class="text-xs text-slate-500 mb-10 font-medium tracking-wide">
-                <span class="text-cyan-400">Bring your own API key:</span> OpenAI (ChatGPT), Claude, Google Gemini, and more.
+                <span class="text-cyan-400">Bring your own API key:</span> OpenAI (ChatGPT), Claude, Google Gemini, and
+                more.
             </p>
-            
+
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="renamer.html" class="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-4 px-10 rounded-full text-lg shadow-lg hover:shadow-cyan-500/20 transition-all flex items-center gap-2">
+                <a href="renamer.html"
+                    class="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-4 px-10 rounded-full text-lg shadow-lg hover:shadow-cyan-500/20 transition-all flex items-center gap-2">
                     Try the Renamer →
                 </a>
-                <button onclick="document.getElementById('how-it-works').scrollIntoView({behavior: 'smooth'})" class="text-slate-400 hover:text-white font-medium py-4 px-8 transition-colors">
+                <button onclick="document.getElementById('how-it-works').scrollIntoView({behavior: 'smooth'})"
+                    class="text-slate-400 hover:text-white font-medium py-4 px-8 transition-colors">
                     See How It Works
                 </button>
             </div>
         </div>
-        
+
         <!-- Animated visual element (CSS circles) -->
         <div class="absolute -z-10 w-full h-full top-0 left-0 overflow-hidden pointer-events-none">
-            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px] animate-pulse"></div>
-            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-lime-400/10 rounded-full blur-[120px] animate-pulse" style="animation-delay: 1s"></div>
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px] animate-pulse">
+            </div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-lime-400/10 rounded-full blur-[120px] animate-pulse"
+                style="animation-delay: 1s"></div>
         </div>
     </main>
 
     <!-- How It Works Section -->
     <section id="how-it-works" class="py-24 px-6 bg-slate-950">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-3xl font-bold text-center mb-16 font-brand">How <span class="text-lime-400">AiPDF</span> Works</h2>
-            
+            <h2 class="text-3xl font-bold text-center mb-16 font-brand">How <span class="text-lime-400">AiPDF</span>
+                Works</h2>
+
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <!-- Step 1 -->
                 <div class="glass p-8 rounded-3xl relative overflow-hidden group">
-                    <div class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mb-6 group-hover:bg-cyan-500 transition-colors">
+                    <div
+                        class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mb-6 group-hover:bg-cyan-500 transition-colors">
                         <span class="text-xl font-bold text-white">1</span>
                     </div>
                     <h3 class="text-xl font-bold mb-4 text-white">Upload PDF</h3>
                     <p class="text-slate-400 text-sm mb-6 leading-relaxed">
                         Drag your poorly named PDF into the dropzone. We support IEEE, Nature, Science, and more.
                     </p>
-                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-700 font-mono text-[11px] text-slate-500 italic overflow-hidden text-ellipsis whitespace-nowrap">
+                    <div
+                        class="bg-slate-900/80 p-4 rounded-xl border border-slate-700 font-mono text-[11px] text-slate-500 italic overflow-hidden text-ellipsis whitespace-nowrap">
                         1-s2.0-S0012821X183071..pdf
                     </div>
                 </div>
 
                 <!-- Step 2 -->
                 <div class="glass p-8 rounded-3xl relative overflow-hidden group border-lime-400/10">
-                    <div class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mb-6 group-hover:bg-lime-400 transition-colors">
+                    <div
+                        class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mb-6 group-hover:bg-lime-400 transition-colors">
                         <span class="text-xl font-bold text-white">2</span>
                     </div>
                     <h3 class="text-xl font-bold mb-4 text-white">Add API Key</h3>
                     <p class="text-slate-400 text-sm mb-6 leading-relaxed">
-                        Bring your own key (OpenAI, Claude, or Gemini). Your keys stay in your browser and are never stored on our servers.
+                        Bring your own key (OpenAI, Claude, or Gemini). Your keys stay in your browser and are never
+                        stored on our servers.
                     </p>
                     <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-700/50 flex items-center gap-2">
                         <div class="w-2 h-2 bg-emerald-400/40 rounded-full"></div>
@@ -113,7 +132,8 @@
 
                 <!-- Step 3 -->
                 <div class="glass p-8 rounded-3xl relative overflow-hidden group">
-                    <div class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mb-6 group-hover:bg-cyan-500 transition-colors">
+                    <div
+                        class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mb-6 group-hover:bg-cyan-500 transition-colors">
                         <span class="text-xl font-bold text-white">3</span>
                     </div>
                     <h3 class="text-xl font-bold mb-4 text-white">Ai Extraction</h3>
@@ -134,431 +154,576 @@
 
                 <!-- Step 4 -->
                 <div class="glass p-8 rounded-3xl relative overflow-hidden group">
-                    <div class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mb-6 group-hover:bg-cyan-500 transition-colors text-white">
+                    <div
+                        class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mb-6 group-hover:bg-cyan-500 transition-colors text-white">
                         <span class="text-xl font-bold">4</span>
                     </div>
                     <h3 class="text-xl font-bold mb-4 text-white">Download PDF</h3>
                     <p class="text-slate-400 text-sm mb-6 leading-relaxed">
                         Get a perfectly formatted filename that makes your file explorer a pleasure to browse.
                     </p>
-                    <div class="bg-slate-900/80 p-4 rounded-xl border border-lime-400/50 font-mono text-[11px] text-lime-400">
+                    <div
+                        class="bg-slate-900/80 p-4 rounded-xl border border-lime-400/50 font-mono text-[11px] text-lime-400">
                         2017_Vaswani_Att...pdf
                     </div>
                 </div>
             </div>
         </div>
-    </sectio    <!-- Product Preview Section (Live UI Replica) -->
-    <section class="py-24 px-6 bg-slate-900/10">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold mb-4 font-brand">A <span class="text-cyan-400">Professional</span> Interface</h2>
-                <p class="text-slate-400 max-w-xl mx-auto">Designed for researchers. Clean, efficient, and precise metadata extraction at your fingertips.</p>
-            </div>
-            
-            <!-- Verbatim Replicas of renamer.html components -->
-            <div class="space-y-10 pointer-events-none select-none">
-                
-                <!-- API Config (Verbatim from renamer.html) -->
-                <section>
-                    <details open class="bg-slate-900/60 border border-slate-700 rounded-2xl shadow-xl overflow-hidden group">
-                        <summary class="p-6 cursor-pointer flex items-center justify-between hover:bg-slate-800/30 transition list-none">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center text-cyan-400">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        </sectio <!-- Product Preview Section (Live UI Replica) -->
+        <section class="py-24 px-6 bg-slate-900/10">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-bold mb-4 font-brand">A <span class="text-cyan-400">Professional</span>
+                        Interface</h2>
+                    <p class="text-slate-400 max-w-xl mx-auto">Designed for researchers. Clean, efficient, and precise
+                        metadata extraction at your fingertips.</p>
+                </div>
+
+                <!-- Verbatim Replicas of renamer.html components -->
+                <div class="space-y-10 pointer-events-none select-none">
+
+                    <!-- API Config (Verbatim from renamer.html) -->
+                    <section>
+                        <details open
+                            class="bg-slate-900/60 border border-slate-700 rounded-2xl shadow-xl overflow-hidden group">
+                            <summary
+                                class="p-6 cursor-pointer flex items-center justify-between hover:bg-slate-800/30 transition list-none">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center text-cyan-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path
+                                                d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                                            <circle cx="12" cy="12" r="3" />
+                                        </svg>
+                                    </div>
+                                    <div class="text-left">
+                                        <h2 class="font-bold text-white text-lg">LLM API Configuration</h2>
+                                        <p class="text-xs text-slate-500">Configure multiple providers</p>
+                                    </div>
                                 </div>
-                                <div class="text-left">
-                                    <h2 class="font-bold text-white text-lg">LLM API Configuration</h2>
-                                    <p class="text-xs text-slate-500">Configure multiple providers</p>
-                                </div>
-                            </div>
-                            <svg class="group-open:rotate-180 transition-transform text-slate-500" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-                        </summary>
-                        
-                        <div class="p-6 border-t border-slate-800/50 bg-slate-900/30 space-y-6">
-                            <div class="provider-row grid md:grid-cols-12 gap-4 items-end p-4 bg-slate-800/20 rounded-xl border border-slate-700/50 relative">
-                                <div class="md:col-span-3 space-y-1">
-                                    <label class="text-[10px] font-bold text-slate-500 uppercase">Provider</label>
-                                    <div class="w-full rounded-lg px-3 py-2 text-sm bg-slate-900 border border-slate-700 text-slate-300">OpenAI</div>
-                                </div>
-                                <div class="md:col-span-3 space-y-1">
-                                    <label class="text-[10px] font-bold text-slate-500 uppercase">Model</label>
-                                    <div class="w-full rounded-lg px-3 py-2 text-sm bg-slate-900 border border-slate-700 text-slate-300">gpt-4o-mini</div>
-                                </div>
-                                <div class="md:col-span-4 space-y-1">
-                                    <label class="text-[10px] font-bold text-slate-500 uppercase">API Key</label>
-                                    <div class="w-full rounded-lg px-3 py-2 text-sm bg-slate-900 border border-slate-700 text-slate-500">sk-••••••••••••••••••••••••••••••••</div>
-                                </div>
-                                <div class="md:col-span-1 flex items-center justify-center p-1">
-                                    <div class="flex flex-col items-center gap-1">
-                                        <span class="text-[10px] font-bold text-slate-500 uppercase">Active</span>
-                                        <div class="w-4 h-4 rounded-full border-2 border-cyan-400 bg-cyan-400/20 flex items-center justify-center">
-                                            <div class="w-1.5 h-1.5 rounded-full bg-cyan-400"></div>
+                                <svg class="group-open:rotate-180 transition-transform text-slate-500"
+                                    xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9" />
+                                </svg>
+                            </summary>
+
+                            <div class="p-6 border-t border-slate-800/50 bg-slate-900/30 space-y-6">
+                                <div
+                                    class="provider-row grid md:grid-cols-12 gap-4 items-end p-4 bg-slate-800/20 rounded-xl border border-slate-700/50 relative">
+                                    <div class="md:col-span-3 space-y-1">
+                                        <label class="text-[10px] font-bold text-slate-500 uppercase">Provider</label>
+                                        <div
+                                            class="w-full rounded-lg px-3 py-2 text-sm bg-slate-900 border border-slate-700 text-slate-300">
+                                            OpenAI</div>
+                                    </div>
+                                    <div class="md:col-span-3 space-y-1">
+                                        <label class="text-[10px] font-bold text-slate-500 uppercase">Model</label>
+                                        <div
+                                            class="w-full rounded-lg px-3 py-2 text-sm bg-slate-900 border border-slate-700 text-slate-300">
+                                            gpt-4o-mini</div>
+                                    </div>
+                                    <div class="md:col-span-4 space-y-1">
+                                        <label class="text-[10px] font-bold text-slate-500 uppercase">API Key</label>
+                                        <div
+                                            class="w-full rounded-lg px-3 py-2 text-sm bg-slate-900 border border-slate-700 text-slate-500">
+                                            sk-••••••••••••••••••••••••••••••••</div>
+                                    </div>
+                                    <div class="md:col-span-1 flex items-center justify-center p-1">
+                                        <div class="flex flex-col items-center gap-1">
+                                            <span class="text-[10px] font-bold text-slate-500 uppercase">Active</span>
+                                            <div
+                                                class="w-4 h-4 rounded-full border-2 border-cyan-400 bg-cyan-400/20 flex items-center justify-center">
+                                                <div class="w-1.5 h-1.5 rounded-full bg-cyan-400"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-1 flex justify-end">
+                                        <div class="p-2 text-slate-600">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M3 6h18" />
+                                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                                            </svg>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="md:col-span-1 flex justify-end">
-                                    <div class="p-2 text-slate-600">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                                <div class="flex justify-between items-center pt-2">
+                                    <div class="flex items-center gap-2 text-xs font-bold text-cyan-400/60">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10" />
+                                            <line x1="12" y1="8" x2="12" y2="16" />
+                                            <line x1="8" y1="12" x2="16" y2="12" />
+                                        </svg>
+                                        Add Provider
+                                    </div>
+                                    <div class="flex items-center gap-6">
+                                        <div class="flex items-center gap-2 group">
+                                            <div
+                                                class="w-4 h-4 rounded border border-slate-700 bg-slate-900 flex items-center justify-center text-cyan-400">
+                                                ✓</div>
+                                            <span
+                                                class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Persist
+                                                in Secure Local Storage</span>
+                                        </div>
+                                        <div class="flex gap-3">
+                                            <span class="text-xs text-slate-600">Clear All</span>
+                                            <div
+                                                class="bg-cyan-600/60 text-white text-xs font-bold py-2 px-4 rounded-lg">
+                                                Save Configurations</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex justify-between items-center pt-2">
-                                <div class="flex items-center gap-2 text-xs font-bold text-cyan-400/60">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-                                    Add Provider
-                                </div>
-                                <div class="flex items-center gap-6">
-                                     <div class="flex items-center gap-2 group">
-                                         <div class="w-4 h-4 rounded border border-slate-700 bg-slate-900 flex items-center justify-center text-cyan-400">✓</div>
-                                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Persist in Secure Local Storage</span>
-                                     </div>
-                                     <div class="flex gap-3">
-                                         <span class="text-xs text-slate-600">Clear All</span>
-                                         <div class="bg-cyan-600/60 text-white text-xs font-bold py-2 px-4 rounded-lg">Save Configurations</div>
-                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </details>
-                </section>
+                        </details>
+                    </section>
 
-                <!-- Tool Content (Verbatim from renamer.html) -->
-                <div class="bg-slate-900/60 border border-slate-700 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
-                    
-                    <!-- DROP ZONE -->
-                    <div class="p-10 w-full block text-center rounded-xl bg-gray-900/40 border-2 border-dashed border-[#58b9d9] opacity-80">
-                        <div class="font-medium text-white mb-1">Drag & Drop your PDF here</div>
-                        <div class="text-xs text-gray-500">...or click to choose a file</div>
-                    </div>
+                    <!-- Tool Content (Verbatim from renamer.html) -->
+                    <div class="bg-slate-900/60 border border-slate-700 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
 
-                    <!-- PREVIEW + FIELDS GRID -->
-                    <div class="grid grid-cols-1 md:grid-cols-[450px,1fr] gap-10 mt-8 items-start">
-                        <!-- Preview (Verbatim Layout) -->
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-left">PDF Preview</div>
-                                <div class="flex items-center gap-2">
-                                    <div class="px-3 py-1.5 border-2 border-cyan-400/50 text-cyan-400 text-[10px] font-black uppercase rounded-lg tracking-wider">(Select Page)</div>
-                                    <div class="p-1 rounded bg-slate-800 text-gray-600">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-                                    </div>
-                                    <span class="text-[10px] font-mono text-cyan-400">1/15</span>
-                                    <div class="p-1 rounded bg-slate-800 text-gray-400">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Static PDF Image Wrapper (No border, matching renamer style exactly) -->
-                            <div class="relative w-full h-[650px] flex flex-col items-center justify-center bg-gray-900/60 border border-gray-700 rounded-lg overflow-hidden">
-                                <embed src="Atttention_is all_you_need_1page.pdf" type="application/pdf" class="w-full h-full" />
-                                <div class="absolute bottom-0 left-0 right-0 bg-cyan-900/80 backdrop-blur-sm py-1.5 px-3 text-center border-t border-cyan-400/30">
-                                    <span class="text-[9px] font-bold text-cyan-100 italic uppercase">Page displayed will be used for extraction</span>
-                                </div>
-                            </div>
+                        <!-- DROP ZONE -->
+                        <div
+                            class="p-10 w-full block text-center rounded-xl bg-gray-900/40 border-2 border-dashed border-[#58b9d9] opacity-80">
+                            <div class="font-medium text-white mb-1">Drag & Drop your PDF here</div>
+                            <div class="text-xs text-gray-500">...or click to choose a file</div>
                         </div>
 
-                        <!-- Fields (Verbatim with Real Data) -->
-                        <div class="space-y-4 text-left">
-                            <div class="text-sm text-gray-300 mb-2">
-                                <span class="font-bold text-lime-400">Ai Extracted</span> Metadata (you may edit manually)
+                        <!-- PREVIEW + FIELDS GRID -->
+                        <div class="grid grid-cols-1 md:grid-cols-[450px,1fr] gap-10 mt-8 items-start">
+                            <!-- Preview (Verbatim Layout) -->
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div
+                                        class="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-left">
+                                        PDF Preview</div>
+                                    <div class="flex items-center gap-2">
+                                        <div
+                                            class="px-3 py-1.5 border-2 border-cyan-400/50 text-cyan-400 text-[10px] font-black uppercase rounded-lg tracking-wider">
+                                            (Select Page)</div>
+                                        <div class="p-1 rounded bg-slate-800 text-gray-600">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="15 18 9 12 15 6" />
+                                            </svg>
+                                        </div>
+                                        <span class="text-[10px] font-mono text-cyan-400">1/15</span>
+                                        <div class="p-1 rounded bg-slate-800 text-gray-400">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="9 18 15 12 9 6" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Static PDF Image Wrapper (No border, matching renamer style exactly) -->
+                                <div
+                                    class="relative w-full h-[650px] flex flex-col items-center justify-center bg-gray-900/60 border border-gray-700 rounded-lg overflow-hidden">
+                                    <embed src="Atttention_is all_you_need_1page.pdf" type="application/pdf"
+                                        class="w-full h-full" />
+                                    <div
+                                        class="absolute bottom-0 left-0 right-0 bg-cyan-900/80 backdrop-blur-sm py-1.5 px-3 text-center border-t border-cyan-400/30">
+                                        <span class="text-[9px] font-bold text-cyan-100 italic uppercase">Page displayed
+                                            will be used for extraction</span>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="grid grid-cols-1 gap-4 text-xs">
-                                <div class="grid grid-cols-2 gap-4">
+                            <!-- Fields (Verbatim with Real Data) -->
+                            <div class="space-y-4 text-left">
+                                <div class="text-sm text-gray-300 mb-2">
+                                    <span class="font-bold text-lime-400">Ai Extracted</span> Metadata (you may edit
+                                    manually)
+                                </div>
+
+                                <div class="grid grid-cols-1 gap-4 text-xs">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="text-gray-400 font-bold block mb-1">Year:</label>
+                                            <div
+                                                class="w-full px-3 py-2 rounded bg-slate-900/60 border border-slate-700 text-white text-left">
+                                                2017</div>
+                                        </div>
+                                        <div>
+                                            <label class="text-gray-400 font-bold block mb-1">Lead Author
+                                                (Surname):</label>
+                                            <div
+                                                class="w-full px-3 py-2 rounded bg-slate-900/60 border border-slate-700 text-white text-left">
+                                                Vaswani</div>
+                                        </div>
+                                    </div>
+
                                     <div>
-                                        <label class="text-gray-400 font-bold block mb-1">Year:</label>
-                                        <div class="w-full px-3 py-2 rounded bg-slate-900/60 border border-slate-700 text-white text-left">2017</div>
+                                        <label class="text-gray-400 font-bold block mb-1">All Authors (Full
+                                            List):</label>
+                                        <div
+                                            class="w-full px-3 py-2 rounded bg-slate-800/40 border border-slate-700 text-slate-300 text-[10px] text-left">
+                                            Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones,
+                                            Aidan N. Gomez, Łukasz Kaiser, Illia Polosukhin</div>
                                     </div>
+
                                     <div>
-                                        <label class="text-gray-400 font-bold block mb-1">Lead Author (Surname):</label>
-                                        <div class="w-full px-3 py-2 rounded bg-slate-900/60 border border-slate-700 text-white text-left">Vaswani</div>
+                                        <label class="text-gray-400 font-bold block mb-1">Journal / Venue:</label>
+                                        <div
+                                            class="w-full px-3 py-2 rounded bg-slate-900/60 border border-slate-700 text-white text-left">
+                                            NeurIPS</div>
                                     </div>
-                                </div>
-                                
-                                <div>
-                                    <label class="text-gray-400 font-bold block mb-1">All Authors (Full List):</label>
-                                    <div class="w-full px-3 py-2 rounded bg-slate-800/40 border border-slate-700 text-slate-300 text-[10px] text-left">Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Łukasz Kaiser, Illia Polosukhin</div>
-                                </div>
-                                
-                                <div>
-                                    <label class="text-gray-400 font-bold block mb-1">Journal / Venue:</label>
-                                    <div class="w-full px-3 py-2 rounded bg-slate-900/60 border border-slate-700 text-white text-left">NeurIPS</div>
-                                </div>
 
-                                <div>
-                                     <label class="text-gray-400 font-bold block mb-1">Title (Full):</label>
-                                     <div class="w-full px-3 py-2 rounded bg-slate-900/60 border border-slate-700 text-white font-bold leading-tight text-left">Attention Is All You Need</div>
-                                 </div>
-         
-                                 <div>
-                                     <label class="text-lime-400 font-bold block mb-1">Shorned Title (Ai Style):</label>
-                                     <div class="w-full px-3 py-2 rounded bg-slate-900 border border-lime-400/20 text-lime-400 font-bold text-left">Attention Is All You Need</div>
-                                 </div>
+                                    <div>
+                                        <label class="text-gray-400 font-bold block mb-1">Title (Full):</label>
+                                        <div
+                                            class="w-full px-3 py-2 rounded bg-slate-900/60 border border-slate-700 text-white font-bold leading-tight text-left">
+                                            Attention Is All You Need</div>
+                                    </div>
 
-                                 <div>
-                                     <label class="text-gray-400 font-bold block mb-1">Abstract:</label>
-                                     <div class="w-full px-3 py-2 rounded bg-slate-800/40 border border-slate-700 text-slate-400 text-[10px] leading-relaxed text-left line-clamp-4 italic">The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms...</div>
-                                 </div>
+                                    <div>
+                                        <label class="text-lime-400 font-bold block mb-1">Shorned Title (Ai
+                                            Style):</label>
+                                        <div
+                                            class="w-full px-3 py-2 rounded bg-slate-900 border border-lime-400/20 text-lime-400 font-bold text-left">
+                                            Attention Is All You Need</div>
+                                    </div>
 
-                                 <div>
-                                     <label class="text-gray-400 font-bold block mb-1">Key Words:</label>
-                                     <div class="w-full px-3 py-2 rounded bg-slate-800/40 border border-slate-700 text-slate-400 text-[10px] text-left">Transformer, Attention, Machine Translation, Neural Networks</div>
-                                 </div>
+                                    <div>
+                                        <label class="text-gray-400 font-bold block mb-1">Abstract:</label>
+                                        <div
+                                            class="w-full px-3 py-2 rounded bg-slate-800/40 border border-slate-700 text-slate-400 text-[10px] leading-relaxed text-left line-clamp-4 italic">
+                                            The dominant sequence transduction models are based on complex recurrent or
+                                            convolutional neural networks that include an encoder and a decoder. We
+                                            propose a new simple network architecture, the Transformer, based solely on
+                                            attention mechanisms...</div>
+                                    </div>
 
-                                <div class="pt-4 border-t border-slate-800">
-                                    <label class="text-lime-400 font-bold block mb-1 uppercase tracking-tight">Proposed Ai File Name:</label>
-                                    <div class="w-full px-3 py-3 rounded font-mono bg-black/40 border border-lime-400/30 text-lime-400 break-all min-h-[44px] flex items-center text-xs font-bold">
-                                        2017_Vaswani_Attention_Is_All_You_Need.pdf
+                                    <div>
+                                        <label class="text-gray-400 font-bold block mb-1">Key Words:</label>
+                                        <div
+                                            class="w-full px-3 py-2 rounded bg-slate-800/40 border border-slate-700 text-slate-400 text-[10px] text-left">
+                                            Transformer, Attention, Machine Translation, Neural Networks</div>
+                                    </div>
+
+                                    <div class="pt-4 border-t border-slate-800">
+                                        <label
+                                            class="text-lime-400 font-bold block mb-1 uppercase tracking-tight">Proposed
+                                            Ai File Name:</label>
+                                        <div
+                                            class="w-full px-3 py-3 rounded font-mono bg-black/40 border border-lime-400/30 text-lime-400 break-all min-h-[44px] flex items-center text-xs font-bold">
+                                            2017_Vaswani_Attention_Is_All_You_Need.pdf
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- BUTTONS (Verbatim from renamer.html) -->
+                        <div class="flex flex-wrap gap-4 pt-6 border-t border-slate-800">
+                            <div
+                                class="px-8 py-3 bg-transparent border-2 border-cyan-400 text-cyan-400 rounded-xl font-bold uppercase tracking-widest text-xs opacity-60">
+                                Extract Fields
+                            </div>
+
+                            <div
+                                class="px-8 py-3 bg-gradient-to-r from-lime-600 to-lime-500 text-black rounded-xl font-bold flex items-center gap-2 shadow-[0_0_20px_rgba(101,163,13,0.3)]">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <polyline points="7 10 12 15 17 10" />
+                                    <line x1="12" y1="15" x2="12" y2="3" />
+                                </svg>
+                                Download PDF
+                            </div>
+
+                            <div
+                                class="px-8 py-3 bg-slate-800 text-slate-500 rounded-xl font-bold border border-slate-700">
+                                Clear All
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </section>
+
+        <!-- Metadata Injection Section -->
+        <section class="py-24 px-6 bg-slate-950 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
+                <div class="flex-1 space-y-8">
+                    <div
+                        class="inline-flex items-center gap-2 bg-lime-400/10 border border-lime-400/20 text-lime-400 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest">
+                        <span class="w-2 h-2 bg-lime-400 rounded-full"></span>
+                        Ready & Included
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight text-white">
+                        Embedded <span class="text-lime-400">Metadata</span> <br>
+                        Injection
+                    </h2>
+                    <p class="text-lg text-slate-400 leading-relaxed max-w-xl">
+                        We don't just change the filename. AiPDF injects Title, Author, Year, Venue, and <span
+                            class="text-lime-400">Abstract</span> directly into your PDF's internal headers (XMP). Your
+                        library stays organized in any standard PDF manager, making your PDF searchable using metadata
+                        text extracted using AI.
+                    </p>
+                    <div class="p-6 bg-slate-900/50 border border-slate-800 rounded-2xl space-y-4 shadow-xl">
+                        <div class="flex gap-4 items-start">
+                            <div
+                                class="w-10 h-10 bg-cyan-400/10 rounded-lg flex items-center justify-center text-cyan-400 shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white mb-1 uppercase tracking-tight text-[10px]">Universal
+                                    Compatibility</h4>
+                                <p class="text-xs text-slate-500 italic leading-relaxed">Readable by Mendeley, Zotero,
+                                    Adobe Acrobat, and any standard file explorer.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-1 relative">
+                    <!-- Visual representation of Meta injection -->
+                    <div class="glass p-8 rounded-[2.5rem] border-slate-700/30 relative z-10 shadow-premium">
+                        <div class="space-y-4 font-mono text-[10px] whitespace-nowrap overflow-hidden">
+                            <div class="flex gap-2"><span class="text-lime-400">></span> <span
+                                    class="text-slate-200">Writing XMP:dc:title...</span></div>
+                            <div class="flex gap-2"><span class="text-lime-400">></span> <span
+                                    class="text-slate-200">Writing XMP:dc:creator...</span></div>
+                            <div class="flex gap-2"><span class="text-cyan-400">STATUS:</span> <span
+                                    class="text-slate-400 uppercase tracking-tighter">Metadata Injected ✓</span></div>
+                        </div>
+                        <div class="mt-8 p-6 bg-black/40 rounded-2xl border border-slate-700/50 shadow-2xl">
+                            <div
+                                class="text-slate-400 text-[9px] font-bold mb-3 uppercase tracking-widest flex items-center justify-between">
+                                File Properties
+                                <span
+                                    class="text-emerald-400 text-[7px] bg-emerald-400/10 px-1.5 py-0.5 rounded">MODIFIED</span>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="h-1.5 w-full bg-slate-800 rounded"></div>
+                                <div class="h-1.5 w-4/5 bg-slate-800 rounded opacity-70"></div>
+                                <div class="h-1.5 w-2/3 bg-slate-800 rounded opacity-40"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Background Glow -->
+                    <div class="absolute -top-20 -right-20 w-80 h-80 bg-lime-400/5 rounded-full blur-[120px]"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AIPDF Search Section (Coming Soon) -->
+        <section class="py-24 px-6 bg-slate-900/10 relative overflow-hidden border-t border-slate-800/30">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row-reverse items-center gap-16">
+                <div class="flex-1 space-y-8">
+                    <div
+                        class="inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest leading-none">
+                        <span class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
+                        Coming Soon
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight text-white">
+                        <span class="text-cyan-400">AIPDF Search</span> <br>
+                        The Companion App
+                    </h2>
+                    <p class="text-lg text-slate-400 leading-relaxed max-w-xl">
+                        Query your entire library using natural language. No more "where was that paper?" moments. Our
+                        advanced RAG-based search engine talks to your database.
+                    </p>
+                    <div class="p-6 bg-slate-900/50 border border-slate-800 rounded-2xl space-y-4 shadow-xl">
+                        <div class="flex gap-4 items-start">
+                            <div
+                                class="w-10 h-10 bg-cyan-400/10 rounded-lg flex items-center justify-center text-cyan-400 shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8" />
+                                    <path d="m21 21-4.3-4.3" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white mb-1 uppercase tracking-tight text-[10px]">RAG-Powered
+                                    Discovery</h4>
+                                <p class="text-xs text-slate-500 italic leading-relaxed">Instantly find papers by
+                                    concept, abstract, or even specific figures—not just filenames.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-1 relative">
+                    <!-- Visual representation of RAG/Search -->
+                    <div class="glass p-8 rounded-[2.5rem] border-slate-700/30 relative z-10 shadow-premium">
+                        <div class="space-y-4 font-mono text-[10px] opacity-60 overflow-hidden text-ellipsis">
+                            <div class="flex gap-2"><span class="text-cyan-400">></span> <span
+                                    class="text-slate-200">WIndexing library...</span></div>
+                            <div class="flex gap-2"><span class="text-cyan-400">></span> <span
+                                    class="text-slate-200">Preparing RAG-ready vectors...</span></div>
+                            <div class="flex gap-2"><span class="text-lime-400">✓</span> <span
+                                    class="text-slate-400 tracking-tight">Optimized for AIPDF Search</span></div>
+                        </div>
+                        <div
+                            class="mt-8 p-6 bg-black/40 rounded-2xl border border-lime-400/20 shadow-2xl group transition-all hover:border-lime-400/50">
+                            <div
+                                class="text-lime-400 text-[10px] font-black mb-4 flex items-center gap-2 uppercase tracking-widest">
+                                <span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span>
+                                AIPDF Search
+                            </div>
+                            <p class="text-slate-500 text-[11px] mb-4">"Find papers about Attention mechanism from 2017"
+                            </p>
+                            <div class="h-2 w-full bg-slate-800 rounded mb-2"></div>
+                            <div class="h-2 w-3/4 bg-slate-800 rounded"></div>
+                        </div>
+                    </div>
+                    <!-- Background Glow -->
+                    <div class="absolute -top-20 -left-20 w-80 h-80 bg-cyan-400/5 rounded-full blur-[120px]"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Auth Modal Overlay -->
+        <div id="auth-overlay"
+            class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
+            <div class="glass max-w-md w-full p-8 rounded-3xl shadow-premium animate-fadeIn">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 id="modal-title" class="text-2xl font-bold">Login</h2>
+                    <button id="close-modal" class="text-slate-400 hover:text-white transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                    </button>
+                </div>
+
+                <form id="auth-form" class="space-y-4">
+                    <div id="auth-error"
+                        class="hidden text-xs bg-rose-500/20 border border-rose-500/50 text-rose-300 p-3 rounded-xl mb-4">
                     </div>
 
-                    <!-- BUTTONS (Verbatim from renamer.html) -->
-                    <div class="flex flex-wrap gap-4 pt-6 border-t border-slate-800">
-                        <div class="px-8 py-3 bg-transparent border-2 border-cyan-400 text-cyan-400 rounded-xl font-bold uppercase tracking-widest text-xs opacity-60">
-                            Extract Fields
-                        </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Email
+                            Address</label>
+                        <input type="email" id="email" required placeholder="name@example.com"
+                            class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
+                    </div>
 
-                        <div class="px-8 py-3 bg-gradient-to-r from-lime-600 to-lime-500 text-black rounded-xl font-bold flex items-center gap-2 shadow-[0_0_20px_rgba(101,163,13,0.3)]">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                            Download PDF
-                        </div>
+                    <div>
+                        <label
+                            class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Password</label>
+                        <input type="password" id="password" required placeholder="••••••••"
+                            class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
+                    </div>
 
-                        <div class="px-8 py-3 bg-slate-800 text-slate-500 rounded-xl font-bold border border-slate-700">
-                            Clear All
-                        </div>
-                </div>
+                    <button type="submit" id="submit-btn"
+                        class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-3 mt-4 rounded-xl transition-all shadow-lg">
+                        Log In
+                    </button>
+
+                    <p class="text-sm text-slate-400 text-center mt-6">
+                        <span id="switch-text">Don't have an account?</span>
+                        <button type="button" id="switch-auth-mode"
+                            class="text-lime-400 font-semibold hover:underline">Sign Up</button>
+                    </p>
+                </form>
             </div>
         </div>
-    </section>
 
-    <!-- Metadata Injection Section -->
-    <section class="py-24 px-6 bg-slate-950 relative overflow-hidden">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
-            <div class="flex-1 space-y-8">
-                <div class="inline-flex items-center gap-2 bg-lime-400/10 border border-lime-400/20 text-lime-400 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest">
-                    <span class="w-2 h-2 bg-lime-400 rounded-full"></span>
-                    Ready & Included
-                </div>
-                <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight text-white">
-                    Embedded <span class="text-lime-400">Metadata</span> <br>
-                    Injection
-                </h2>
-                <p class="text-lg text-slate-400 leading-relaxed max-w-xl">
-                    We don't just change the filename. AiPDF injects Title, Author, Year, Venue, and <span class="text-lime-400">Abstract</span> directly into your PDF's internal headers (XMP). Your library stays organized in any standard PDF manager, making your PDF searchable using metadata text extracted using AI.
-                </p>
-                <div class="p-6 bg-slate-900/50 border border-slate-800 rounded-2xl space-y-4 shadow-xl">
-                    <div class="flex gap-4 items-start">
-                        <div class="w-10 h-10 bg-cyan-400/10 rounded-lg flex items-center justify-center text-cyan-400 shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-white mb-1 uppercase tracking-tight text-[10px]">Universal Compatibility</h4>
-                            <p class="text-xs text-slate-500 italic leading-relaxed">Readable by Mendeley, Zotero, Adobe Acrobat, and any standard file explorer.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="flex-1 relative">
-                <!-- Visual representation of Meta injection -->
-                <div class="glass p-8 rounded-[2.5rem] border-slate-700/30 relative z-10 shadow-premium">
-                    <div class="space-y-4 font-mono text-[10px] whitespace-nowrap overflow-hidden">
-                         <div class="flex gap-2"><span class="text-lime-400">></span> <span class="text-slate-200">Writing XMP:dc:title...</span></div>
-                         <div class="flex gap-2"><span class="text-lime-400">></span> <span class="text-slate-200">Writing XMP:dc:creator...</span></div>
-                         <div class="flex gap-2"><span class="text-cyan-400">STATUS:</span> <span class="text-slate-400 uppercase tracking-tighter">Metadata Injected ✓</span></div>
-                    </div>
-                    <div class="mt-8 p-6 bg-black/40 rounded-2xl border border-slate-700/50 shadow-2xl">
-                         <div class="text-slate-400 text-[9px] font-bold mb-3 uppercase tracking-widest flex items-center justify-between">
-                             File Properties
-                             <span class="text-emerald-400 text-[7px] bg-emerald-400/10 px-1.5 py-0.5 rounded">MODIFIED</span>
-                         </div>
-                         <div class="space-y-3">
-                             <div class="h-1.5 w-full bg-slate-800 rounded"></div>
-                             <div class="h-1.5 w-4/5 bg-slate-800 rounded opacity-70"></div>
-                             <div class="h-1.5 w-2/3 bg-slate-800 rounded opacity-40"></div>
-                         </div>
-                    </div>
-                </div>
-                <!-- Background Glow -->
-                <div class="absolute -top-20 -right-20 w-80 h-80 bg-lime-400/5 rounded-full blur-[120px]"></div>
-            </div>
-        </div>
-    </section>
+        <!-- Scripts -->
+        <script src="js/supabase-client.js?v=igfhwaijhwvknllhdgyk"></script>
+        <script src="js/auth.js"></script>
+        <script>
+            // Modal Logic
+            const authOverlay = document.getElementById('auth-overlay');
+            const authBtn = document.getElementById('auth-btn');
+            const closeModal = document.getElementById('close-modal');
+            const authForm = document.getElementById('auth-form');
+            const switchAuthMode = document.getElementById('switch-auth-mode');
+            const modalTitle = document.getElementById('modal-title');
+            const submitBtn = document.getElementById('submit-btn');
+            const switchText = document.getElementById('switch-text');
+            const authError = document.getElementById('auth-error');
 
-    <!-- AIPDF Search Section (Coming Soon) -->
-    <section class="py-24 px-6 bg-slate-900/10 relative overflow-hidden border-t border-slate-800/30">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row-reverse items-center gap-16">
-            <div class="flex-1 space-y-8">
-                <div class="inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest leading-none">
-                    <span class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
-                    Coming Soon
-                </div>
-                <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight text-white">
-                    <span class="text-cyan-400">AIPDF Search</span> <br>
-                    The Companion App
-                </h2>
-                <p class="text-lg text-slate-400 leading-relaxed max-w-xl">
-                    Query your entire library using natural language. No more "where was that paper?" moments. Our advanced RAG-based search engine talks to your database.
-                </p>
-                <div class="p-6 bg-slate-900/50 border border-slate-800 rounded-2xl space-y-4 shadow-xl">
-                    <div class="flex gap-4 items-start">
-                        <div class="w-10 h-10 bg-cyan-400/10 rounded-lg flex items-center justify-center text-cyan-400 shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-white mb-1 uppercase tracking-tight text-[10px]">RAG-Powered Discovery</h4>
-                            <p class="text-xs text-slate-500 italic leading-relaxed">Instantly find papers by concept, abstract, or even specific figures—not just filenames.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="flex-1 relative">
-                <!-- Visual representation of RAG/Search -->
-                <div class="glass p-8 rounded-[2.5rem] border-slate-700/30 relative z-10 shadow-premium">
-                    <div class="space-y-4 font-mono text-[10px] opacity-60 overflow-hidden text-ellipsis">
-                         <div class="flex gap-2"><span class="text-cyan-400">></span> <span class="text-slate-200">WIndexing library...</span></div>
-                         <div class="flex gap-2"><span class="text-cyan-400">></span> <span class="text-slate-200">Preparing RAG-ready vectors...</span></div>
-                         <div class="flex gap-2"><span class="text-lime-400">✓</span> <span class="text-slate-400 tracking-tight">Optimized for AIPDF Search</span></div>
-                    </div>
-                    <div class="mt-8 p-6 bg-black/40 rounded-2xl border border-lime-400/20 shadow-2xl group transition-all hover:border-lime-400/50">
-                         <div class="text-lime-400 text-[10px] font-black mb-4 flex items-center gap-2 uppercase tracking-widest">
-                             <span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span>
-                             AIPDF Search
-                         </div>
-                         <p class="text-slate-500 text-[11px] mb-4">"Find papers about Attention mechanism from 2017"</p>
-                         <div class="h-2 w-full bg-slate-800 rounded mb-2"></div>
-                         <div class="h-2 w-3/4 bg-slate-800 rounded"></div>
-                    </div>
-                </div>
-                <!-- Background Glow -->
-                <div class="absolute -top-20 -left-20 w-80 h-80 bg-cyan-400/5 rounded-full blur-[120px]"></div>
-            </div>
-        </div>
-    </section>
+            let isLogin = true;
 
-    <!-- Auth Modal Overlay -->
-    <div id="auth-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
-        <div class="glass max-w-md w-full p-8 rounded-3xl shadow-premium animate-fadeIn">
-            <div class="flex items-center justify-between mb-8">
-                <h2 id="modal-title" class="text-2xl font-bold">Login</h2>
-                <button id="close-modal" class="text-slate-400 hover:text-white transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                </button>
-            </div>
-            
-            <form id="auth-form" class="space-y-4">
-                <div id="auth-error" class="hidden text-xs bg-rose-500/20 border border-rose-500/50 text-rose-300 p-3 rounded-xl mb-4"></div>
-                
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Email Address</label>
-                    <input type="email" id="email" required placeholder="name@example.com" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
-                </div>
-                
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Password</label>
-                    <input type="password" id="password" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
-                </div>
-                
-                <button type="submit" id="submit-btn" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-3 mt-4 rounded-xl transition-all shadow-lg">
-                    Log In
-                </button>
-                
-                <p class="text-sm text-slate-400 text-center mt-6">
-                    <span id="switch-text">Don't have an account?</span>
-                    <button type="button" id="switch-auth-mode" class="text-lime-400 font-semibold hover:underline">Sign Up</button>
-                </p>
-            </form>
-        </div>
-    </div>
+            authBtn.addEventListener('click', () => {
+                if (window.user) {
+                    // Already logged in, go to renamer
+                    window.location.href = 'renamer.html';
+                } else {
+                    authOverlay.classList.remove('hidden');
+                    authOverlay.classList.add('flex');
+                }
+            });
 
-    <!-- Scripts -->
-    <script src="js/supabase-client.js?v=igfhwaijhwvknllhdgyk"></script>
-    <script src="js/auth.js"></script>
-    <script>
-        // Modal Logic
-        const authOverlay = document.getElementById('auth-overlay');
-        const authBtn = document.getElementById('auth-btn');
-        const closeModal = document.getElementById('close-modal');
-        const authForm = document.getElementById('auth-form');
-        const switchAuthMode = document.getElementById('switch-auth-mode');
-        const modalTitle = document.getElementById('modal-title');
-        const submitBtn = document.getElementById('submit-btn');
-        const switchText = document.getElementById('switch-text');
-        const authError = document.getElementById('auth-error');
-        
-        let isLogin = true;
+            closeModal.addEventListener('click', () => {
+                authOverlay.classList.add('hidden');
+                authOverlay.classList.remove('flex');
+            });
 
-        authBtn.addEventListener('click', () => {
-            if (window.user) {
-                // Already logged in, go to renamer
-                window.location.href = 'renamer.html';
-            } else {
-                authOverlay.classList.remove('hidden');
-                authOverlay.classList.add('flex');
-            }
-        });
-
-        closeModal.addEventListener('click', () => {
-            authOverlay.classList.add('hidden');
-            authOverlay.classList.remove('flex');
-        });
-
-        switchAuthMode.addEventListener('click', () => {
-            isLogin = !isLogin;
-            modalTitle.innerText = isLogin ? 'Login' : 'Create Account';
-            submitBtn.innerText = isLogin ? 'Log In' : 'Sign Up';
-            switchText.innerText = isLogin ? "Don't have an account?" : "Already have an account?";
-            switchAuthMode.innerText = isLogin ? 'Sign Up' : 'Log In';
-            authError.classList.add('hidden');
-        });
-
-        authForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            authError.classList.add('hidden');
-            submitBtn.disabled = true;
-            submitBtn.innerText = 'Processing...';
-
-            let result;
-            if (isLogin) {
-                result = await window.auth.signIn(email, password);
-            } else {
-                result = await window.auth.signUp(email, password);
-            }
-
-            if (result.error) {
-                authError.innerText = result.error.message;
-                authError.classList.remove('hidden');
+            switchAuthMode.addEventListener('click', () => {
+                isLogin = !isLogin;
+                modalTitle.innerText = isLogin ? 'Login' : 'Create Account';
                 submitBtn.innerText = isLogin ? 'Log In' : 'Sign Up';
-                submitBtn.disabled = false;
-            } else {
-                // Success
-                window.location.href = 'renamer.html';
-            }
-        });
+                switchText.innerText = isLogin ? "Don't have an account?" : "Already have an account?";
+                switchAuthMode.innerText = isLogin ? 'Sign Up' : 'Log In';
+                authError.classList.add('hidden');
+            });
 
-        // Initialize session check
-        window.addEventListener('load', async () => {
-            const session = await window.auth.checkSession();
-            if (session) {
-                window.user = session.user;
-                authBtn.innerText = 'Go to Renamer';
-            }
-        });
-    </script>
-    <!-- Footer (Synced with renamer.html) -->
-    <footer class="w-full px-5 py-3 bg-slate-900/40 border-t border-slate-800">
-        <div class="max-w-6xl mx-auto flex flex-col items-center justify-center space-y-1 text-gray-400 text-xs text-center">
-            <p>© Designed & Built by Ray Kruger</p>
-            <p>HTML • JS • Tailwind CSS • Supabase • Vercel ⚡⚡</p>
-        </div>
+            authForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                authError.classList.add('hidden');
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Processing...';
+
+                let result;
+                if (isLogin) {
+                    result = await window.auth.signIn(email, password);
+                } else {
+                    result = await window.auth.signUp(email, password);
+                }
+
+                if (result.error) {
+                    authError.innerText = result.error.message;
+                    authError.classList.remove('hidden');
+                    submitBtn.innerText = isLogin ? 'Log In' : 'Sign Up';
+                    submitBtn.disabled = false;
+                } else {
+                    // Success
+                    window.location.href = 'renamer.html';
+                }
+            });
+
+            // Initialize session check
+            window.addEventListener('load', async () => {
+                const session = await window.auth.checkSession();
+                if (session) {
+                    window.user = session.user;
+                    authBtn.innerText = 'Go to Renamer';
+                }
+            });
+        </script>
+
+        <!-- Footer (Synced with renamer.html) -->
+        <footer class="w-full px-5 py-3 bg-black border-t border-slate-800" style="margin-bottom:0;">
+            <div
+                class="max-w-6xl mx-auto flex flex-col items-center justify-center space-y-1 text-gray-400 text-xs text-center">
+                <p>© Designed & Built by Ray Kruger</p>
+                <p>HTML • JS • Tailwind CSS • Supabase • Vercel ⚡⚡</p>
+            </div>
     </footer>
 </body>
 </html>
