@@ -10,7 +10,7 @@ let currentPdfBlob = null;
 let extractedText = ""; // Text from the *current* page
 
 const MODEL_MAP = {
-    openai: ['gpt-4o-mini', 'gpt-4o', 'o1-mini', 'o1-preview'],
+    openai: ['gpt-5-mini', 'gpt-5-nano', 'gpt-5.4-mini', 'gpt-5.4-nano', 'gpt-5', 'gpt-4o-mini', 'gpt-4o'],
     claude: ['claude-3-5-sonnet-20240620', 'claude-3-opus-20240229', 'claude-3-haiku-20240307'],
     gemini: ['gemini-1.5-flash', 'gemini-1.5-pro'],
     custom: ['llama3', 'mistral', 'phi3']
@@ -99,9 +99,14 @@ function createProviderRow(data = {}) {
         </div>
         <div class="md:col-span-3 space-y-1">
             <label class="text-[10px] font-bold text-slate-500 uppercase">Model</label>
-            <select class="provider-model w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition bg-slate-900 border border-slate-700">
-                ${models.map(m => `<option value="${m}" ${data.model === m ? 'selected' : ''}>${m}</option>`).join('')}
-            </select>
+            <div class="model-input-container">
+                ${providerType === 'custom' 
+                    ? `<input type="text" value="${data.model || ''}" placeholder="Enter model name" class="provider-model w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition bg-slate-900 border border-slate-700">`
+                    : `<select class="provider-model w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition bg-slate-900 border border-slate-700">
+                        ${models.map(m => `<option value="${m}" ${data.model === m ? 'selected' : ''}>${m}</option>`).join('')}
+                       </select>`
+                }
+            </div>
         </div>
         <div class="md:col-span-4 space-y-1">
             <label class="text-[10px] font-bold text-slate-500 uppercase">API Key</label>
@@ -132,9 +137,17 @@ function createProviderRow(data = {}) {
 
     typeSelect.addEventListener('change', (e) => {
         const type = e.target.value;
-        // Update models
-        const newModels = MODEL_MAP[type] || [];
-        modelSelect.innerHTML = newModels.map(m => `<option value="${m}">${m}</option>`).join('');
+        const modelContainer = row.querySelector('.model-input-container');
+        
+        // Update models UI
+        if (type === 'custom') {
+            modelContainer.innerHTML = `<input type="text" placeholder="Enter model name" class="provider-model w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition bg-slate-900 border border-slate-700">`;
+        } else {
+            const newModels = MODEL_MAP[type] || [];
+            modelContainer.innerHTML = `<select class="provider-model w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition bg-slate-900 border border-slate-700">
+                ${newModels.map(m => `<option value="${m}">${m}</option>`).join('')}
+            </select>`;
+        }
         
         // Show/Hide Custom URL
         if (type === 'custom') {
