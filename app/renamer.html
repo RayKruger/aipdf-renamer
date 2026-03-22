@@ -228,6 +228,11 @@
                         </div>
                         
                         <div>
+                            <label class="text-gray-400 font-bold block mb-1">All Authors (Full List):</label>
+                            <input id="meta-all-authors" type="text" placeholder="Extracting all author names..." class="w-full px-3 py-2 rounded focus:outline-none text-[10px] bg-slate-800/40">
+                        </div>
+                        
+                        <div>
                             <label class="text-gray-400 font-bold block mb-1">Journal / Venue:</label>
                             <input id="meta-venue" type="text" placeholder="Nature" class="w-full px-3 py-2 rounded focus:outline-none">
                         </div>
@@ -250,6 +255,14 @@
                          <div>
                              <label class="text-gray-400 font-bold block mb-1">Key Words:</label>
                              <input id="meta-keywords" type="text" placeholder="Extracting keywords..." class="w-full px-3 py-2 rounded focus:outline-none text-[10px] bg-slate-800/40 border border-slate-700">
+                         </div>
+
+                         <div>
+                             <label class="text-cyan-400 font-bold block mb-1 flex items-center gap-1.5">
+                                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+                                 RAG Summary (Findings & Methodology):
+                             </label>
+                             <textarea id="meta-summary" rows="3" placeholder="Context for retrieval..." class="w-full px-3 py-2 rounded focus:outline-none resize-none text-[10px] bg-cyan-950/20 border border-cyan-500/20"></textarea>
                          </div>
 
                         <div class="pt-4 border-t border-slate-800">

@@ -45,6 +45,8 @@ const metaTitle = document.getElementById('meta-title');
 const metaShortTitle = document.getElementById('meta-short-title');
 const metaAbstract = document.getElementById('meta-abstract');
 const metaKeywords = document.getElementById('meta-keywords');
+const metaAllAuthors = document.getElementById('meta-all-authors');
+const metaSummary = document.getElementById('meta-summary');
 const previewFilename = document.getElementById('preview-filename');
 const rawLog = document.getElementById('raw-log');
 
@@ -442,9 +444,11 @@ if (extractBtn) {
             metaAbstract.value = meta2.abstract || '';
             metaShortTitle.value = meta2.short_title || metaShortTitle.value;
             if (metaKeywords) metaKeywords.value = meta2.keywords || '';
+            if (metaAllAuthors) metaAllAuthors.value = meta2.all_authors || '';
+            if (metaSummary) metaSummary.value = meta2.summary_info || '';
 
             updateFilenamePreview();
-            logToUi(`Prompt 2 complete: Abstract, Short Title, and Keywords extracted.`);
+            logToUi(`Prompt 2 complete: Abstract, Short Title, Keywords, Authors and RAG Summary extracted.`);
         } catch (error) {
             console.error(error);
             logToUi(`Extraction Error: ${error.message}`);
@@ -481,6 +485,8 @@ if (clearBtn) {
         metaYear.value = ""; metaAuthor.value = ""; metaVenue.value = ""; metaTitle.value = "";
         metaShortTitle.value = ""; metaAbstract.value = "";
         if (metaKeywords) metaKeywords.value = "";
+        if (metaAllAuthors) metaAllAuthors.value = "";
+        if (metaSummary) metaSummary.value = "";
         if (previewPlaceholder) previewPlaceholder.style.display = 'block';
         if (pageHint) pageHint.classList.add('hidden');
         if (canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
