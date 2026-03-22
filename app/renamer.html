@@ -54,11 +54,11 @@
         }
     </style>
 </head>
-<body class="font-sans text-gray-100 h-screen flex flex-col overflow-hidden">
+<body class="font-sans text-gray-100 min-h-screen">
 
     <!-- Navbar/Header (Legacy Look) -->
-    <header class="w-full pt-6 pb-4">
-        <div class="max-w-[1400px] mx-auto px-6 flex items-center justify-between">
+    <header class="w-full pt-10 pb-6">
+        <div class="max-w-6xl mx-auto px-4 flex items-center justify-between">
             <div>
                 <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-100 flex items-center gap-3">
                     <span class="text-lime-400">AiPDF</span>
@@ -81,7 +81,7 @@
         </div>
     </header>
 
-    <main class="flex-grow max-w-[1400px] w-full mx-auto px-6 flex flex-col gap-6 overflow-hidden pb-6">
+    <main class="max-w-6xl mx-auto px-4 space-y-10 pb-20">
         
         <!-- API Config (Enhanced Multi-Provider) -->
         <section>
@@ -168,8 +168,8 @@
             </details>
         </section>
 
-        <!-- Main Tool -->
-        <div class="flex-grow bg-slate-900/60 border border-slate-700 rounded-2xl shadow-xl p-6 flex flex-col min-h-0">
+        <!-- Main Tool (Legacy Look) -->
+        <div class="bg-slate-900/60 border border-slate-700 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
             
             <!-- DROP ZONE -->
             <div id="drop-zone" class="drop-zone p-10 w-full block text-center rounded-xl cursor-pointer bg-gray-900/40 border-2 border-dashed border-[#58b9d9] hover:bg-gray-800/40 hover:border-cyan-300">
@@ -179,9 +179,9 @@
             </div>
 
             <!-- PREVIEW + FIELDS GRID -->
-            <div class="flex-grow grid grid-cols-1 md:grid-cols-[450px,1fr] gap-8 min-h-0">
+            <div class="grid grid-cols-1 md:grid-cols-[270px,1fr] gap-10 mt-8">
                 <!-- Preview -->
-                <div class="flex flex-col h-full space-y-3 min-h-0">
+                <div class="space-y-4">
                     <div class="flex items-center justify-between">
                         <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">PDF Preview</div>
                         <div class="flex items-center gap-2">
@@ -198,9 +198,9 @@
                         </div>
                     </div>
                     
-                    <div class="relative flex-grow flex flex-col items-center justify-center bg-gray-800/60 border border-gray-700 rounded-lg overflow-auto group min-h-0">
-                        <canvas id="pdf-canvas" class="max-w-full h-auto"></canvas>
-                        <span id="preview-placeholder" class="text-[10px] text-gray-500 absolute">Waiting for PDF…</span>
+                    <div class="relative w-[270px] min-h-[390px] flex flex-col items-center justify-center bg-gray-800/60 border border-gray-700 rounded-lg overflow-hidden group">
+                        <canvas id="pdf-canvas"></canvas>
+                        <span id="preview-placeholder" class="text-[10px] text-gray-500">Waiting for PDF…</span>
                         
                         <!-- Extraction Hint Overlay -->
                         <div id="page-hint" class="hidden absolute bottom-0 left-0 right-0 bg-cyan-900/80 backdrop-blur-sm py-1.5 px-3 text-center border-t border-cyan-400/30">
@@ -210,57 +210,55 @@
                 </div>
 
                 <!-- Fields -->
-                <div class="flex flex-col h-full min-h-0 space-y-4">
+                <div class="space-y-4">
                     <div class="text-sm text-gray-300 mb-2">
                         <span class="font-bold text-lime-400">Ai Extracted</span> Metadata (you may edit manually)
                     </div>
 
-                    <div class="flex-grow overflow-y-auto pr-2 custom-scrollbar space-y-4 pb-2">
-                        <div class="grid grid-cols-1 gap-4 text-xs">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="text-gray-400 font-bold block mb-1">Year:</label>
-                                    <input id="meta-year" type="text" placeholder="2024" class="w-full px-3 py-2 rounded focus:outline-none">
-                                </div>
-                                <div>
-                                    <label class="text-gray-400 font-bold block mb-1">Lead Author (Surname):</label>
-                                    <input id="meta-author" type="text" placeholder="Author" class="w-full px-3 py-2 rounded focus:outline-none">
-                                </div>
-                            </div>
-                            
+                    <div class="grid grid-cols-1 gap-4 text-xs">
+                        <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="text-gray-400 font-bold block mb-1">All Authors (Full List):</label>
-                                <input id="meta-all-authors" type="text" placeholder="Extracting all author names..." class="w-full px-3 py-2 rounded focus:outline-none text-[10px] bg-slate-800/40">
+                                <label class="text-gray-400 font-bold block mb-1">Year:</label>
+                                <input id="meta-year" type="text" placeholder="2024" class="w-full px-3 py-2 rounded focus:outline-none">
                             </div>
-                            
                             <div>
-                                <label class="text-gray-400 font-bold block mb-1">Journal / Venue:</label>
-                                <input id="meta-venue" type="text" placeholder="Nature" class="w-full px-3 py-2 rounded focus:outline-none">
+                                <label class="text-gray-400 font-bold block mb-1">Lead Author (Surname):</label>
+                                <input id="meta-author" type="text" placeholder="Author" class="w-full px-3 py-2 rounded focus:outline-none">
                             </div>
-
-                            <div>
-                                 <label class="text-gray-400 font-bold block mb-1">Title (Full):</label>
-                                 <textarea id="meta-title" rows="2" placeholder="Full title of the paper..." class="w-full px-3 py-2 rounded focus:outline-none resize-none"></textarea>
-                             </div>
-     
-                             <div>
-                                 <label class="text-lime-400 font-bold block mb-1">Shorned Title (Ai Style):</label>
-                                 <input id="meta-short-title" type="text" placeholder="Ai_Short_Title" class="w-full px-3 py-2 rounded focus:outline-none border border-lime-400/20">
-                             </div>
-
-                             <div>
-                                 <label class="text-gray-400 font-bold block mb-1">Abstract:</label>
-                                 <textarea id="meta-abstract" rows="2" placeholder="Paper abstract..." class="w-full px-3 py-1.5 rounded focus:outline-none resize-none text-[10px] bg-slate-800/40"></textarea>
-                             </div>
-
-                             <div class="grid grid-cols-1 gap-4">
-                                 <div>
-                                     <label class="text-gray-400 font-bold block mb-1">Key Words:</label>
-                                     <input id="meta-keywords" type="text" placeholder="Extracting keywords..." class="w-full px-3 py-2 rounded focus:outline-none text-[10px] bg-slate-800/40 border border-slate-700">
-                                 </div>
-                             </div>
                         </div>
-                    </div>
+                        
+                        <div>
+                            <label class="text-gray-400 font-bold block mb-1">All Authors (Full List):</label>
+                            <input id="meta-all-authors" type="text" placeholder="Extracting all author names..." class="w-full px-3 py-2 rounded focus:outline-none text-[10px] bg-slate-800/40">
+                        </div>
+                        
+                        <div>
+                            <label class="text-gray-400 font-bold block mb-1">Journal / Venue:</label>
+                            <input id="meta-venue" type="text" placeholder="Nature" class="w-full px-3 py-2 rounded focus:outline-none">
+                        </div>
+
+                        <div>
+                             <label class="text-gray-400 font-bold block mb-1">Title (Full):</label>
+                             <textarea id="meta-title" rows="2" placeholder="Full title of the paper..." class="w-full px-3 py-2 rounded focus:outline-none resize-none"></textarea>
+                         </div>
+ 
+                         <div>
+                             <label class="text-lime-400 font-bold block mb-1">Shorned Title (Ai Style):</label>
+                             <input id="meta-short-title" type="text" placeholder="Ai_Short_Title" class="w-full px-3 py-2 rounded focus:outline-none border border-lime-400/20">
+                         </div>
+
+                         <div>
+                             <label class="text-gray-400 font-bold block mb-1">Abstract:</label>
+                             <textarea id="meta-abstract" rows="3" placeholder="Paper abstract..." class="w-full px-3 py-2 rounded focus:outline-none resize-none text-[10px] bg-slate-800/40"></textarea>
+                         </div>
+
+                         <div>
+                             <label class="text-gray-400 font-bold block mb-1">Key Words:</label>
+                             <input id="meta-keywords" type="text" placeholder="Extracting keywords..." class="w-full px-3 py-2 rounded focus:outline-none text-[10px] bg-slate-800/40 border border-slate-700">
+                         </div>
+
+
+                        <div class="pt-4 border-t border-slate-800">
                             <label class="text-lime-400 font-bold block mb-1 uppercase tracking-tight">Proposed Ai File Name:</label>
                             <div id="preview-filename" class="w-full px-3 py-3 rounded font-mono bg-black/40 border border-lime-400/30 text-lime-400 break-all min-h-[44px] flex items-center">
                                 ...waiting for input
@@ -270,7 +268,8 @@
                 </div>
             </div>
 
-            <div class="flex flex-wrap gap-4 pt-4 border-t border-slate-800">
+            <!-- BUTTONS (Legacy Colors) -->
+            <div class="flex flex-wrap gap-4 pt-6 border-t border-slate-800">
                 <button id="extract-btn" class="px-8 py-3 bg-transparent border-2 border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 rounded-xl font-bold transition transform hover:scale-[1.02] active:scale-95 flex items-center gap-2 uppercase tracking-widest text-xs shadow-[0_0_15px_rgba(34,211,238,0.1)]">
                     Extract Fields
                 </button>
@@ -283,6 +282,12 @@
                 <button id="clear-btn" class="px-8 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-bold border border-slate-700 transition transform hover:scale-[1.02] active:scale-95">
                     Clear All
                 </button>
+            </div>
+
+            <!-- RAW OUTPUT -->
+            <div class="mt-8">
+                <div class="text-xs text-cyan-300 mb-2 font-bold uppercase tracking-widest">Raw Model Response</div>
+                <textarea id="raw-log" rows="4" readonly class="w-full text-[11px] px-3 py-2 rounded font-mono text-gray-400 resize-none"></textarea>
             </div>
         </div>
     </main>

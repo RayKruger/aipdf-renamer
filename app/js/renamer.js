@@ -46,8 +46,8 @@ const metaShortTitle = document.getElementById('meta-short-title');
 const metaAbstract = document.getElementById('meta-abstract');
 const metaKeywords = document.getElementById('meta-keywords');
 const metaAllAuthors = document.getElementById('meta-all-authors');
-const metaSummary = document.getElementById('meta-summary');
 const previewFilename = document.getElementById('preview-filename');
+const rawLog = document.getElementById('raw-log');
 
 const extractBtn = document.getElementById('extract-btn');
 const extractPageBtn = document.getElementById('extract-page-btn');
@@ -80,10 +80,10 @@ if (logoutBtn) {
 }
 
 // --- Utils ---
-function logToUi(message, isError = false) {
-    console.log(message);
-    if (isError) {
-        alert(message);
+function logToUi(message) {
+    if (rawLog) {
+        const timestamp = new Date().toLocaleTimeString();
+        rawLog.value = `[${timestamp}] ${message}\n` + rawLog.value;
     }
 }
 
@@ -444,13 +444,12 @@ if (extractBtn) {
             metaShortTitle.value = meta2.short_title || metaShortTitle.value;
             if (metaKeywords) metaKeywords.value = meta2.keywords || '';
             if (metaAllAuthors) metaAllAuthors.value = meta2.all_authors || '';
-            if (metaSummary) metaSummary.value = meta2.summary_info || '';
 
             updateFilenamePreview();
-            console.log(`Extraction complete.`);
+            logToUi(`Prompt 2 complete: Abstract, Short Title, Keywords and Authors extracted.`);
         } catch (error) {
             console.error(error);
-            alert(`Extraction Error: ${error.message}`);
+            logToUi(`Extraction Error: ${error.message}`);
             alert('Failed to extract metadata. Check your API settings and quota.');
         } finally {
             extractBtn.disabled = false;
@@ -485,7 +484,6 @@ if (clearBtn) {
         metaShortTitle.value = ""; metaAbstract.value = "";
         if (metaKeywords) metaKeywords.value = "";
         if (metaAllAuthors) metaAllAuthors.value = "";
-        if (metaSummary) metaSummary.value = "";
         if (previewPlaceholder) previewPlaceholder.style.display = 'block';
         if (pageHint) pageHint.classList.add('hidden');
         if (canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
