@@ -155,96 +155,160 @@
                 <p class="text-slate-400 max-w-xl mx-auto">Designed for researchers. Clean, efficient, and precise metadata extraction at your fingertips.</p>
             </div>
             
-            <div class="glass p-2 sm:p-4 rounded-[2.5rem] shadow-2xl group overflow-hidden relative border border-slate-700/30">
-                <div class="bg-[#0f172a] rounded-[2rem] p-6 lg:p-10 border border-slate-700/50 pointer-events-none select-none">
-                    
-                    <!-- API Config (Replica) -->
-                    <div class="mb-10 pointer-events-none opacity-80">
-                        <div class="bg-slate-900/60 border border-slate-700 rounded-2xl shadow-xl overflow-hidden">
-                            <div class="p-4 flex items-center justify-between border-b border-slate-800">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 bg-slate-800 rounded-lg flex items-center justify-center text-cyan-400">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-                                    </div>
-                                    <div>
-                                        <h2 class="text-sm font-bold text-white">LLM API Configuration</h2>
-                                        <p class="text-[10px] text-slate-500">Configure multiple providers</p>
+            <!-- Verbatim Replicas of renamer.html components -->
+            <div class="space-y-10 pointer-events-none select-none">
+                
+                <!-- API Config (Verbatim from renamer.html) -->
+                <section>
+                    <details open class="bg-slate-900/60 border border-slate-700 rounded-2xl shadow-xl overflow-hidden group">
+                        <summary class="p-6 cursor-pointer flex items-center justify-between hover:bg-slate-800/30 transition list-none">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center text-cyan-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </div>
+                                <div class="text-left">
+                                    <h2 class="font-bold text-white text-lg">LLM API Configuration</h2>
+                                    <p class="text-xs text-slate-500">Configure multiple providers</p>
+                                </div>
+                            </div>
+                            <svg class="group-open:rotate-180 transition-transform text-slate-500" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </summary>
+                        
+                        <div class="p-6 border-t border-slate-800/50 bg-slate-900/30 space-y-6">
+                            <div class="provider-row grid md:grid-cols-12 gap-4 items-end p-4 bg-slate-800/20 rounded-xl border border-slate-700/50 relative">
+                                <div class="md:col-span-3 space-y-1">
+                                    <label class="text-[10px] font-bold text-slate-500 uppercase">Provider</label>
+                                    <div class="w-full rounded-lg px-3 py-2 text-sm bg-slate-900 border border-slate-700 text-slate-300">OpenAI</div>
+                                </div>
+                                <div class="md:col-span-3 space-y-1">
+                                    <label class="text-[10px] font-bold text-slate-500 uppercase">Model</label>
+                                    <div class="w-full rounded-lg px-3 py-2 text-sm bg-slate-900 border border-slate-700 text-slate-300">gpt-4o-mini</div>
+                                </div>
+                                <div class="md:col-span-4 space-y-1">
+                                    <label class="text-[10px] font-bold text-slate-500 uppercase">API Key</label>
+                                    <div class="w-full rounded-lg px-3 py-2 text-sm bg-slate-900 border border-slate-700 text-slate-500">sk-••••••••••••••••••••••••••••••••</div>
+                                </div>
+                                <div class="md:col-span-1 flex items-center justify-center p-1">
+                                    <div class="flex flex-col items-center gap-1">
+                                        <span class="text-[10px] font-bold text-slate-500 uppercase">Active</span>
+                                        <div class="w-4 h-4 rounded-full border-2 border-cyan-400 bg-cyan-400/20 flex items-center justify-center">
+                                            <div class="w-1.5 h-1.5 rounded-full bg-cyan-400"></div>
+                                        </div>
                                     </div>
                                 </div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-600"><polyline points="6 9 12 15 18 9"/></svg>
+                                <div class="md:col-span-1 flex justify-end">
+                                    <div class="p-2 text-slate-600">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center pt-2">
+                                <div class="flex items-center gap-2 text-xs font-bold text-cyan-400/60">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                                    Add Provider
+                                </div>
+                                <div class="flex items-center gap-6">
+                                     <div class="flex items-center gap-2 group">
+                                         <div class="w-4 h-4 rounded border border-slate-700 bg-slate-900 flex items-center justify-center text-cyan-400">✓</div>
+                                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Persist in Secure Local Storage</span>
+                                     </div>
+                                     <div class="flex gap-3">
+                                         <span class="text-xs text-slate-600">Clear All</span>
+                                         <div class="bg-cyan-600/60 text-white text-xs font-bold py-2 px-4 rounded-lg">Save Configurations</div>
+                                     </div>
+                                </div>
                             </div>
                         </div>
+                    </details>
+                </section>
+
+                <!-- Tool Content (Verbatim from renamer.html) -->
+                <div class="bg-slate-900/60 border border-slate-700 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
+                    
+                    <!-- DROP ZONE -->
+                    <div class="p-10 w-full block text-center rounded-xl bg-gray-900/40 border-2 border-dashed border-[#58b9d9] opacity-80">
+                        <div class="font-medium text-white mb-1">Drag & Drop your PDF here</div>
+                        <div class="text-xs text-gray-500">...or click to choose a file</div>
                     </div>
 
                     <!-- PREVIEW + FIELDS GRID -->
-                    <div class="grid grid-cols-1 md:grid-cols-[450px,1fr] gap-12 mt-8 items-start">
-                        <!-- Preview -->
+                    <div class="grid grid-cols-1 md:grid-cols-[450px,1fr] gap-10 mt-8 items-start">
+                        <!-- Preview (Verbatim Layout) -->
                         <div class="space-y-4">
-                            <div class="flex items-center justify-between mb-2">
-                                <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">PDF Preview</div>
+                            <div class="flex items-center justify-between">
+                                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-left">PDF Preview</div>
                                 <div class="flex items-center gap-2">
-                                    <button class="px-3 py-1 bg-transparent border border-cyan-400/50 text-cyan-400 text-[9px] font-bold uppercase rounded-md tracking-wider">(Select Page)</button>
-                                    <span class="text-[10px] font-mono text-cyan-400">1 / 15</span>
+                                    <div class="px-3 py-1.5 border-2 border-cyan-400/50 text-cyan-400 text-[10px] font-black uppercase rounded-lg tracking-wider">(Select Page)</div>
+                                    <div class="p-1 rounded bg-slate-800 text-gray-600">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                                    </div>
+                                    <span class="text-[10px] font-mono text-cyan-400">1/15</span>
+                                    <div class="p-1 rounded bg-slate-800 text-gray-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                                    </div>
                                 </div>
                             </div>
                             
-                            <!-- Clean PDF Preview (Matching renamer style - NO BORDER) -->
-                            <div class="w-full h-[650px] bg-white shadow-2xl rounded-sm overflow-hidden flex items-center justify-center">
-                                <embed src="Atttention_is all_you_need_1page.pdf" type="application/pdf" class="w-full h-full" />
+                            <!-- Static PDF Image Wrapper (No border, matching renamer style exactly) -->
+                            <div class="relative w-full h-[650px] flex flex-col items-center justify-center bg-gray-900/60 border border-gray-700 rounded-lg overflow-hidden">
+                                <img src="Atttention_is all_you_need_1page.pdf" class="w-full h-full object-contain bg-white" alt="PDF Preview">
+                                <div class="absolute bottom-0 left-0 right-0 bg-cyan-900/80 backdrop-blur-sm py-1.5 px-3 text-center border-t border-cyan-400/30">
+                                    <span class="text-[9px] font-bold text-cyan-100 italic uppercase">Page displayed will be used for extraction</span>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Fields -->
-                        <div class="space-y-5">
-                            <div class="text-sm text-gray-300 mb-4 font-bold flex items-center gap-2">
-                                <span class="text-lime-400">Ai Extracted</span> Metadata
+                        <!-- Fields (Verbatim with Real Data) -->
+                        <div class="space-y-4 text-left">
+                            <div class="text-sm text-gray-300 mb-2">
+                                <span class="font-bold text-lime-400">Ai Extracted</span> Metadata (you may edit manually)
                             </div>
 
-                            <div class="grid grid-cols-1 gap-5 text-xs">
+                            <div class="grid grid-cols-1 gap-4 text-xs">
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="text-gray-500 font-bold block mb-1.5 uppercase tracking-tighter text-[10px]">Year:</label>
-                                        <div class="w-full px-4 py-2.5 rounded-lg bg-slate-800 text-white border border-slate-700">2017</div>
+                                        <label class="text-gray-400 font-bold block mb-1">Year:</label>
+                                        <div class="w-full px-3 py-2 rounded bg-slate-900/60 border border-slate-700 text-white text-left">2017</div>
                                     </div>
                                     <div>
-                                        <label class="text-gray-500 font-bold block mb-1.5 uppercase tracking-tighter text-[10px]">Lead Author:</label>
-                                        <div class="w-full px-4 py-2.5 rounded-lg bg-slate-800 text-white border border-slate-700 italic">Vaswani</div>
+                                        <label class="text-gray-400 font-bold block mb-1">Lead Author (Surname):</label>
+                                        <div class="w-full px-3 py-2 rounded bg-slate-900/60 border border-slate-700 text-white text-left">Vaswani</div>
                                     </div>
                                 </div>
                                 
                                 <div>
-                                    <label class="text-gray-500 font-bold block mb-1.5 uppercase tracking-tighter text-[10px]">All Authors (Full List):</label>
-                                    <div class="w-full px-4 py-2.5 rounded-lg bg-slate-800/40 text-[10px] text-slate-300 border border-slate-700/50 leading-relaxed italic">Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Łukasz Kaiser, Illia Polosukhin</div>
+                                    <label class="text-gray-400 font-bold block mb-1">All Authors (Full List):</label>
+                                    <div class="w-full px-3 py-2 rounded bg-slate-800/40 border border-slate-700 text-slate-300 text-[10px] text-left">Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Łukasz Kaiser, Illia Polosukhin</div>
                                 </div>
                                 
                                 <div>
-                                    <label class="text-gray-500 font-bold block mb-1.5 uppercase tracking-tighter text-[10px]">Journal / Venue:</label>
-                                    <div class="w-full px-4 py-2.5 rounded-lg bg-slate-800 text-white border border-slate-700">NeurIPS</div>
+                                    <label class="text-gray-400 font-bold block mb-1">Journal / Venue:</label>
+                                    <div class="w-full px-3 py-2 rounded bg-slate-900/60 border border-slate-700 text-white text-left">NeurIPS</div>
                                 </div>
 
                                 <div>
-                                     <label class="text-gray-500 font-bold block mb-1.5 uppercase tracking-tighter text-[10px]">Title (Full):</label>
-                                     <div class="w-full px-4 py-2.5 rounded-lg bg-slate-800 text-white border border-slate-700 font-bold">Attention Is All You Need</div>
+                                     <label class="text-gray-400 font-bold block mb-1">Title (Full):</label>
+                                     <div class="w-full px-3 py-2 rounded bg-slate-900/60 border border-slate-700 text-white font-bold leading-tight text-left">Attention Is All You Need</div>
                                  </div>
          
                                  <div>
-                                     <label class="text-lime-400 font-black block mb-1.5 uppercase tracking-tighter text-[10px]">Shorned Title (Ai Style):</label>
-                                     <div class="w-full px-4 py-2.5 rounded-lg bg-slate-800 border border-lime-400/30 text-lime-400 font-black text-sm">Attention Is All You Need</div>
+                                     <label class="text-lime-400 font-bold block mb-1">Shorned Title (Ai Style):</label>
+                                     <div class="w-full px-3 py-2 rounded bg-slate-900 border border-lime-400/20 text-lime-400 font-bold text-left">Attention Is All You Need</div>
                                  </div>
 
                                  <div>
-                                     <label class="text-gray-500 font-bold block mb-1.5 uppercase tracking-tighter text-[10px]">Abstract:</label>
-                                     <div class="w-full px-4 py-2.5 rounded-lg bg-slate-800/20 text-slate-400 text-[9px] leading-relaxed line-clamp-4 italic border border-slate-800">The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms...</div>
+                                     <label class="text-gray-400 font-bold block mb-1">Abstract:</label>
+                                     <div class="w-full px-3 py-2 rounded bg-slate-800/40 border border-slate-700 text-slate-400 text-[10px] leading-relaxed text-left line-clamp-4 italic">The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms...</div>
                                  </div>
 
                                  <div>
-                                     <label class="text-gray-500 font-bold block mb-1.5 uppercase tracking-tighter text-[10px]">Key Words:</label>
-                                     <div class="w-full px-4 py-2.5 rounded-lg bg-slate-800/40 text-[10px] text-slate-400 border border-slate-700">Transformer, attention mechanisms, machine translation, sequence transduction</div>
+                                     <label class="text-gray-400 font-bold block mb-1">Key Words:</label>
+                                     <div class="w-full px-3 py-2 rounded bg-slate-800/40 border border-slate-700 text-slate-400 text-[10px] text-left">Transformer, Attention, Machine Translation, Neural Networks</div>
                                  </div>
 
-                                <div class="pt-6 border-t border-slate-800 mt-2">
-                                    <label class="text-lime-400 font-black block mb-2 uppercase tracking-tight text-[10px]">Proposed Ai File Name:</label>
-                                    <div class="w-full px-4 py-4 rounded-xl font-mono bg-black/40 border border-lime-400/30 text-lime-400 break-all text-xs font-bold tracking-tight">
+                                <div class="pt-4 border-t border-slate-800">
+                                    <label class="text-lime-400 font-bold block mb-1 uppercase tracking-tight">Proposed Ai File Name:</label>
+                                    <div class="w-full px-3 py-3 rounded font-mono bg-black/40 border border-lime-400/30 text-lime-400 break-all min-h-[44px] flex items-center text-xs font-bold">
                                         2017_Vaswani_Attention_Is_All_You_Need.pdf
                                     </div>
                                 </div>
@@ -252,19 +316,21 @@
                         </div>
                     </div>
 
-                    <!-- BUTTONS (Replica) -->
-                    <div class="flex flex-wrap gap-4 pt-12 mt-10 border-t border-slate-800">
-                        <button class="px-8 py-3.5 bg-transparent border-2 border-cyan-400 text-cyan-400 rounded-xl font-bold uppercase tracking-widest text-xs">Extract Fields</button>
-                        <button class="px-8 py-3.5 bg-gradient-to-r from-lime-600 to-lime-500 text-black rounded-xl font-bold flex items-center gap-2">
-                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                             Download PDF
-                        </button>
-                        <button class="px-8 py-3.5 bg-slate-800 text-slate-300 rounded-xl font-bold border border-slate-700">Clear All</button>
-                    </div>
-                </div>
+                    <!-- BUTTONS (Verbatim from renamer.html) -->
+                    <div class="flex flex-wrap gap-4 pt-6 border-t border-slate-800">
+                        <div class="px-8 py-3 bg-transparent border-2 border-cyan-400 text-cyan-400 rounded-xl font-bold uppercase tracking-widest text-xs opacity-60">
+                            Extract Fields
+                        </div>
 
-                <!-- Glow Effect -->
-                <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-950/40 to-transparent pointer-events-none"></div>
+                        <div class="px-8 py-3 bg-gradient-to-r from-lime-600 to-lime-500 text-black rounded-xl font-bold flex items-center gap-2 shadow-[0_0_20px_rgba(101,163,13,0.3)]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            Download PDF
+                        </div>
+
+                        <div class="px-8 py-3 bg-slate-800 text-slate-500 rounded-xl font-bold border border-slate-700">
+                            Clear All
+                        </div>
+                </div>
             </div>
         </div>
     </section>
@@ -376,7 +442,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="py-4 px-6 border-t border-slate-800 bg-slate-950">
+    <footer class="py-2 px-6 border-t border-slate-800 bg-slate-950">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden">
             <div class="flex flex-col items-center md:items-start">
                  <h1 class="text-xl font-extrabold tracking-tight flex items-center gap-2 mb-2">
