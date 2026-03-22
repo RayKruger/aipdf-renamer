@@ -48,7 +48,6 @@ const metaKeywords = document.getElementById('meta-keywords');
 const metaAllAuthors = document.getElementById('meta-all-authors');
 const metaSummary = document.getElementById('meta-summary');
 const previewFilename = document.getElementById('preview-filename');
-const rawLog = document.getElementById('raw-log');
 
 const extractBtn = document.getElementById('extract-btn');
 const extractPageBtn = document.getElementById('extract-page-btn');
@@ -81,10 +80,10 @@ if (logoutBtn) {
 }
 
 // --- Utils ---
-function logToUi(message) {
-    if (rawLog) {
-        const timestamp = new Date().toLocaleTimeString();
-        rawLog.value = `[${timestamp}] ${message}\n` + rawLog.value;
+function logToUi(message, isError = false) {
+    console.log(message);
+    if (isError) {
+        alert(message);
     }
 }
 
@@ -448,10 +447,10 @@ if (extractBtn) {
             if (metaSummary) metaSummary.value = meta2.summary_info || '';
 
             updateFilenamePreview();
-            logToUi(`Prompt 2 complete: Abstract, Short Title, Keywords, Authors and RAG Summary extracted.`);
+            console.log(`Extraction complete.`);
         } catch (error) {
             console.error(error);
-            logToUi(`Extraction Error: ${error.message}`);
+            alert(`Extraction Error: ${error.message}`);
             alert('Failed to extract metadata. Check your API settings and quota.');
         } finally {
             extractBtn.disabled = false;

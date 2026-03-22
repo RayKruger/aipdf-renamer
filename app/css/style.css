@@ -3,9 +3,8 @@
 
 body {
     background: linear-gradient(to bottom, #0f172a, #1e293b, #000);
-    /* background-attachment: fixed; */
-    min-height: 100vh;
     font-family: 'Inter', sans-serif;
+    color: #f1f5f9;
 }
 
 h1, h2, h3, .font-brand {
@@ -20,20 +19,14 @@ h1, h2, h3, .font-brand {
     border: 1px solid rgba(51, 65, 85, 0.5);
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-    width: 10px;
-}
-::-webkit-scrollbar-track {
-    background: #0f172a;
-}
-::-webkit-scrollbar-thumb {
-    background: #334155;
-    border-radius: 5px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #475569;
-}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+.custom-scrollbar::-webkit-scrollbar { width: 5px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(34, 211, 238, 0.15); }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(34, 211, 238, 0.3); }
 
 /* Animations */
 .fade-in {
