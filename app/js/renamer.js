@@ -504,20 +504,46 @@ if (downloadBtn) {
             const authorsStr = (metaAllAuthors && metaAllAuthors.value) ? metaAllAuthors.value.trim() : metaAuthor.value.trim();
             if (authorsStr) pdfDocLib.setAuthor(authorsStr);
             
-            // Subject (Use venue + year + full abstract)
+            // Subject (Use venue + year ONLY, NO abstract)
             let subjectStr = "";
             if (metaVenue.value) subjectStr += `Published in: ${metaVenue.value.trim()}\n`;
             if (metaYear.value) subjectStr += `Year: ${metaYear.value.trim()}\n`;
-            if (metaAbstract.value) subjectStr += `Abstract: ${metaAbstract.value.trim()}`;
             if (subjectStr) pdfDocLib.setSubject(subjectStr); 
             
-            // Custom Metadata Properties (Visible in some advanced PDF editors)
-            if (metaAbstract.value) pdfDocLib.setKeywords([...(pdfDocLib.getKeywords() || []), `abstract:${metaAbstract.value.substring(0, 1000)}`]); // Add snippet to keywords if needed, but better use subject
+            // Custom Metadata Properties (Visible in advanced PDF editors under 'Custom' tab)
+            // Robustly identify or create the Info Dictionary to add custom fields
+            try {
+                // High-level setters in pdf-lib usually manage the Info dict automatically
+                // But for pure custom fields like 'Abstract', we need to check the existing dict
+                let infoDict;
+                try {
+                    infoDict = pdfDocLib.getInfoDict();
+                } catch {
+                    // Fallback for different pdf-lib versions
+                    const infoRef = pdfDocLib.context.trailer.get(PDFLib.PDFName.of('Info'));
+                    if (infoRef) infoDict = pdfDocLib.context.lookup(infoRef);
+                }
+                
+                if (infoDict && metaAbstract.value) {
+                    infoDict.set(PDFLib.PDFName.of('Abstract'), PDFLib.PDFString.of(metaAbstract.value.trim()));
+                    logToUi("Custom Abstract field successfully embedded.");
+                } else if (metaAbstract.value) {
+                    // If we can't get the dictionary, use a standardized keyword tag as backup
+                    const existingKeywords = pdfDocLib.getKeywords() || "";
+                    pdfDocLib.setKeywords(`${existingKeywords}; Abstract: ${metaAbstract.value.substring(0, 500)}`);
+                }
+            } catch (e) {
+                console.warn("Could not set custom Info properties.", e);
+            }
             
             // Keywords
             if (metaKeywords && metaKeywords.value) {
                 const kws = metaKeywords.value.split(',').map(k => k.trim()).filter(k => k);
-                if (kws.length > 0) pdfDocLib.setKeywords(kws);
+                if (kws.length > 0) {
+                    const existing = pdfDocLib.getKeywords() || "";
+                    const newKws = kws.join(', ');
+                    pdfDocLib.setKeywords(existing ? `${existing}, ${newKws}` : newKws);
+                }
             }
             
             // Creator / Producer
