@@ -504,12 +504,15 @@ if (downloadBtn) {
             const authorsStr = (metaAllAuthors && metaAllAuthors.value) ? metaAllAuthors.value.trim() : metaAuthor.value.trim();
             if (authorsStr) pdfDocLib.setAuthor(authorsStr);
             
-            // Subject (Use venue + yea + abstract snippet)
+            // Subject (Use venue + year + full abstract)
             let subjectStr = "";
-            if (metaVenue.value) subjectStr += `Published in ${metaVenue.value.trim()}. `;
-            if (metaYear.value) subjectStr += `Year: ${metaYear.value.trim()}. `;
-            if (metaAbstract.value) subjectStr += `\nAbstract: ${metaAbstract.value.trim()}`;
-            if (subjectStr) pdfDocLib.setSubject(subjectStr.substring(0, 500)); // Limit length
+            if (metaVenue.value) subjectStr += `Published in: ${metaVenue.value.trim()}\n`;
+            if (metaYear.value) subjectStr += `Year: ${metaYear.value.trim()}\n`;
+            if (metaAbstract.value) subjectStr += `Abstract: ${metaAbstract.value.trim()}`;
+            if (subjectStr) pdfDocLib.setSubject(subjectStr); 
+            
+            // Custom Metadata Properties (Visible in some advanced PDF editors)
+            if (metaAbstract.value) pdfDocLib.setKeywords([...(pdfDocLib.getKeywords() || []), `abstract:${metaAbstract.value.substring(0, 1000)}`]); // Add snippet to keywords if needed, but better use subject
             
             // Keywords
             if (metaKeywords && metaKeywords.value) {
