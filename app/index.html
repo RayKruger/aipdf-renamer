@@ -27,7 +27,7 @@
     </style>
 </head>
 
-<body class="text-slate-100 overflow-x-hidden">
+<body class="text-slate-100 overflow-x-hidden min-h-screen flex flex-col">
 
     <!-- Navbar -->
     <nav class="fixed w-full z-50 glass border-b border-slate-700/50 px-6 py-4">
@@ -639,6 +639,8 @@
             </div>
         </div>
 
+
+
         <!-- Scripts -->
         <script src="js/supabase-client.js?v=igfhwaijhwvknllhdgyk"></script>
         <script src="js/auth.js"></script>
@@ -717,13 +719,15 @@
             });
         </script>
 
-        <!-- Footer (Synced with renamer.html) -->
-        <footer class="w-full px-5 py-3 bg-black border-t border-slate-800" style="margin-bottom:0;">
-            <div
-                class="max-w-6xl mx-auto flex flex-col items-center justify-center space-y-1 text-gray-400 text-xs text-center">
-                <p>© Designed & Built by Ray Kruger</p>
-                <p>HTML • JS • Tailwind CSS • Supabase • Vercel ⚡⚡</p>
-            </div>
+
+
+    <!-- Footer (Synced with renamer.html) -->
+    <footer class="w-full px-5 py-3 bg-slate-900/40 border-t border-slate-800 mt-auto">
+        <div class="max-w-6xl mx-auto flex flex-col items-center justify-center space-y-1 text-gray-400 text-xs text-center">
+            <p>© Designed & Built by Ray Kruger</p>
+            <p>HTML • JS • Tailwind CSS • Supabase • Vercel ⚡⚡</p>
+        </div>
     </footer>
 </body>
+
 </html>
