@@ -1,9 +1,27 @@
-// Renamer Logic
+// Renamer Logic (Enhanced with Multi-Provider & PDF Pagination)
 const pdfjsLib = window['pdfjs-dist/build/pdf'];
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
+// --- State ---
+let pdfDoc = null;
+let currentPage = 1;
+let totalPages = 0;
 let currentPdfBlob = null;
-let extractedText = "";
+let extractedText = ""; // Text from the *current* page
+
+const MODEL_MAP = {
+    openai: ['gpt-4o-mini', 'gpt-4o', 'o1-mini', 'o1-preview'],
+    claude: ['claude-3-5-sonnet-20240620', 'claude-3-opus-20240229', 'claude-3-haiku-20240307'],
+    gemini: ['gemini-1.5-flash', 'gemini-1.5-pro'],
+    custom: ['llama3', 'mistral', 'phi3']
+};
+
+const BASE_URL_MAP = {
+    openai: 'https://api.openai.com/v1',
+    claude: 'https://api.anthropic.com/v1',
+    gemini: 'https://generativelanguage.googleapis.com/v1beta',
+    custom: 'http://localhost:11434/v1'
+};
 
 // --- UI Elements ---
 const dropZone = document.getElementById('drop-zone');
@@ -11,6 +29,10 @@ const pdfInput = document.getElementById('pdf-input');
 const canvas = document.getElementById('pdf-canvas');
 const ctx = canvas.getContext('2d');
 const previewPlaceholder = document.getElementById('preview-placeholder');
+const pageIndicator = document.getElementById('page-indicator');
+const pageHint = document.getElementById('page-hint');
+const prevPageBtn = document.getElementById('prev-page');
+const nextPageBtn = document.getElementById('next-page');
 
 const metaYear = document.getElementById('meta-year');
 const metaAuthor = document.getElementById('meta-author');
@@ -20,14 +42,15 @@ const previewFilename = document.getElementById('preview-filename');
 const rawLog = document.getElementById('raw-log');
 
 const extractBtn = document.getElementById('extract-btn');
+const extractPageBtn = document.getElementById('extract-page-btn');
 const downloadBtn = document.getElementById('download-btn');
 const clearBtn = document.getElementById('clear-btn');
 
-const apiBaseInput = document.getElementById('api-base');
-const apiModelInput = document.getElementById('api-model');
-const apiKeyInput = document.getElementById('api-key');
+const providerContainer = document.getElementById('provider-container');
+const addProviderBtn = document.getElementById('add-provider');
 const saveApiBtn = document.getElementById('save-api');
 const clearApiBtn = document.getElementById('clear-api');
+const storageStatus = document.getElementById('storage-status');
 
 // --- Auth Check ---
 async function initAuth() {
@@ -56,62 +79,184 @@ function logToUi(message) {
     }
 }
 
-// --- API Config Handling ---
-function loadApiConfig() {
-    apiBaseInput.value = localStorage.getItem('pdf_renamer_base') || 'https://api.openai.com/v1';
-    apiModelInput.value = localStorage.getItem('pdf_renamer_model') || 'gpt-4o-mini';
-    apiKeyInput.value = localStorage.getItem('pdf_renamer_key') || '';
+// --- Provider Management ---
+function createProviderRow(data = {}) {
+    const row = document.createElement('div');
+    row.className = 'provider-row grid md:grid-cols-12 gap-4 items-end p-4 bg-slate-800/20 rounded-xl border border-slate-700/50 relative';
+    
+    const providerType = data.type || 'openai';
+    const models = MODEL_MAP[providerType] || [];
+    
+    row.innerHTML = `
+        <div class="md:col-span-3 space-y-1">
+            <label class="text-[10px] font-bold text-slate-500 uppercase">Provider</label>
+            <select class="provider-type w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition bg-slate-900 border border-slate-700">
+                <option value="openai" ${providerType === 'openai' ? 'selected' : ''}>OpenAI</option>
+                <option value="claude" ${providerType === 'claude' ? 'selected' : ''}>Anthropic (Claude)</option>
+                <option value="gemini" ${providerType === 'gemini' ? 'selected' : ''}>Google (Gemini)</option>
+                <option value="custom" ${providerType === 'custom' ? 'selected' : ''}>Custom Endpoint</option>
+            </select>
+        </div>
+        <div class="md:col-span-3 space-y-1">
+            <label class="text-[10px] font-bold text-slate-500 uppercase">Model</label>
+            <select class="provider-model w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition bg-slate-900 border border-slate-700">
+                ${models.map(m => `<option value="${m}" ${data.model === m ? 'selected' : ''}>${m}</option>`).join('')}
+            </select>
+        </div>
+        <div class="md:col-span-4 space-y-1">
+            <label class="text-[10px] font-bold text-slate-500 uppercase">API Key</label>
+            <input type="password" value="${data.key || ''}" placeholder="sk-..." class="provider-key w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition bg-slate-900 border border-slate-700">
+        </div>
+        <div class="md:col-span-1 flex items-center justify-center p-1">
+            <label class="flex flex-col items-center gap-1 cursor-pointer">
+                <span class="text-[10px] font-bold text-slate-500 uppercase">Active</span>
+                <input type="radio" name="active-provider" ${data.active ? 'checked' : ''} class="provider-active w-4 h-4 accent-cyan-400">
+            </label>
+        </div>
+        <div class="md:col-span-1 flex justify-end">
+            <button class="remove-provider p-2 text-slate-500 hover:text-rose-400 transition" title="Remove Provider">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+            </button>
+        </div>
+        <div class="custom-url-container ${providerType === 'custom' ? '' : 'hidden'} md:col-span-12 mt-2 space-y-1">
+            <label class="text-[10px] font-bold text-slate-500 uppercase">Custom API Base URL</label>
+            <input type="text" value="${data.baseUrl || BASE_URL_MAP[providerType]}" placeholder="https://your-domain.com/v1" class="provider-base-url w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition bg-slate-900 border border-slate-700">
+        </div>
+    `;
+
+    // Event Listeners for the row
+    const typeSelect = row.querySelector('.provider-type');
+    const modelSelect = row.querySelector('.provider-model');
+    const customUrlContainer = row.querySelector('.custom-url-container');
+    const baseUrlInput = row.querySelector('.provider-base-url');
+
+    typeSelect.addEventListener('change', (e) => {
+        const type = e.target.value;
+        // Update models
+        const newModels = MODEL_MAP[type] || [];
+        modelSelect.innerHTML = newModels.map(m => `<option value="${m}">${m}</option>`).join('');
+        
+        // Show/Hide Custom URL
+        if (type === 'custom') {
+            customUrlContainer.classList.remove('hidden');
+        } else {
+            customUrlContainer.classList.add('hidden');
+        }
+        baseUrlInput.value = BASE_URL_MAP[type] || '';
+    });
+
+    row.querySelector('.remove-provider').addEventListener('click', () => {
+        if (document.querySelectorAll('.provider-row').length > 1) {
+            row.remove();
+        } else {
+            alert("At least one provider is required.");
+        }
+    });
+
+    return row;
+}
+
+function loadProviders() {
+    providerContainer.innerHTML = '';
+    let providers = JSON.parse(localStorage.getItem('pdf_renamer_providers') || '[]');
+    
+    // Migration from old single storage
+    if (providers.length === 0) {
+        const oldKey = localStorage.getItem('pdf_renamer_key');
+        if (oldKey) {
+            providers.push({
+                type: 'openai',
+                model: localStorage.getItem('pdf_renamer_model') || 'gpt-4o-mini',
+                key: oldKey,
+                baseUrl: localStorage.getItem('pdf_renamer_base') || BASE_URL_MAP.openai,
+                active: true
+            });
+        } else {
+            // Default empty state
+            providers.push({ type: 'openai', model: 'gpt-4o-mini', key: '', baseUrl: BASE_URL_MAP.openai, active: true });
+        }
+    }
+
+    providers.forEach(p => {
+        providerContainer.appendChild(createProviderRow(p));
+    });
+}
+
+if (addProviderBtn) {
+    addProviderBtn.addEventListener('click', () => {
+        providerContainer.appendChild(createProviderRow({ active: false }));
+    });
 }
 
 if (saveApiBtn) {
     saveApiBtn.addEventListener('click', () => {
-        localStorage.setItem('pdf_renamer_base', apiBaseInput.value);
-        localStorage.setItem('pdf_renamer_model', apiModelInput.value);
-        localStorage.setItem('pdf_renamer_key', apiKeyInput.value);
-        logToUi('Configuration saved to browser local storage.');
-        alert('Configuration saved to browser!');
+        const rows = document.querySelectorAll('.provider-row');
+        const providers = Array.from(rows).map(row => ({
+            type: row.querySelector('.provider-type').value,
+            model: row.querySelector('.provider-model').value,
+            key: row.querySelector('.provider-key').value,
+            active: row.querySelector('.provider-active').checked,
+            baseUrl: row.querySelector('.provider-base-url').value
+        }));
+
+        localStorage.setItem('pdf_renamer_providers', JSON.stringify(providers));
+        
+        storageStatus.classList.remove('hidden');
+        setTimeout(() => storageStatus.classList.add('hidden'), 3000);
+        logToUi('Multiple providers saved to secure local storage.');
     });
 }
 
 if (clearApiBtn) {
     clearApiBtn.addEventListener('click', () => {
-        localStorage.removeItem('pdf_renamer_base');
-        localStorage.removeItem('pdf_renamer_model');
-        localStorage.removeItem('pdf_renamer_key');
-        loadApiConfig();
-        logToUi('API configuration cleared.');
-    });
-}
-
-// --- PDF Handling ---
-if (dropZone) {
-    dropZone.addEventListener('click', () => pdfInput.click());
-
-    dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropZone.classList.add('dragover');
-    });
-
-    dropZone.addEventListener('dragleave', () => {
-        dropZone.classList.remove('dragover');
-    });
-
-    dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('dragover');
-        if (e.dataTransfer.files.length) {
-            handleFile(e.dataTransfer.files[0]);
+        if (confirm("Reset all AI configurations?")) {
+            localStorage.removeItem('pdf_renamer_providers');
+            loadProviders();
+            logToUi('All provider configurations reset.');
         }
     });
 }
 
-if (pdfInput) {
-    pdfInput.addEventListener('change', (e) => {
-        if (e.target.files.length) {
-            handleFile(e.target.files[0]);
-        }
-    });
+// --- PDF Handling & Navigation ---
+async function renderPage(pageNum) {
+    if (!pdfDoc) return;
+    currentPage = pageNum;
+    
+    // UI Updates
+    pageIndicator.innerText = `${currentPage}/${totalPages}`;
+    prevPageBtn.disabled = (currentPage <= 1);
+    nextPageBtn.disabled = (currentPage >= totalPages);
+    
+    try {
+        const page = await pdfDoc.getPage(pageNum);
+        const viewport = page.getViewport({ scale: 1.2 });
+        
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        const renderContext = {
+            canvasContext: ctx,
+            viewport: viewport
+        };
+        await page.render(renderContext).promise;
+        
+        // Extract symbols/text for the *current* page
+        const textContent = await page.getTextContent();
+        extractedText = textContent.items.map(item => item.str).join(' ');
+        
+        logToUi(`Switched to page ${pageNum}. Text extraction ready.`);
+    } catch (error) {
+        logToUi(`Error rendering page ${pageNum}: ${error.message}`);
+    }
 }
+
+if (prevPageBtn) prevPageBtn.addEventListener('click', () => {
+    if (currentPage > 1) renderPage(currentPage - 1);
+});
+
+if (nextPageBtn) nextPageBtn.addEventListener('click', () => {
+    if (currentPage < totalPages) renderPage(currentPage + 1);
+});
 
 async function handleFile(file) {
     if (file.type !== 'application/pdf') {
@@ -125,32 +270,33 @@ async function handleFile(file) {
     const reader = new FileReader();
     reader.onload = async function() {
         const typedarray = new Uint8Array(this.result);
-        const pdf = await pdfjsLib.getDocument(typedarray).promise;
-        const page = await pdf.getPage(1);
-        
-        // Render to canvas
-        const viewport = page.getViewport({ scale: 1.2 });
-        if (canvas) {
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-
-            const renderContext = {
-                canvasContext: ctx,
-                viewport: viewport
-            };
-            await page.render(renderContext).promise;
-        }
+        pdfDoc = await pdfjsLib.getDocument(typedarray).promise;
+        totalPages = pdfDoc.numPages;
         
         if (previewPlaceholder) previewPlaceholder.style.display = 'none';
+        if (pageHint) pageHint.classList.remove('hidden');
 
-        // Extract text for LLM
-        const textContent = await page.getTextContent();
-        extractedText = textContent.items.map(item => item.str).join(' ');
-        
-        logToUi(`First page rendered. Text extraction complete (${extractedText.length} chars).`);
+        await renderPage(1);
         updateFilenamePreview();
     };
     reader.readAsArrayBuffer(file);
+}
+
+if (dropZone) {
+    dropZone.addEventListener('click', () => pdfInput.click());
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+    });
+}
+
+if (pdfInput) {
+    pdfInput.addEventListener('change', (e) => {
+        if (e.target.files.length) handleFile(e.target.files[0]);
+    });
 }
 
 // --- Filename Generation ---
@@ -160,8 +306,8 @@ function updateFilenamePreview() {
     const author = metaAuthor.value.trim();
     const venue = metaVenue.value.trim();
     const title = metaTitle.value.trim()
-        .replace(/[:\/\\|?*<>]/g, '') // Remove invalid chars
-        .replace(/\s+/g, '_'); // Replace spaces with underscores
+        .replace(/[:\/\\|?*<>]/g, '') 
+        .replace(/\s+/g, '_'); 
 
     if (!year && !author && !title) {
         if (previewFilename) previewFilename.innerText = '...waiting for input';
@@ -188,12 +334,11 @@ if (metaYear && metaAuthor && metaVenue && metaTitle) {
 // --- AI Extraction ---
 if (extractBtn) {
     extractBtn.addEventListener('click', async () => {
-        const apiKey = apiKeyInput.value.trim();
-        const apiBase = apiBaseInput.value.trim();
-        const model = apiModelInput.value.trim();
+        const providers = JSON.parse(localStorage.getItem('pdf_renamer_providers') || '[]');
+        const active = providers.find(p => p.active);
 
-        if (!apiKey) {
-            alert('Please enter an API Key in the configuration section.');
+        if (!active || !active.key) {
+            alert('Please configure and set an "Active" API provider.');
             return;
         }
 
@@ -204,21 +349,26 @@ if (extractBtn) {
 
         extractBtn.disabled = true;
         extractBtn.innerText = 'Extracting...';
-        logToUi(`AI Extraction started using model: ${model}`);
+        if (extractPageBtn) extractPageBtn.disabled = true;
+        
+        logToUi(`AI Extraction started from page ${currentPage} using ${active.type} (${active.model})`);
 
         try {
-            const prompt = `Extract metadata from the following academic paper text. 
+            const prompt = `Extract metadata from the following academic paper text (from page ${currentPage}).
+            Ensure the title is concise, following the "Ai" style (shortened but highly descriptive, e.g. "Ai_Vision_Transformer" vs "A Large Scale Study of Vision Transformers").
             Format your response as a JSON object with keys: "year", "author" (last name only of first author), "venue" (short name), "title".
-            Text: ${extractedText.substring(0, 4000)}`;
+            Text: ${extractedText.substring(0, 5000)}`;
 
-            const response = await fetch(`${apiBase}/chat/completions`, {
+            const response = await fetch(`${active.baseUrl}/chat/completions`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
+                    'Authorization': `Bearer ${active.key}`,
+                    // Anthropic specific header if needed
+                    ...(active.type === 'claude' ? { 'anthropic-version': '2023-06-01' } : {})
                 },
                 body: JSON.stringify({
-                    model: model,
+                    model: active.model,
                     messages: [{ role: 'user', content: prompt }],
                     response_format: { type: "json_object" }
                 })
@@ -238,26 +388,23 @@ if (extractBtn) {
             metaTitle.value = meta.title || '';
 
             updateFilenamePreview();
-            logToUi('Metadata fields updated from AI.');
+            logToUi(`Metadata updated from page ${currentPage}.`);
         } catch (error) {
             console.error(error);
             logToUi(`Extraction Error: ${error.message}`);
-            alert('Failed to extract metadata. Check your API settings and console.');
+            alert('Failed to extract metadata. Check your API settings and quota.');
         } finally {
             extractBtn.disabled = false;
             extractBtn.innerText = 'Extract Fields';
+            if (extractPageBtn) extractPageBtn.disabled = false;
         }
     });
 }
 
-// --- Download ---
+// --- Download & Clear ---
 if (downloadBtn) {
     downloadBtn.addEventListener('click', () => {
-        if (!currentPdfBlob) {
-            alert('Upload a PDF first!');
-            return;
-        }
-        
+        if (!currentPdfBlob) { alert('Upload a PDF first!'); return; }
         const newName = updateFilenamePreview();
         const url = URL.createObjectURL(currentPdfBlob);
         const a = document.createElement('a');
@@ -271,24 +418,28 @@ if (downloadBtn) {
     });
 }
 
-// --- Clear ---
 if (clearBtn) {
     clearBtn.addEventListener('click', () => {
-        currentPdfBlob = null;
-        extractedText = "";
-        metaYear.value = "";
-        metaAuthor.value = "";
-        metaVenue.value = "";
-        metaTitle.value = "";
+        pdfDoc = null; totalPages = 0; currentPage = 1;
+        currentPdfBlob = null; extractedText = "";
+        metaYear.value = ""; metaAuthor.value = ""; metaVenue.value = ""; metaTitle.value = "";
         if (previewPlaceholder) previewPlaceholder.style.display = 'block';
+        if (pageHint) pageHint.classList.add('hidden');
         if (canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pageIndicator.innerText = "0/0";
         updateFilenamePreview();
         if (rawLog) rawLog.value = "";
         logToUi('All fields cleared.');
     });
 }
 
+if (extractPageBtn) {
+    extractPageBtn.addEventListener('click', () => {
+        if (extractBtn) extractBtn.click();
+    });
+}
+
 // --- Init ---
 initAuth();
-loadApiConfig();
+loadProviders();
 updateFilenamePreview();
