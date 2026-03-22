@@ -47,7 +47,6 @@ const metaAbstract = document.getElementById('meta-abstract');
 const metaKeywords = document.getElementById('meta-keywords');
 const metaAllAuthors = document.getElementById('meta-all-authors');
 const previewFilename = document.getElementById('preview-filename');
-const rawLog = document.getElementById('raw-log');
 
 const extractBtn = document.getElementById('extract-btn');
 const extractPageBtn = document.getElementById('extract-page-btn');
@@ -81,10 +80,7 @@ if (logoutBtn) {
 
 // --- Utils ---
 function logToUi(message) {
-    if (rawLog) {
-        const timestamp = new Date().toLocaleTimeString();
-        rawLog.value = `[${timestamp}] ${message}\n` + rawLog.value;
-    }
+    console.log(`[Log] ${message}`);
 }
 
 async function fetchPrompts() {
@@ -489,7 +485,7 @@ if (clearBtn) {
         if (canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
         pageIndicator.innerText = "0/0";
         updateFilenamePreview();
-        if (rawLog) rawLog.value = "";
+        if (previewFilename) previewFilename.innerText = 'All cleared';
         logToUi('All fields cleared.');
     });
 }
