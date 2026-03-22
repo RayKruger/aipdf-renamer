@@ -488,28 +488,42 @@ if (downloadBtn) {
         downloadBtn.innerText = 'Embedding Metadata...';
         
         try {
-            logToUi(`Starting metadata embedding using pdf-lib...`);
+            logToUi(`Starting metadata embedding...`);
             
             // 1. Read the PDF blob as ArrayBuffer
             const arrBuffer = await currentPdfBlob.arrayBuffer();
             
             // 2. Load the PDF with pdf-lib
-            const pdfDocLib = await PDFLib.PDFDocument.load(arrBuffer);
+            // Using window.PDFLib to be safe with global scope
+            const lib = window.PDFLib || PDFLib;
+            if (!lib) throw new Error("PDF-Lib library not found. Please check your connection.");
             
-            // 3. Set standard metadata fields
-            // Title
+            const pdfDocLib = await lib.PDFDocument.load(arrBuffer);
+            
+            // 3. Set standard metadata fields via High-Level API
             if (metaTitle.value) pdfDocLib.setTitle(metaTitle.value.trim());
             
-            // Author (Prefer full authors if available, else first author)
             const authorsStr = (metaAllAuthors && metaAllAuthors.value) ? metaAllAuthors.value.trim() : metaAuthor.value.trim();
             if (authorsStr) pdfDocLib.setAuthor(authorsStr);
             
-            // Subject (Use venue + year + full abstract)
             let subjectStr = "";
             if (metaVenue.value) subjectStr += `Published in: ${metaVenue.value.trim()}\n`;
             if (metaYear.value) subjectStr += `Year: ${metaYear.value.trim()}\n`;
             if (metaAbstract.value) subjectStr += `Abstract: ${metaAbstract.value.trim()}`;
+            
             if (subjectStr) pdfDocLib.setSubject(subjectStr); 
+
+            // 3b. FORCE update the Info Dictionary (Acrobat fallback)
+            try {
+                const infoDict = pdfDocLib.context.lookup(pdfDocLib.context.trailer.get(lib.PDFName.of('Info')));
+                if (infoDict) {
+                    if (subjectStr) infoDict.set(lib.PDFName.of('Subject'), lib.PDFString.of(subjectStr));
+                    if (metaTitle.value) infoDict.set(lib.PDFName.of('Title'), lib.PDFString.of(metaTitle.value.trim()));
+                    logToUi("Info Dictionary fields forced.");
+                }
+            } catch (e) {
+                console.warn("Manual InfoDict update failed, relying on high-level API.", e);
+            }
             
             // Keywords
             if (metaKeywords && metaKeywords.value) {
@@ -520,10 +534,6 @@ if (downloadBtn) {
                     pdfDocLib.setKeywords(existing ? `${existing}, ${newKws}` : newKws);
                 }
             }
-            
-            // Creator / Producer
-            pdfDocLib.setProducer('AiPDF Renamer (https://aipdfrenamer.vercel.app)');
-            pdfDocLib.setCreator('AiPDF Renamer');
             
             // 4. Save and Download
             const modifiedPdfBytes = await pdfDocLib.save();
@@ -538,11 +548,11 @@ if (downloadBtn) {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            logToUi(`Downloaded with Metadata: ${newName}`);
+            logToUi(`SUCCESS: Full metadata embedded in ${newName}`);
         } catch (err) {
             console.error(err);
-            logToUi(`Metadata Embedding Error: ${err.message}`);
-            // Fallback: Download original file
+            logToUi(`CRITICAL ERROR (Using Rename Fallback): ${err.message}`);
+            // Fallback: Download original file but with new name
             const url = URL.createObjectURL(currentPdfBlob);
             const a = document.createElement('a');
             a.href = url;
