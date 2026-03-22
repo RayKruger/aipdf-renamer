@@ -80,27 +80,42 @@
         <div class="max-w-7xl mx-auto">
             <h2 class="text-3xl font-bold text-center mb-16 font-brand">How <span class="text-lime-400">AiPDF</span> Works</h2>
             
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <!-- Step 1 -->
                 <div class="glass p-8 rounded-3xl relative overflow-hidden group">
                     <div class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mb-6 group-hover:bg-cyan-500 transition-colors">
-                        <span class="text-xl font-bold">1</span>
+                        <span class="text-xl font-bold text-white">1</span>
                     </div>
-                    <h3 class="text-xl font-bold mb-4">Upload PDF</h3>
+                    <h3 class="text-xl font-bold mb-4 text-white">Upload PDF</h3>
                     <p class="text-slate-400 text-sm mb-6 leading-relaxed">
                         Drag your poorly named PDF into the dropzone. We support IEEE, Nature, Science, and more.
                     </p>
-                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-700 font-mono text-[11px] text-slate-500 italic">
-                        1-s2.0-S0012821X18307103-main.pdf
+                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-700 font-mono text-[11px] text-slate-500 italic overflow-hidden text-ellipsis whitespace-nowrap">
+                        1-s2.0-S0012821X183071..pdf
                     </div>
                 </div>
 
                 <!-- Step 2 -->
-                <div class="glass p-8 rounded-3xl relative overflow-hidden group border-cyan-500/30">
+                <div class="glass p-8 rounded-3xl relative overflow-hidden group border-lime-400/10">
                     <div class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mb-6 group-hover:bg-lime-400 transition-colors">
-                        <span class="text-xl font-bold">2</span>
+                        <span class="text-xl font-bold text-white">2</span>
                     </div>
-                    <h3 class="text-xl font-bold mb-4">Ai Extraction</h3>
+                    <h3 class="text-xl font-bold mb-4 text-white">Add API Key</h3>
+                    <p class="text-slate-400 text-sm mb-6 leading-relaxed">
+                        Bring your own key (OpenAI, Claude, or Gemini). Your keys stay in your browser and are never stored on our servers.
+                    </p>
+                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-700/50 flex items-center gap-2">
+                        <div class="w-2 h-2 bg-emerald-400/40 rounded-full"></div>
+                        <span class="text-[10px] text-slate-600 font-mono">sk-••••••••</span>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="glass p-8 rounded-3xl relative overflow-hidden group">
+                    <div class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mb-6 group-hover:bg-cyan-500 transition-colors">
+                        <span class="text-xl font-bold text-white">3</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 text-white">Ai Extraction</h3>
                     <p class="text-slate-400 text-sm mb-6 leading-relaxed">
                         Our vision model reads the first page and extracts Title, Author, Year, and Venue automatically.
                     </p>
@@ -116,17 +131,17 @@
                     </div>
                 </div>
 
-                <!-- Step 3 -->
+                <!-- Step 4 -->
                 <div class="glass p-8 rounded-3xl relative overflow-hidden group">
-                    <div class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mb-6 group-hover:bg-cyan-500 transition-colors">
-                        <span class="text-xl font-bold">3</span>
+                    <div class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mb-6 group-hover:bg-cyan-500 transition-colors text-white">
+                        <span class="text-xl font-bold">4</span>
                     </div>
-                    <h3 class="text-xl font-bold mb-4">Download Renamed</h3>
+                    <h3 class="text-xl font-bold mb-4 text-white">Download PDF</h3>
                     <p class="text-slate-400 text-sm mb-6 leading-relaxed">
                         Get a perfectly formatted filename that makes your file explorer a pleasure to browse.
                     </p>
                     <div class="bg-slate-900/80 p-4 rounded-xl border border-lime-400/50 font-mono text-[11px] text-lime-400">
-                        2017_Vaswani_Attention_Is_All_You_Need.pdf
+                        2017_Vaswani_Att...pdf
                     </div>
                 </div>
             </div>
@@ -253,54 +268,61 @@
         </div>
     </section>
 
-    <!-- Metadata & RAG Section -->
+    <!-- Metadata Injection Section -->
     <section class="py-24 px-6 bg-slate-950 relative overflow-hidden">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
             <div class="flex-1 space-y-8">
-                <div class="inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest">
-                    <span class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
-                    Coming Soon
+                <div class="inline-flex items-center gap-2 bg-lime-400/10 border border-lime-400/20 text-lime-400 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest">
+                    <span class="w-2 h-2 bg-lime-400 rounded-full"></span>
+                    Ready & Included
                 </div>
-                <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
-                    Metadata <span class="text-lime-400">Injection</span> <br>
-                    & AIPDF Search
+                <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight text-white">
+                    Embedded <span class="text-lime-400">Metadata</span> <br>
+                    Injection
                 </h2>
                 <p class="text-lg text-slate-400 leading-relaxed max-w-xl">
-                    Our AI doesn't just rename your files—it transforms them. Every extraction process prepares your papers for high-fidelity RAG (Retrieval-Augmented Generation) indexing.
+                    We don't just change the filename. AiPDF injects Title, Author, Year, and Venue directly into your PDF's internal headers (XMP). Your library stays organized in any standard PDF manager.
                 </p>
-                <div class="p-6 bg-slate-900/50 border border-slate-800 rounded-2xl space-y-4">
+                <div class="p-6 bg-slate-900/50 border border-slate-800 rounded-2xl space-y-4 shadow-xl">
                     <div class="flex gap-4 items-start">
-                        <div class="w-10 h-10 bg-lime-400/10 rounded-lg flex items-center justify-center text-lime-400 shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        <div class="w-10 h-10 bg-cyan-400/10 rounded-lg flex items-center justify-center text-cyan-400 shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
                         </div>
                         <div>
-                            <h4 class="font-bold text-white mb-1 uppercase tracking-tight text-xs">AIPDF Search Companion</h4>
-                            <p class="text-sm text-slate-500 italic leading-relaxed">Instantly search your entire library using natural language query. Your digital library, finally searchable.</p>
+                            <h4 class="font-bold text-white mb-1 uppercase tracking-tight text-[10px]">Universal Compatibility</h4>
+                            <p class="text-xs text-slate-500 italic leading-relaxed">Readable by Mendeley, Zotero, Adobe Acrobat, and any standard file explorer.</p>
                         </div>
                     </div>
                 </div>
+                
+                <p class="text-xs text-slate-600 flex items-center gap-2">
+                    <span class="w-1 h-1 bg-slate-700 rounded-full"></span>
+                    Companion App: <span class="text-slate-500 font-bold">AIPDF Search</span> (Coming Soon) for advanced RAG-based database querying.
+                </p>
             </div>
             
             <div class="flex-1 relative">
-                <!-- Visual representation of RAG/Search -->
+                <!-- Visual representation of Meta injection -->
                 <div class="glass p-8 rounded-[2.5rem] border-slate-700/30 relative z-10 shadow-premium">
-                    <div class="space-y-4 font-mono text-[10px] opacity-60">
-                         <div class="flex gap-2"><span class="text-cyan-400">></span> <span class="text-slate-200">Injecting semantic metadata...</span></div>
-                         <div class="flex gap-2"><span class="text-cyan-400">></span> <span class="text-slate-200">Preparing RAG-ready vectors...</span></div>
-                         <div class="flex gap-2"><span class="text-lime-400">✓</span> <span class="text-slate-400">Optimized for AIPDF Search</span></div>
+                    <div class="space-y-4 font-mono text-[10px] whitespace-nowrap overflow-hidden">
+                         <div class="flex gap-2"><span class="text-lime-400">></span> <span class="text-slate-200">Writing XMP:dc:title...</span></div>
+                         <div class="flex gap-2"><span class="text-lime-400">></span> <span class="text-slate-200">Writing XMP:dc:creator...</span></div>
+                         <div class="flex gap-2"><span class="text-cyan-400">STATUS:</span> <span class="text-slate-400 uppercase tracking-tighter">Metadata Injected ✓</span></div>
                     </div>
-                    <div class="mt-8 p-6 bg-black/40 rounded-2xl border border-lime-400/20 shadow-2xl group transition-all hover:border-lime-400/50">
-                         <div class="text-lime-400 text-[10px] font-black mb-4 flex items-center gap-2 uppercase tracking-widest">
-                             <span class="w-2 h-2 bg-lime-400 rounded-full"></span>
-                             AIPDF Search
+                    <div class="mt-8 p-6 bg-black/40 rounded-2xl border border-slate-700/50 shadow-2xl">
+                         <div class="text-slate-400 text-[9px] font-bold mb-3 uppercase tracking-widest flex items-center justify-between">
+                             File Properties
+                             <span class="text-emerald-400 text-[7px] bg-emerald-400/10 px-1.5 py-0.5 rounded">MODIFIED</span>
                          </div>
-                         <p class="text-slate-500 text-[11px] mb-4">"Find papers about Attention mechanism from 2017"</p>
-                         <div class="h-2 w-full bg-slate-800 rounded mb-2"></div>
-                         <div class="h-2 w-3/4 bg-slate-800 rounded"></div>
+                         <div class="space-y-3">
+                             <div class="h-1.5 w-full bg-slate-800 rounded"></div>
+                             <div class="h-1.5 w-4/5 bg-slate-800 rounded opacity-70"></div>
+                             <div class="h-1.5 w-2/3 bg-slate-800 rounded opacity-40"></div>
+                         </div>
                     </div>
                 </div>
                 <!-- Background Glow -->
-                <div class="absolute -top-20 -right-20 w-80 h-80 bg-cyan-500/10 rounded-full blur-[120px]"></div>
+                <div class="absolute -top-20 -right-20 w-80 h-80 bg-lime-400/5 rounded-full blur-[120px]"></div>
             </div>
         </div>
     </section>
