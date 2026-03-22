@@ -38,6 +38,8 @@ const metaYear = document.getElementById('meta-year');
 const metaAuthor = document.getElementById('meta-author');
 const metaVenue = document.getElementById('meta-venue');
 const metaTitle = document.getElementById('meta-title');
+const metaShortTitle = document.getElementById('meta-short-title');
+const metaAbstract = document.getElementById('meta-abstract');
 const previewFilename = document.getElementById('preview-filename');
 const rawLog = document.getElementById('raw-log');
 
@@ -318,7 +320,9 @@ function updateFilenamePreview() {
     const year = metaYear.value.trim();
     const author = metaAuthor.value.trim();
     const venue = metaVenue.value.trim();
-    const title = metaTitle.value.trim()
+    
+    // Prioritize Short Title for filename
+    let title = (metaShortTitle.value.trim() || metaTitle.value.trim())
         .replace(/[:\/\\|?*<>]/g, '') 
         .replace(/\s+/g, '_'); 
 
@@ -338,8 +342,8 @@ function updateFilenamePreview() {
     return newName;
 }
 
-if (metaYear && metaAuthor && metaVenue && metaTitle) {
-    [metaYear, metaAuthor, metaVenue, metaTitle].forEach(el => {
+if (metaYear && metaAuthor && metaVenue && metaTitle && metaShortTitle && metaAbstract) {
+    [metaYear, metaAuthor, metaVenue, metaTitle, metaShortTitle, metaAbstract].forEach(el => {
         el.addEventListener('input', updateFilenamePreview);
     });
 }
@@ -367,41 +371,63 @@ if (extractBtn) {
         logToUi(`AI Extraction started from page ${currentPage} using ${active.type} (${active.model})`);
 
         try {
-            const prompt = `Extract metadata from the following academic paper text (from page ${currentPage}).
-            Ensure the title is concise, following the "Ai" style (shortened but highly descriptive, e.g. "Ai_Vision_Transformer" vs "A Large Scale Study of Vision Transformers").
+            // PROMPT 1: Basic Metadata
+            const prompt1 = `Extract metadata from the following academic paper text (from page ${currentPage}).
+            CRITICAL: Extract the FULL, COMPLETE title for the title field.
             Format your response as a JSON object with keys: "year", "author" (last name only of first author), "venue" (short name), "title".
-            Text: ${extractedText.substring(0, 5000)}`;
+            Text: ${extractedText.substring(0, 4000)}`;
 
-            const response = await fetch(`${active.baseUrl}/chat/completions`, {
+            const reqHeaders = {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${active.key}`,
+                ...(active.type === 'claude' ? { 'anthropic-version': '2023-06-01' } : {})
+            };
+
+            const response1 = await fetch(`${active.baseUrl}/chat/completions`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${active.key}`,
-                    // Anthropic specific header if needed
-                    ...(active.type === 'claude' ? { 'anthropic-version': '2023-06-01' } : {})
-                },
+                headers: reqHeaders,
                 body: JSON.stringify({
                     model: active.model,
-                    messages: [{ role: 'user', content: prompt }],
+                    messages: [{ role: 'user', content: prompt1 }],
                     response_format: { type: "json_object" }
                 })
             });
 
-            if (!response.ok) throw new Error(`API Error: ${response.status}`);
+            if (!response1.ok) throw new Error(`API Error (Prompt 1): ${response1.status}`);
+            const data1 = await response1.json();
+            const meta1 = JSON.parse(data1.choices[0].message.content);
 
-            const data = await response.json();
-            const content = data.choices[0].message.content;
-            logToUi(`Model response content: ${content}`);
-            
-            const meta = JSON.parse(content);
+            metaYear.value = meta1.year || '';
+            metaAuthor.value = meta1.author || '';
+            metaVenue.value = meta1.venue || '';
+            metaTitle.value = meta1.title || '';
+            logToUi(`Prompt 1 complete: Metadata extracted.`);
 
-            metaYear.value = meta.year || '';
-            metaAuthor.value = meta.author || '';
-            metaVenue.value = meta.venue || '';
-            metaTitle.value = meta.title || '';
+            // PROMPT 2: Abstract & Short Title
+            logToUi(`Starting Prompt 2: Abstract & AI Short Title...`);
+            const prompt2 = `Based on the following paper text, extract the abstract (up to 3 sentences) and generate a shortened "Ai" style title (e.g. "Ai_Vision_Transformer").
+            Format your response as a JSON object with keys: "abstract", "short_title".
+            Text: ${extractedText.substring(0, 4000)}`;
+
+            const response2 = await fetch(`${active.baseUrl}/chat/completions`, {
+                method: 'POST',
+                headers: reqHeaders,
+                body: JSON.stringify({
+                    model: active.model,
+                    messages: [{ role: 'user', content: prompt2 }],
+                    response_format: { type: "json_object" }
+                })
+            });
+
+            if (!response2.ok) throw new Error(`API Error (Prompt 2): ${response2.status}`);
+            const data2 = await response2.json();
+            const meta2 = JSON.parse(data2.choices[0].message.content);
+
+            metaAbstract.value = meta2.abstract || '';
+            metaShortTitle.value = meta2.short_title || '';
 
             updateFilenamePreview();
-            logToUi(`Metadata updated from page ${currentPage}.`);
+            logToUi(`Prompt 2 complete: Abstract and Short Title extracted.`);
         } catch (error) {
             console.error(error);
             logToUi(`Extraction Error: ${error.message}`);
@@ -436,6 +462,7 @@ if (clearBtn) {
         pdfDoc = null; totalPages = 0; currentPage = 1;
         currentPdfBlob = null; extractedText = "";
         metaYear.value = ""; metaAuthor.value = ""; metaVenue.value = ""; metaTitle.value = "";
+        metaShortTitle.value = ""; metaAbstract.value = "";
         if (previewPlaceholder) previewPlaceholder.style.display = 'block';
         if (pageHint) pageHint.classList.add('hidden');
         if (canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
