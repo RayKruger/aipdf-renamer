@@ -281,7 +281,7 @@
                     Injection
                 </h2>
                 <p class="text-lg text-slate-400 leading-relaxed max-w-xl">
-                    We don't just change the filename. AiPDF injects Title, Author, Year, and Venue directly into your PDF's internal headers (XMP). Your library stays organized in any standard PDF manager.
+                    We don't just change the filename. AiPDF injects Title, Author, Year, Venue, and <span class="text-lime-400">Abstract</span> directly into your PDF's internal headers (XMP). Your library stays organized in any standard PDF manager.
                 </p>
                 <div class="p-6 bg-slate-900/50 border border-slate-800 rounded-2xl space-y-4 shadow-xl">
                     <div class="flex gap-4 items-start">
@@ -294,11 +294,6 @@
                         </div>
                     </div>
                 </div>
-                
-                <p class="text-xs text-slate-600 flex items-center gap-2">
-                    <span class="w-1 h-1 bg-slate-700 rounded-full"></span>
-                    Companion App: <span class="text-slate-500 font-bold">AIPDF Search</span> (Coming Soon) for advanced RAG-based database querying.
-                </p>
             </div>
             
             <div class="flex-1 relative">
@@ -323,6 +318,58 @@
                 </div>
                 <!-- Background Glow -->
                 <div class="absolute -top-20 -right-20 w-80 h-80 bg-lime-400/5 rounded-full blur-[120px]"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AIPDF Search Section (Coming Soon) -->
+    <section class="py-24 px-6 bg-slate-900/10 relative overflow-hidden border-t border-slate-800/30">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row-reverse items-center gap-16">
+            <div class="flex-1 space-y-8">
+                <div class="inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest leading-none">
+                    <span class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
+                    Coming Soon
+                </div>
+                <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight text-white">
+                    <span class="text-cyan-400">AIPDF Search</span> <br>
+                    The Companion App
+                </h2>
+                <p class="text-lg text-slate-400 leading-relaxed max-w-xl">
+                    Query your entire library using natural language. No more "where was that paper?" moments. Our advanced RAG-based search engine talks to your database.
+                </p>
+                <div class="p-6 bg-slate-900/50 border border-slate-800 rounded-2xl space-y-4 shadow-xl">
+                    <div class="flex gap-4 items-start">
+                        <div class="w-10 h-10 bg-cyan-400/10 rounded-lg flex items-center justify-center text-cyan-400 shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white mb-1 uppercase tracking-tight text-[10px]">RAG-Powered Discovery</h4>
+                            <p class="text-xs text-slate-500 italic leading-relaxed">Instantly find papers by concept, abstract, or even specific figures—not just filenames.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex-1 relative">
+                <!-- Visual representation of RAG/Search -->
+                <div class="glass p-8 rounded-[2.5rem] border-slate-700/30 relative z-10 shadow-premium">
+                    <div class="space-y-4 font-mono text-[10px] opacity-60 overflow-hidden text-ellipsis">
+                         <div class="flex gap-2"><span class="text-cyan-400">></span> <span class="text-slate-200">WIndexing library...</span></div>
+                         <div class="flex gap-2"><span class="text-cyan-400">></span> <span class="text-slate-200">Preparing RAG-ready vectors...</span></div>
+                         <div class="flex gap-2"><span class="text-lime-400">✓</span> <span class="text-slate-400 tracking-tight">Optimized for AIPDF Search</span></div>
+                    </div>
+                    <div class="mt-8 p-6 bg-black/40 rounded-2xl border border-lime-400/20 shadow-2xl group transition-all hover:border-lime-400/50">
+                         <div class="text-lime-400 text-[10px] font-black mb-4 flex items-center gap-2 uppercase tracking-widest">
+                             <span class="w-1.5 h-1.5 bg-lime-400 rounded-full"></span>
+                             AIPDF Search
+                         </div>
+                         <p class="text-slate-500 text-[11px] mb-4">"Find papers about Attention mechanism from 2017"</p>
+                         <div class="h-2 w-full bg-slate-800 rounded mb-2"></div>
+                         <div class="h-2 w-3/4 bg-slate-800 rounded"></div>
+                    </div>
+                </div>
+                <!-- Background Glow -->
+                <div class="absolute -top-20 -left-20 w-80 h-80 bg-cyan-400/5 rounded-full blur-[120px]"></div>
             </div>
         </div>
     </section>
