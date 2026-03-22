@@ -478,20 +478,77 @@ if (extractBtn) {
     });
 }
 
-// --- Download & Clear ---
+// --- Download & Metadata Embedding ---
 if (downloadBtn) {
-    downloadBtn.addEventListener('click', () => {
+    downloadBtn.addEventListener('click', async () => {
         if (!currentPdfBlob) { alert('Upload a PDF first!'); return; }
+        
         const newName = updateFilenamePreview();
-        const url = URL.createObjectURL(currentPdfBlob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = newName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        logToUi(`Downloaded: ${newName}`);
+        downloadBtn.disabled = true;
+        downloadBtn.innerText = 'Embedding Metadata...';
+        
+        try {
+            logToUi(`Starting metadata embedding using pdf-lib...`);
+            
+            // 1. Read the PDF blob as ArrayBuffer
+            const arrBuffer = await currentPdfBlob.arrayBuffer();
+            
+            // 2. Load the PDF with pdf-lib
+            const pdfDocLib = await PDFLib.PDFDocument.load(arrBuffer);
+            
+            // 3. Set standard metadata fields
+            // Title
+            if (metaTitle.value) pdfDocLib.setTitle(metaTitle.value.trim());
+            
+            // Author (Prefer full authors if available, else first author)
+            const authorsStr = (metaAllAuthors && metaAllAuthors.value) ? metaAllAuthors.value.trim() : metaAuthor.value.trim();
+            if (authorsStr) pdfDocLib.setAuthor(authorsStr);
+            
+            // Subject (Use venue + yea + abstract snippet)
+            let subjectStr = "";
+            if (metaVenue.value) subjectStr += `Published in ${metaVenue.value.trim()}. `;
+            if (metaYear.value) subjectStr += `Year: ${metaYear.value.trim()}. `;
+            if (metaAbstract.value) subjectStr += `\nAbstract: ${metaAbstract.value.trim()}`;
+            if (subjectStr) pdfDocLib.setSubject(subjectStr.substring(0, 500)); // Limit length
+            
+            // Keywords
+            if (metaKeywords && metaKeywords.value) {
+                const kws = metaKeywords.value.split(',').map(k => k.trim()).filter(k => k);
+                if (kws.length > 0) pdfDocLib.setKeywords(kws);
+            }
+            
+            // Creator / Producer
+            pdfDocLib.setProducer('AiPDF Renamer (https://aipdfrenamer.vercel.app)');
+            pdfDocLib.setCreator('AiPDF Renamer');
+            
+            // 4. Save and Download
+            const modifiedPdfBytes = await pdfDocLib.save();
+            const modifiedBlob = new Blob([modifiedPdfBytes], { type: 'application/pdf' });
+            
+            const url = URL.createObjectURL(modifiedBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = newName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            logToUi(`Downloaded with Metadata: ${newName}`);
+        } catch (err) {
+            console.error(err);
+            logToUi(`Metadata Embedding Error: ${err.message}`);
+            // Fallback: Download original file
+            const url = URL.createObjectURL(currentPdfBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = newName;
+            a.click();
+            URL.revokeObjectURL(url);
+        } finally {
+            downloadBtn.disabled = false;
+            downloadBtn.innerText = 'Download PDF';
+        }
     });
 }
 
