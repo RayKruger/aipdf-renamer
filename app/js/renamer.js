@@ -336,9 +336,8 @@ function updateFilenamePreview() {
     if (!metaYear) return;
     const year = metaYear.value.trim();
     const author = metaAuthor.value.trim();
-    const venue = metaVenue.value.trim();
     
-    // Prioritize Short Title for filename
+    // Prioritize Short Title for filename (Exclude Venue/Journal)
     let title = (metaShortTitle.value.trim() || metaTitle.value.trim())
         .replace(/[:\/\\|?*<>]/g, '') 
         .replace(/\s+/g, '_'); 
@@ -351,7 +350,6 @@ function updateFilenamePreview() {
     const nameParts = [];
     if (year) nameParts.push(year);
     if (author) nameParts.push(author);
-    if (venue) nameParts.push(venue);
     if (title) nameParts.push(title);
 
     const newName = nameParts.join('_') + '.pdf';
