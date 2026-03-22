@@ -8,6 +8,10 @@ let currentPage = 1;
 let totalPages = 0;
 let currentPdfBlob = null;
 let extractedText = ""; // Text from the *current* page
+let PROMPTS = {
+    metadata_prompt: "Extract metadata from the following academic paper text (from page {{page}}).\nCRITICAL: Extract the FULL, COMPLETE title for the title field.\nFormat your response as a JSON object with keys: \"year\", \"author\" (last name only of first author), \"venue\" (short name), \"title\".\nText: {{text}}",
+    abstract_prompt: "Based on the following paper text, extract the abstract (up to 3 sentences) and generate a shortened \"Ai\" style title (e.g. \"Ai_Vision_Transformer\").\nFormat your response as a JSON object with keys: \"abstract\", \"short_title\".\nText: {{text}}"
+};
 
 const MODEL_MAP = {
     openai: ['gpt-5-mini', 'gpt-5-nano', 'gpt-5.4-mini', 'gpt-5.4-nano', 'gpt-5', 'gpt-4o-mini', 'gpt-4o'],
@@ -40,6 +44,7 @@ const metaVenue = document.getElementById('meta-venue');
 const metaTitle = document.getElementById('meta-title');
 const metaShortTitle = document.getElementById('meta-short-title');
 const metaAbstract = document.getElementById('meta-abstract');
+const metaKeywords = document.getElementById('meta-keywords');
 const previewFilename = document.getElementById('preview-filename');
 const rawLog = document.getElementById('raw-log');
 
@@ -78,6 +83,18 @@ function logToUi(message) {
     if (rawLog) {
         const timestamp = new Date().toLocaleTimeString();
         rawLog.value = `[${timestamp}] ${message}\n` + rawLog.value;
+    }
+}
+
+async function fetchPrompts() {
+    try {
+        const resp = await fetch('prompts.json');
+        if (resp.ok) {
+            PROMPTS = await resp.json();
+            logToUi('External prompts loaded successfully.');
+        }
+    } catch (e) {
+        console.warn('Could not load external prompts, using defaults.', e);
     }
 }
 
@@ -372,10 +389,9 @@ if (extractBtn) {
 
         try {
             // PROMPT 1: Basic Metadata
-            const prompt1 = `Extract metadata from the following academic paper text (from page ${currentPage}).
-            CRITICAL: Extract the FULL, COMPLETE title for the title field.
-            Format your response as a JSON object with keys: "year", "author" (last name only of first author), "venue" (short name), "title".
-            Text: ${extractedText.substring(0, 4000)}`;
+            const prompt1 = PROMPTS.metadata_prompt
+                .replace('{{page}}', currentPage)
+                .replace('{{text}}', extractedText.substring(0, 4000));
 
             const reqHeaders = {
                 'Content-Type': 'application/json',
@@ -401,13 +417,15 @@ if (extractBtn) {
             metaAuthor.value = meta1.author || '';
             metaVenue.value = meta1.venue || '';
             metaTitle.value = meta1.title || '';
+            metaShortTitle.value = meta1.short_title || ''; // Pre-calculated short title
+            updateFilenamePreview();
             logToUi(`Prompt 1 complete: Metadata extracted.`);
 
             // PROMPT 2: Abstract & Short Title
             logToUi(`Starting Prompt 2: Abstract & AI Short Title...`);
-            const prompt2 = `Based on the following paper text, extract the abstract (up to 3 sentences) and generate a shortened "Ai" style title (e.g. "Ai_Vision_Transformer").
-            Format your response as a JSON object with keys: "abstract", "short_title".
-            Text: ${extractedText.substring(0, 4000)}`;
+            const prompt2 = PROMPTS.abstract_prompt
+                .replace('{{page}}', currentPage)
+                .replace('{{text}}', extractedText.substring(0, 4000));
 
             const response2 = await fetch(`${active.baseUrl}/chat/completions`, {
                 method: 'POST',
@@ -424,10 +442,11 @@ if (extractBtn) {
             const meta2 = JSON.parse(data2.choices[0].message.content);
 
             metaAbstract.value = meta2.abstract || '';
-            metaShortTitle.value = meta2.short_title || '';
+            metaShortTitle.value = meta2.short_title || metaShortTitle.value;
+            if (metaKeywords) metaKeywords.value = meta2.keywords || '';
 
             updateFilenamePreview();
-            logToUi(`Prompt 2 complete: Abstract and Short Title extracted.`);
+            logToUi(`Prompt 2 complete: Abstract, Short Title, and Keywords extracted.`);
         } catch (error) {
             console.error(error);
             logToUi(`Extraction Error: ${error.message}`);
@@ -463,6 +482,7 @@ if (clearBtn) {
         currentPdfBlob = null; extractedText = "";
         metaYear.value = ""; metaAuthor.value = ""; metaVenue.value = ""; metaTitle.value = "";
         metaShortTitle.value = ""; metaAbstract.value = "";
+        if (metaKeywords) metaKeywords.value = "";
         if (previewPlaceholder) previewPlaceholder.style.display = 'block';
         if (pageHint) pageHint.classList.add('hidden');
         if (canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -482,4 +502,5 @@ if (extractPageBtn) {
 // --- Init ---
 initAuth();
 loadProviders();
+fetchPrompts();
 updateFilenamePreview();
