@@ -46,9 +46,9 @@
     <!-- Hero Section -->
     <main class="pt-32 pb-20 px-6 hero-bg min-h-screen flex flex-col items-center justify-center text-center">
         <div class="max-w-4xl fade-in">
-            <h2 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight leading-tight">
+            <h2 class="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight leading-loose">
                 Rename Your Research Papers <br>
-                <span class="text-lime-400">Correctly. Precisely. Using AI,</span>
+                <span class="text-lime-400">Correctly. Precisely. With AI.</span>
             </h2>
             <p class="text-xl text-slate-400 mb-4 max-w-2xl mx-auto leading-relaxed">
                 Tired of <code class="bg-slate-800 px-2 py-0.5 rounded text-slate-300">1-s2.0-main.pdf</code>? 
@@ -131,7 +131,7 @@
                 </div>
             </div>
         </div>
-    </section>    <!-- Product Preview Section (Live UI Replica) -->
+    </sectio    <!-- Product Preview Section (Live UI Replica) -->
     <section class="py-24 px-6 bg-slate-900/10">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-16">
@@ -142,75 +142,93 @@
             <div class="glass p-2 sm:p-4 rounded-[2.5rem] shadow-2xl group overflow-hidden relative border border-slate-700/30">
                 <div class="bg-[#0f172a] rounded-[2rem] p-6 lg:p-10 border border-slate-700/50 pointer-events-none select-none">
                     
+                    <!-- API Config (Replica) -->
+                    <div class="mb-10 pointer-events-none opacity-80">
+                        <div class="bg-slate-900/60 border border-slate-700 rounded-2xl shadow-xl overflow-hidden">
+                            <div class="p-4 flex items-center justify-between border-b border-slate-800">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-slate-800 rounded-lg flex items-center justify-center text-cyan-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-sm font-bold text-white">LLM API Configuration</h2>
+                                        <p class="text-[10px] text-slate-500">Configure multiple providers</p>
+                                    </div>
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-600"><polyline points="6 9 12 15 18 9"/></svg>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- PREVIEW + FIELDS GRID -->
-                    <div class="grid grid-cols-1 md:grid-cols-[450px,1fr] gap-10 mt-8 items-start">
+                    <div class="grid grid-cols-1 md:grid-cols-[450px,1fr] gap-12 mt-8 items-start">
                         <!-- Preview -->
                         <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">PDF Preview</div>
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">PDF Preview</div>
                                 <div class="flex items-center gap-2">
-                                    <button class="px-3 py-1.5 bg-transparent border-2 border-cyan-400/70 text-cyan-400 text-[10px] font-black uppercase rounded-lg tracking-wider">(Select Page)</button>
+                                    <button class="px-3 py-1 bg-transparent border border-cyan-400/50 text-cyan-400 text-[9px] font-bold uppercase rounded-md tracking-wider">(Select Page)</button>
                                     <span class="text-[10px] font-mono text-cyan-400">1 / 15</span>
                                 </div>
                             </div>
                             
-                            <div class="relative w-full h-[600px] bg-gray-900/60 border border-gray-700 rounded-lg overflow-hidden flex items-center justify-center">
-                                <!-- Real PDF Embed (Scaled down) -->
+                            <!-- Clean PDF Preview (Matching renamer style - NO BORDER) -->
+                            <div class="w-full h-[650px] bg-white shadow-2xl rounded-sm overflow-hidden flex items-center justify-center">
                                 <embed src="Atttention_is all_you_need_1page.pdf" type="application/pdf" class="w-full h-full" />
                             </div>
                         </div>
 
                         <!-- Fields -->
-                        <div class="space-y-4">
-                            <div class="text-sm text-gray-300 mb-2 font-bold flex items-center gap-2">
+                        <div class="space-y-5">
+                            <div class="text-sm text-gray-300 mb-4 font-bold flex items-center gap-2">
                                 <span class="text-lime-400">Ai Extracted</span> Metadata
                             </div>
 
-                            <div class="grid grid-cols-1 gap-4 text-xs">
+                            <div class="grid grid-cols-1 gap-5 text-xs">
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="text-gray-400 font-bold block mb-1 uppercase tracking-tighter">Year:</label>
-                                        <div class="w-full px-3 py-2 rounded bg-slate-800 text-white border border-slate-700">2017</div>
+                                        <label class="text-gray-500 font-bold block mb-1.5 uppercase tracking-tighter text-[10px]">Year:</label>
+                                        <div class="w-full px-4 py-2.5 rounded-lg bg-slate-800 text-white border border-slate-700">2017</div>
                                     </div>
                                     <div>
-                                        <label class="text-gray-400 font-bold block mb-1 uppercase tracking-tighter">Lead Author:</label>
-                                        <div class="w-full px-3 py-2 rounded bg-slate-800 text-white border border-slate-700 italic">Vaswani</div>
+                                        <label class="text-gray-500 font-bold block mb-1.5 uppercase tracking-tighter text-[10px]">Lead Author:</label>
+                                        <div class="w-full px-4 py-2.5 rounded-lg bg-slate-800 text-white border border-slate-700 italic">Vaswani</div>
                                     </div>
                                 </div>
                                 
                                 <div>
-                                    <label class="text-gray-400 font-bold block mb-1 uppercase tracking-tighter">All Authors (Full List):</label>
-                                    <div class="w-full px-3 py-2 rounded bg-slate-800/40 text-[10px] text-slate-300 border border-slate-700/50 leading-relaxed italic">Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Łukasz Kaiser, Illia Polosukhin</div>
+                                    <label class="text-gray-500 font-bold block mb-1.5 uppercase tracking-tighter text-[10px]">All Authors (Full List):</label>
+                                    <div class="w-full px-4 py-2.5 rounded-lg bg-slate-800/40 text-[10px] text-slate-300 border border-slate-700/50 leading-relaxed italic">Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Łukasz Kaiser, Illia Polosukhin</div>
                                 </div>
                                 
                                 <div>
-                                    <label class="text-gray-400 font-bold block mb-1 uppercase tracking-tighter">Journal / Venue:</label>
-                                    <div class="w-full px-3 py-2 rounded bg-slate-800 text-white border border-slate-700">NeurIPS</div>
+                                    <label class="text-gray-500 font-bold block mb-1.5 uppercase tracking-tighter text-[10px]">Journal / Venue:</label>
+                                    <div class="w-full px-4 py-2.5 rounded-lg bg-slate-800 text-white border border-slate-700">NeurIPS</div>
                                 </div>
 
                                 <div>
-                                     <label class="text-gray-400 font-bold block mb-1 uppercase tracking-tighter">Title (Full):</label>
-                                     <div class="w-full px-3 py-2 rounded bg-slate-800 text-white border border-slate-700 font-bold">Attention Is All You Need</div>
+                                     <label class="text-gray-500 font-bold block mb-1.5 uppercase tracking-tighter text-[10px]">Title (Full):</label>
+                                     <div class="w-full px-4 py-2.5 rounded-lg bg-slate-800 text-white border border-slate-700 font-bold">Attention Is All You Need</div>
                                  </div>
          
                                  <div>
-                                     <label class="text-lime-400 font-bold block mb-1 uppercase tracking-tighter">Shorned Title (Ai Style):</label>
-                                     <div class="w-full px-3 py-2 rounded bg-slate-800 border border-lime-400/30 text-lime-400 font-bold">Attention Is All You Need</div>
+                                     <label class="text-lime-400 font-black block mb-1.5 uppercase tracking-tighter text-[10px]">Shorned Title (Ai Style):</label>
+                                     <div class="w-full px-4 py-2.5 rounded-lg bg-slate-800 border border-lime-400/30 text-lime-400 font-black text-sm">Attention Is All You Need</div>
                                  </div>
 
                                  <div>
-                                     <label class="text-gray-400 font-bold block mb-1 uppercase tracking-tighter">Abstract:</label>
-                                     <div class="w-full px-3 py-2 rounded bg-slate-800/20 text-slate-400 text-[9px] leading-relaxed line-clamp-4 italic border border-slate-800">The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms...</div>
+                                     <label class="text-gray-500 font-bold block mb-1.5 uppercase tracking-tighter text-[10px]">Abstract:</label>
+                                     <div class="w-full px-4 py-2.5 rounded-lg bg-slate-800/20 text-slate-400 text-[9px] leading-relaxed line-clamp-4 italic border border-slate-800">The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms...</div>
                                  </div>
 
                                  <div>
-                                     <label class="text-gray-400 font-bold block mb-1 uppercase tracking-tighter">Key Words:</label>
-                                     <div class="w-full px-3 py-2 rounded bg-slate-800/40 text-[10px] text-slate-400 border border-slate-700">Transformer, attention mechanisms, machine translation, sequence transduction</div>
+                                     <label class="text-gray-500 font-bold block mb-1.5 uppercase tracking-tighter text-[10px]">Key Words:</label>
+                                     <div class="w-full px-4 py-2.5 rounded-lg bg-slate-800/40 text-[10px] text-slate-400 border border-slate-700">Transformer, attention mechanisms, machine translation, sequence transduction</div>
                                  </div>
 
-                                <div class="pt-4 border-t border-slate-800">
-                                    <label class="text-lime-400 font-bold block mb-1 uppercase tracking-tight">Proposed Ai File Name:</label>
-                                    <div class="w-full px-3 py-3 rounded font-mono bg-black/40 border border-lime-400/30 text-lime-400 break-all text-xs">
+                                <div class="pt-6 border-t border-slate-800 mt-2">
+                                    <label class="text-lime-400 font-black block mb-2 uppercase tracking-tight text-[10px]">Proposed Ai File Name:</label>
+                                    <div class="w-full px-4 py-4 rounded-xl font-mono bg-black/40 border border-lime-400/30 text-lime-400 break-all text-xs font-bold tracking-tight">
                                         2017_Vaswani_Attention_Is_All_You_Need.pdf
                                     </div>
                                 </div>
@@ -218,19 +236,71 @@
                         </div>
                     </div>
 
-                    <!-- BUTTONS (Legacy Look Replica) -->
-                    <div class="flex flex-wrap gap-4 pt-10 mt-6 border-t border-slate-800">
-                        <button class="px-8 py-3 bg-transparent border-2 border-cyan-400 text-cyan-400 rounded-xl font-bold uppercase tracking-widest text-xs">Extract Fields</button>
-                        <button class="px-8 py-3 bg-gradient-to-r from-lime-600 to-lime-500 text-black rounded-xl font-bold flex items-center gap-2">
+                    <!-- BUTTONS (Replica) -->
+                    <div class="flex flex-wrap gap-4 pt-12 mt-10 border-t border-slate-800">
+                        <button class="px-8 py-3.5 bg-transparent border-2 border-cyan-400 text-cyan-400 rounded-xl font-bold uppercase tracking-widest text-xs">Extract Fields</button>
+                        <button class="px-8 py-3.5 bg-gradient-to-r from-lime-600 to-lime-500 text-black rounded-xl font-bold flex items-center gap-2">
                              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                              Download PDF
                         </button>
-                        <button class="px-8 py-3 bg-slate-800 text-slate-300 rounded-xl font-bold border border-slate-700">Clear All</button>
+                        <button class="px-8 py-3.5 bg-slate-800 text-slate-300 rounded-xl font-bold border border-slate-700">Clear All</button>
                     </div>
                 </div>
 
                 <!-- Glow Effect -->
-                <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-950/60 to-transparent pointer-events-none"></div>
+                <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-950/40 to-transparent pointer-events-none"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metadata & RAG Section -->
+    <section class="py-24 px-6 bg-slate-950 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
+            <div class="flex-1 space-y-8">
+                <div class="inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest">
+                    <span class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
+                    Coming Soon
+                </div>
+                <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+                    Metadata <span class="text-lime-400">Injection</span> <br>
+                    & AIPDF Search
+                </h2>
+                <p class="text-lg text-slate-400 leading-relaxed max-w-xl">
+                    Our AI doesn't just rename your files—it transforms them. Every extraction process prepares your papers for high-fidelity RAG (Retrieval-Augmented Generation) indexing.
+                </p>
+                <div class="p-6 bg-slate-900/50 border border-slate-800 rounded-2xl space-y-4">
+                    <div class="flex gap-4 items-start">
+                        <div class="w-10 h-10 bg-lime-400/10 rounded-lg flex items-center justify-center text-lime-400 shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white mb-1 uppercase tracking-tight text-xs">AIPDF Search Companion</h4>
+                            <p class="text-sm text-slate-500 italic leading-relaxed">Instantly search your entire library using natural language query. Your digital library, finally searchable.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex-1 relative">
+                <!-- Visual representation of RAG/Search -->
+                <div class="glass p-8 rounded-[2.5rem] border-slate-700/30 relative z-10 shadow-premium">
+                    <div class="space-y-4 font-mono text-[10px] opacity-60">
+                         <div class="flex gap-2"><span class="text-cyan-400">></span> <span class="text-slate-200">Injecting semantic metadata...</span></div>
+                         <div class="flex gap-2"><span class="text-cyan-400">></span> <span class="text-slate-200">Preparing RAG-ready vectors...</span></div>
+                         <div class="flex gap-2"><span class="text-lime-400">✓</span> <span class="text-slate-400">Optimized for AIPDF Search</span></div>
+                    </div>
+                    <div class="mt-8 p-6 bg-black/40 rounded-2xl border border-lime-400/20 shadow-2xl group transition-all hover:border-lime-400/50">
+                         <div class="text-lime-400 text-[10px] font-black mb-4 flex items-center gap-2 uppercase tracking-widest">
+                             <span class="w-2 h-2 bg-lime-400 rounded-full"></span>
+                             AIPDF Search
+                         </div>
+                         <p class="text-slate-500 text-[11px] mb-4">"Find papers about Attention mechanism from 2017"</p>
+                         <div class="h-2 w-full bg-slate-800 rounded mb-2"></div>
+                         <div class="h-2 w-3/4 bg-slate-800 rounded"></div>
+                    </div>
+                </div>
+                <!-- Background Glow -->
+                <div class="absolute -top-20 -right-20 w-80 h-80 bg-cyan-500/10 rounded-full blur-[120px]"></div>
             </div>
         </div>
     </section>
