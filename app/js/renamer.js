@@ -209,7 +209,29 @@ function loadProviders() {
     providers.forEach(p => {
         providerContainer.appendChild(createProviderRow(p));
     });
+
+    checkProviderWarning();
 }
+
+function checkProviderWarning() {
+    const providerWarning = document.getElementById('provider-warning');
+    if (!providerWarning) return;
+    
+    const rows = document.querySelectorAll('.provider-row');
+    const hasKey = Array.from(rows).some(row => {
+        const key = row.querySelector('.provider-key').value.trim();
+        const active = row.querySelector('.provider-active').checked;
+        return key !== '' && active;
+    });
+    
+    if (!hasKey) {
+        providerWarning.classList.remove('hidden');
+    } else {
+        providerWarning.classList.add('hidden');
+    }
+}
+
+loadProviders();
 
 if (addProviderBtn) {
     addProviderBtn.addEventListener('click', () => {
@@ -230,6 +252,7 @@ if (saveApiBtn) {
 
         localStorage.setItem('pdf_renamer_providers', JSON.stringify(providers));
         
+        checkProviderWarning();
         storageStatus.classList.remove('hidden');
         setTimeout(() => storageStatus.classList.add('hidden'), 3000);
         logToUi('Multiple providers saved to secure local storage.');
