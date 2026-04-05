@@ -4,7 +4,8 @@ window.DISABLE_SUPABASE_AUTH = true; // Set to true to bypass Supabase login
 const auth = {
     async signUp(email, password) {
         if (window.DISABLE_SUPABASE_AUTH) {
-            return { data: { user: { email } }, error: null };
+            console.log("Guest Auth: Sign Up bypassed");
+            return { data: { user: { email: email || 'guest@aipdf-renamer.local' } }, error: null };
         }
         const { data, error } = await window.supabaseClient.auth.signUp({
             email,
@@ -15,7 +16,8 @@ const auth = {
 
     async signIn(email, password) {
         if (window.DISABLE_SUPABASE_AUTH) {
-            return { data: { user: { email } }, error: null };
+            console.log("Guest Auth: Sign In bypassed");
+            return { data: { user: { email: email || 'guest@aipdf-renamer.local' } }, error: null };
         }
         const { data, error } = await window.supabaseClient.auth.signInWithPassword({
             email,
@@ -26,6 +28,7 @@ const auth = {
 
     async signOut() {
         if (window.DISABLE_SUPABASE_AUTH) {
+            console.log("Guest Auth: Sign Out bypassed");
             return { error: null };
         }
         const { error } = await window.supabaseClient.auth.signOut();
@@ -34,7 +37,7 @@ const auth = {
 
     async checkSession() {
         if (window.DISABLE_SUPABASE_AUTH) {
-            return { user: { email: 'guest@aipdf-renamer.local' } };
+            return { user: { email: 'guest@aipdf-renamer.local', id: 'guest-user-id' } };
         }
         const { data: { session } } = await window.supabaseClient.auth.getSession();
         return session;
@@ -42,10 +45,8 @@ const auth = {
 
     onAuthStateChange(callback) {
         if (window.DISABLE_SUPABASE_AUTH) {
-            // Simulate initial session
-            setTimeout(() => {
-                callback('SIGNED_IN', { user: { email: 'guest@aipdf-renamer.local' } });
-            }, 0);
+            // Simulate initial session immediately
+            callback('SIGNED_IN', { user: { email: 'guest@aipdf-renamer.local', id: 'guest-user-id' } });
             return;
         }
         window.supabaseClient.auth.onAuthStateChange((event, session) => {

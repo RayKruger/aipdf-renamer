@@ -60,7 +60,7 @@ const clearApiBtn = document.getElementById('clear-api');
 const storageStatus = document.getElementById('storage-status');
 
 // --- Metadata Viewer ---
-const viewMetaBtn = document.getElementById('view-meta-btn');
+const viewMetaBtn = document.getElementById('view-meta-btn-v2') || document.getElementById('view-meta-btn');
 const metadataModal = document.getElementById('metadata-modal');
 const metadataDisplay = document.getElementById('metadata-display');
 const metadataFilename = document.getElementById('metadata-filename');
@@ -71,9 +71,13 @@ const metadataModalOverlay = document.getElementById('metadata-modal-overlay');
 // --- Auth Check ---
 async function initAuth() {
     if (window.DISABLE_SUPABASE_AUTH) {
+        console.log("Renamer: Auth Bypass Active (Guest Mode)");
         // Hide auth UI if disabled
         const authSection = document.querySelector('.flex.items-center.gap-3.text-sm.border-r.border-slate-700.pr-5');
-        if (authSection) authSection.style.display = 'none';
+        if (authSection) {
+            authSection.style.opacity = '0.3';
+            authSection.title = "Supabase Auth is currently disabled by developer flag.";
+        }
         return;
     }
 
