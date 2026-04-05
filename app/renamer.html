@@ -1,62 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AiPDF Renamer.</title>
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- PDF.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
         window.pdfjsLib = window['pdfjs-dist/build/pdf'];
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     </script>
-    
+
     <!-- pdf-lib (for modification) -->
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    
+
     <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
+
     <!-- Custom Styles -->
     <link rel="stylesheet" href="css/style.css">
-    
+
     <style>
         body {
             background: linear-gradient(to bottom, #0f172a, #1e293b, #000);
         }
+
         .glass {
             background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(51, 65, 85, 0.5);
         }
+
         .drop-zone {
             transition: all 0.3s ease;
         }
+
         .drop-zone.dragover {
             border-color: #22d3ee;
             background: rgba(34, 211, 238, 0.05);
             filter: brightness(1.25);
         }
+
         canvas {
             max-width: 100%;
             height: auto;
             border-radius: 4px;
         }
+
         /* Match legacy input styles */
-        input, textarea {
+        input,
+        textarea {
             background: rgba(17, 24, 39, 0.6) !important;
             border: 1px solid #374151 !important;
         }
-        input:focus, textarea:focus {
+
+        input:focus,
+        textarea:focus {
             border-color: #22d3ee !important;
             box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.5);
         }
     </style>
 </head>
+
 <body class="font-sans text-gray-100 min-h-screen">
 
     <!-- Navbar/Header (Legacy Look) -->
@@ -71,7 +81,7 @@
                     AI-powered PDF renamer and bibliography extraction
                 </p>
             </div>
-            
+
             <div class="flex items-center gap-5">
                 <div class="flex items-center gap-3 text-sm border-r border-slate-700 pr-5">
                     <span id="user-email" class="text-slate-400 font-medium"></span>
@@ -85,35 +95,49 @@
     </header>
 
     <main class="max-w-6xl mx-auto px-4 space-y-10 pb-20">
-        
+
         <!-- API Config (Enhanced Multi-Provider) -->
         <section>
             <details class="bg-slate-900/60 border border-slate-700 rounded-2xl shadow-xl overflow-hidden group">
                 <summary class="p-6 cursor-pointer flex items-center justify-between hover:bg-slate-800/30 transition">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center text-cyan-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
                         </div>
                         <div>
                             <h2 class="font-bold text-white">LLM API Configuration</h2>
                             <p class="text-xs text-slate-500 flex items-center gap-1">
-                                Configure multiple providers 
-                                <span id="storage-status" class="hidden text-emerald-400 font-medium whitespace-nowrap">· Saved ✓</span>
-                                <span id="provider-warning" class="hidden text-rose-400 font-bold animate-pulse">· PLEASE ADD A PROVIDER!</span>
+                                Configure multiple providers
+                                <span id="storage-status"
+                                    class="hidden text-emerald-400 font-medium whitespace-nowrap">· Saved ✓</span>
+                                <span id="provider-warning" class="hidden text-rose-400 font-bold animate-pulse">·
+                                    PLEASE ADD A PROVIDER!</span>
                             </p>
                         </div>
                     </div>
-                    <svg class="group-open:rotate-180 transition-transform" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    <svg class="group-open:rotate-180 transition-transform" xmlns="http://www.w3.org/2000/svg"
+                        width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
                 </summary>
-                
+
                 <div class="p-6 border-t border-slate-800/50 bg-slate-900/30 space-y-6">
                     <!-- Provider List (Dynamic) -->
                     <div id="provider-container" class="space-y-4">
                         <!-- Individual Provider Row -->
-                        <div class="provider-row grid md:grid-cols-12 gap-4 items-end p-4 bg-slate-800/20 rounded-xl border border-slate-700/50 relative">
+                        <div
+                            class="provider-row grid md:grid-cols-12 gap-4 items-end p-4 bg-slate-800/20 rounded-xl border border-slate-700/50 relative">
                             <div class="md:col-span-3 space-y-1">
                                 <label class="text-[10px] font-bold text-slate-500 uppercase">Provider</label>
-                                <select class="provider-type w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition bg-slate-900 border border-slate-700">
+                                <select
+                                    class="provider-type w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition bg-slate-900 border border-slate-700">
                                     <option value="openai">OpenAI</option>
                                     <option value="claude">Anthropic (Claude)</option>
                                     <option value="gemini">Google (Gemini)</option>
@@ -122,7 +146,8 @@
                             </div>
                             <div class="md:col-span-3 space-y-1">
                                 <label class="text-[10px] font-bold text-slate-500 uppercase">Model</label>
-                                <select class="provider-model w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition bg-slate-900 border border-slate-700">
+                                <select
+                                    class="provider-model w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition bg-slate-900 border border-slate-700">
                                     <option value="gpt-4o-mini">gpt-4o-mini</option>
                                     <option value="gpt-4o">gpt-4o</option>
                                     <option value="o1-mini">o1-mini</option>
@@ -130,7 +155,8 @@
                             </div>
                             <div class="md:col-span-4 space-y-1">
                                 <label class="text-[10px] font-bold text-slate-500 uppercase">API Key</label>
-                                <input type="password" placeholder="sk-..." class="provider-key w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition bg-slate-900 border border-slate-700">
+                                <input type="password" placeholder="sk-..."
+                                    class="provider-key w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition bg-slate-900 border border-slate-700">
                             </div>
                             <div class="md:col-span-1 flex items-center justify-center p-1">
                                 <label class="flex flex-col items-center gap-1 cursor-pointer">
@@ -139,33 +165,55 @@
                                 </label>
                             </div>
                             <div class="md:col-span-1 flex justify-end">
-                                <button class="remove-provider p-2 text-slate-500 hover:text-rose-400 transition" title="Remove Provider">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                                <button class="remove-provider p-2 text-slate-500 hover:text-rose-400 transition"
+                                    title="Remove Provider">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M3 6h18" />
+                                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                                    </svg>
                                 </button>
                             </div>
 
                             <!-- Custom URL Field (Hidden by default, shown for 'custom') -->
                             <div class="custom-url-container hidden md:col-span-12 mt-2 space-y-1">
-                                <label class="text-[10px] font-bold text-slate-500 uppercase">Custom API Base URL</label>
-                                <input type="text" placeholder="https://your-domain.com/v1" class="provider-base-url w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition bg-slate-900 border border-slate-700">
+                                <label class="text-[10px] font-bold text-slate-500 uppercase">Custom API Base
+                                    URL</label>
+                                <input type="text" placeholder="https://your-domain.com/v1"
+                                    class="provider-base-url w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition bg-slate-900 border border-slate-700">
                             </div>
                         </div>
                     </div>
 
                     <div class="flex justify-between items-center pt-2">
-                        <button id="add-provider" class="flex items-center gap-2 text-xs font-bold text-cyan-400 hover:text-cyan-300 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                        <button id="add-provider"
+                            class="flex items-center gap-2 text-xs font-bold text-cyan-400 hover:text-cyan-300 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="8" x2="12" y2="16" />
+                                <line x1="8" y1="12" x2="16" y2="12" />
+                            </svg>
                             Add Provider
                         </button>
                         <div class="flex items-center gap-6">
-                             <label class="flex items-center gap-2 cursor-pointer group">
-                                 <input type="checkbox" checked class="w-4 h-4 rounded border-slate-700 bg-slate-900 accent-cyan-400">
-                                 <span class="text-[10px] font-bold text-slate-400 group-hover:text-cyan-400 transition uppercase tracking-wider">Persist in Secure Local Storage</span>
-                             </label>
-                             <div class="flex gap-3">
-                                 <button id="clear-api" class="text-xs text-slate-500 hover:text-rose-400">Clear All</button>
-                                 <button id="save-api" class="bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold py-2 px-4 rounded-lg transition shadow-lg shadow-cyan-900/20">Save Configurations</button>
-                             </div>
+                            <label class="flex items-center gap-2 cursor-pointer group">
+                                <input type="checkbox" checked
+                                    class="w-4 h-4 rounded border-slate-700 bg-slate-900 accent-cyan-400">
+                                <span
+                                    class="text-[10px] font-bold text-slate-400 group-hover:text-cyan-400 transition uppercase tracking-wider">Persist
+                                    in Secure Local Storage</span>
+                            </label>
+                            <div class="flex gap-3">
+                                <button id="clear-api" class="text-xs text-slate-500 hover:text-rose-400">Clear
+                                    All</button>
+                                <button id="save-api"
+                                    class="bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold py-2 px-4 rounded-lg transition shadow-lg shadow-cyan-900/20">Save
+                                    Configurations</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -174,9 +222,10 @@
 
         <!-- Main Tool (Legacy Look) -->
         <div class="bg-slate-900/60 border border-slate-700 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
-            
+
             <!-- DROP ZONE -->
-            <div id="drop-zone" class="drop-zone p-10 w-full block text-center rounded-xl cursor-pointer bg-gray-900/40 border-2 border-dashed border-[#58b9d9] hover:bg-gray-800/40 hover:border-cyan-300">
+            <div id="drop-zone"
+                class="drop-zone p-10 w-full block text-center rounded-xl cursor-pointer bg-gray-900/40 border-2 border-dashed border-[#58b9d9] hover:bg-gray-800/40 hover:border-cyan-300">
                 <div class="font-medium text-white mb-1">Drag & Drop your PDF here</div>
                 <div class="text-xs text-gray-500">...or click to choose a file</div>
                 <input id="pdf-input" type="file" accept="application/pdf" class="hidden" />
@@ -189,26 +238,41 @@
                     <div class="flex items-center justify-between">
                         <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">PDF Preview</div>
                         <div class="flex items-center gap-2">
-                            <button id="extract-page-btn" class="mr-2 px-3 py-1.5 bg-transparent border-2 border-cyan-400/70 text-cyan-400 text-[10px] font-black uppercase rounded-lg hover:bg-cyan-400/10 transition tracking-wider" title="Confirm THIS page for extraction">
+                            <button id="extract-page-btn"
+                                class="mr-2 px-3 py-1.5 bg-transparent border-2 border-cyan-400/70 text-cyan-400 text-[10px] font-black uppercase rounded-lg hover:bg-cyan-400/10 transition tracking-wider"
+                                title="Confirm THIS page for extraction">
                                 (Select Page)
-                             </button>
-                            <button id="prev-page" class="p-1 rounded bg-slate-800 hover:bg-slate-700 text-gray-400 disabled:opacity-30 disabled:cursor-not-allowed">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                            </button>
+                            <button id="prev-page"
+                                class="p-1 rounded bg-slate-800 hover:bg-slate-700 text-gray-400 disabled:opacity-30 disabled:cursor-not-allowed">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <polyline points="15 18 9 12 15 6" />
+                                </svg>
                             </button>
                             <span id="page-indicator" class="text-[10px] font-mono text-cyan-400">0/0</span>
-                            <button id="next-page" class="p-1 rounded bg-slate-800 hover:bg-slate-700 text-gray-400 disabled:opacity-30 disabled:cursor-not-allowed">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                            <button id="next-page"
+                                class="p-1 rounded bg-slate-800 hover:bg-slate-700 text-gray-400 disabled:opacity-30 disabled:cursor-not-allowed">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <polyline points="9 18 15 12 9 6" />
+                                </svg>
                             </button>
                         </div>
                     </div>
-                    
-                    <div class="relative w-full h-[650px] flex flex-col items-center justify-center bg-gray-900/60 border border-gray-700 rounded-lg overflow-hidden group">
+
+                    <div
+                        class="relative w-full h-[650px] flex flex-col items-center justify-center bg-gray-900/60 border border-gray-700 rounded-lg overflow-hidden group">
                         <canvas id="pdf-canvas"></canvas>
                         <span id="preview-placeholder" class="text-[10px] text-gray-500">Waiting for PDF…</span>
-                        
+
                         <!-- Extraction Hint Overlay -->
-                        <div id="page-hint" class="hidden absolute bottom-0 left-0 right-0 bg-cyan-900/80 backdrop-blur-sm py-1.5 px-3 text-center border-t border-cyan-400/30">
-                            <span class="text-[9px] font-bold text-cyan-100 italic uppercase">Page displayed will be used for extraction</span>
+                        <div id="page-hint"
+                            class="hidden absolute bottom-0 left-0 right-0 bg-cyan-900/80 backdrop-blur-sm py-1.5 px-3 text-center border-t border-cyan-400/30">
+                            <span class="text-[9px] font-bold text-cyan-100 italic uppercase">Page displayed will be
+                                used for extraction</span>
                         </div>
                     </div>
                 </div>
@@ -223,48 +287,58 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="text-gray-400 font-bold block mb-1">Year:</label>
-                                <input id="meta-year" type="text" placeholder="2024" class="w-full px-3 py-2 rounded focus:outline-none">
+                                <input id="meta-year" type="text" placeholder="2024"
+                                    class="w-full px-3 py-2 rounded focus:outline-none">
                             </div>
                             <div>
                                 <label class="text-gray-400 font-bold block mb-1">Lead Author (Surname):</label>
-                                <input id="meta-author" type="text" placeholder="Author" class="w-full px-3 py-2 rounded focus:outline-none">
+                                <input id="meta-author" type="text" placeholder="Author"
+                                    class="w-full px-3 py-2 rounded focus:outline-none">
                             </div>
                         </div>
-                        
+
                         <div>
                             <label class="text-gray-400 font-bold block mb-1">All Authors (Full List):</label>
-                            <input id="meta-all-authors" type="text" placeholder="Extracting all author names..." class="w-full px-3 py-2 rounded focus:outline-none text-[10px] bg-slate-800/40">
+                            <input id="meta-all-authors" type="text" placeholder="Extracting all author names..."
+                                class="w-full px-3 py-2 rounded focus:outline-none text-[10px] bg-slate-800/40">
                         </div>
-                        
+
                         <div>
                             <label class="text-gray-400 font-bold block mb-1">Journal / Venue:</label>
-                            <input id="meta-venue" type="text" placeholder="Nature" class="w-full px-3 py-2 rounded focus:outline-none">
+                            <input id="meta-venue" type="text" placeholder="Nature"
+                                class="w-full px-3 py-2 rounded focus:outline-none">
                         </div>
 
                         <div>
-                             <label class="text-gray-400 font-bold block mb-1">Title (Full):</label>
-                             <textarea id="meta-title" rows="2" placeholder="Full title of the paper..." class="w-full px-3 py-2 rounded focus:outline-none resize-none"></textarea>
-                         </div>
- 
-                         <div>
-                             <label class="text-lime-400 font-bold block mb-1">Shorned Title (Ai Style):</label>
-                             <input id="meta-short-title" type="text" placeholder="Ai_Short_Title" class="w-full px-3 py-2 rounded focus:outline-none border border-lime-400/20">
-                         </div>
+                            <label class="text-gray-400 font-bold block mb-1">Title (Full):</label>
+                            <textarea id="meta-title" rows="2" placeholder="Full title of the paper..."
+                                class="w-full px-3 py-2 rounded focus:outline-none resize-none"></textarea>
+                        </div>
 
-                         <div>
-                             <label class="text-gray-400 font-bold block mb-1">Abstract:</label>
-                             <textarea id="meta-abstract" rows="3" placeholder="Paper abstract..." class="w-full px-3 py-2 rounded focus:outline-none resize-none text-[10px] bg-slate-800/40"></textarea>
-                         </div>
+                        <div>
+                            <label class="text-lime-400 font-bold block mb-1">Shorned Title (Ai Style):</label>
+                            <input id="meta-short-title" type="text" placeholder="Ai_Short_Title"
+                                class="w-full px-3 py-2 rounded focus:outline-none border border-lime-400/20">
+                        </div>
 
-                         <div>
-                             <label class="text-gray-400 font-bold block mb-1">Key Words:</label>
-                             <input id="meta-keywords" type="text" placeholder="Extracting keywords..." class="w-full px-3 py-2 rounded focus:outline-none text-[10px] bg-slate-800/40 border border-slate-700">
-                         </div>
+                        <div>
+                            <label class="text-gray-400 font-bold block mb-1">Abstract:</label>
+                            <textarea id="meta-abstract" rows="3" placeholder="Paper abstract..."
+                                class="w-full px-3 py-2 rounded focus:outline-none resize-none text-[10px] bg-slate-800/40"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="text-gray-400 font-bold block mb-1">Key Words:</label>
+                            <input id="meta-keywords" type="text" placeholder="Extracting keywords..."
+                                class="w-full px-3 py-2 rounded focus:outline-none text-[10px] bg-slate-800/40 border border-slate-700">
+                        </div>
 
 
                         <div class="pt-4 border-t border-slate-800">
-                            <label class="text-lime-400 font-bold block mb-1 uppercase tracking-tight">Proposed Ai File Name:</label>
-                            <div id="preview-filename" class="w-full px-3 py-3 rounded font-mono bg-black/40 border border-lime-400/30 text-lime-400 break-all min-h-[44px] flex items-center">
+                            <label class="text-lime-400 font-bold block mb-1 uppercase tracking-tight">Proposed Ai File
+                                Name:</label>
+                            <div id="preview-filename"
+                                class="w-full px-3 py-3 rounded font-mono bg-black/40 border border-lime-400/30 text-lime-400 break-all min-h-[44px] flex items-center">
                                 ...waiting for input
                             </div>
                         </div>
@@ -274,22 +348,38 @@
 
             <!-- BUTTONS (Legacy Colors) -->
             <div class="flex flex-wrap gap-4 pt-6 border-t border-slate-800">
-                <button id="extract-btn" class="px-8 py-3 bg-transparent border-2 border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 rounded-xl font-bold transition transform hover:scale-[1.02] active:scale-95 flex items-center gap-2 uppercase tracking-widest text-xs shadow-[0_0_15px_rgba(34,211,238,0.1)]">
+                <button id="extract-btn"
+                    class="px-8 py-3 bg-transparent border-2 border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 rounded-xl font-bold transition transform hover:scale-[1.02] active:scale-95 flex items-center gap-2 uppercase tracking-widest text-xs shadow-[0_0_15px_rgba(34,211,238,0.1)]">
                     Extract Fields
                 </button>
 
-                <button id="download-btn" class="px-8 py-3 bg-gradient-to-r from-lime-600 to-lime-500 hover:from-lime-500 hover:to-lime-400 text-black rounded-xl font-bold shadow-[0_0_20px_rgba(101,163,13,0.3)] transition transform hover:scale-[1.02] active:scale-95 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <button id="download-btn"
+                    class="px-8 py-3 bg-gradient-to-r from-lime-600 to-lime-500 hover:from-lime-500 hover:to-lime-400 text-black rounded-xl font-bold shadow-[0_0_20px_rgba(101,163,13,0.3)] transition transform hover:scale-[1.02] active:scale-95 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
                     Download PDF
                 </button>
 
                 <!-- Metadata Viewer Button (Moved & Styled for Visibility) -->
-                <button id="view-meta-btn-v2" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-cyan-400 rounded-xl font-bold border-2 border-cyan-400/50 transition flex items-center gap-2 shadow-[0_0_15px_rgba(34,211,238,0.2)]">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                <button id="view-meta-btn-v2"
+                    class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-cyan-400 rounded-xl font-bold border-2 border-cyan-400/50 transition flex items-center gap-2 shadow-[0_0_15px_rgba(34,211,238,0.2)]">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                    </svg>
                     View Metadata Source
                 </button>
 
-                <button id="clear-btn" class="px-8 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-bold border border-slate-700 transition transform hover:scale-[1.02] active:scale-95">
+                <button id="clear-btn"
+                    class="px-8 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-bold border border-slate-700 transition transform hover:scale-[1.02] active:scale-95">
                     Clear All
                 </button>
             </div>
@@ -299,8 +389,9 @@
 
     <!-- Footer (Legacy Look) -->
     <footer class="w-full px-5 py-3 bg-slate-900/40 border-t border-slate-800 mt-auto">
-        <div class="max-w-6xl mx-auto flex flex-col items-center justify-center space-y-1 text-gray-400 text-xs shadow-sm">
-            <p>© Designed & Built by Ray Kruger | Build v2.1.2-bypass (2026-04-05 15:24)</p>
+        <div
+            class="max-w-6xl mx-auto flex flex-col items-center justify-center space-y-1 text-gray-400 text-xs shadow-sm">
+            <p>© Designed & Built by Ray Kruger</p>
             <p>HTML • JS • Tailwind CSS • Supabase • Vercel ⚡⚡</p>
         </div>
     </footer>
@@ -308,42 +399,52 @@
     <!-- Metadata Modal -->
     <div id="metadata-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="metadata-modal-overlay"></div>
-        <div class="glass relative w-full max-w-4xl max-h-[90vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-cyan-500/20">
+        <div
+            class="glass relative w-full max-w-4xl max-h-[90vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-cyan-500/20">
             <!-- Modal Header -->
             <div class="p-6 border-b border-slate-700/50 flex items-center justify-between bg-slate-900/40">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-cyan-900/30 rounded-xl flex items-center justify-center text-cyan-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                            <polyline points="14 2 14 8 20 8" />
+                        </svg>
                     </div>
                     <div>
                         <h3 class="text-xl font-bold text-white">Internal PDF Metadata Structure</h3>
-                        <p class="text-xs text-slate-400 uppercase tracking-widest font-mono mt-0.5">Raw Dictionary & XMP Stream Analysis</p>
+                        <p class="text-xs text-slate-400 uppercase tracking-widest font-mono mt-0.5">Raw Dictionary &
+                            XMP Stream Analysis</p>
                     </div>
                 </div>
-                <button id="close-metadata-modal" class="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <button id="close-metadata-modal"
+                    class="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
                 </button>
             </div>
-            
+
             <!-- Modal Content -->
             <div class="p-6 overflow-y-auto bg-slate-900/20 flex-1">
                 <div class="space-y-4 h-full flex flex-col">
-                    <div class="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-tighter">
+                    <div
+                        class="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-tighter">
                         <span>Comprehensive Metadata Dump</span>
                         <span id="metadata-filename" class="text-cyan-400/60 lowercase">no file selected</span>
                     </div>
-                    <textarea 
-                        id="metadata-display" 
-                        readonly 
-                        class="flex-1 w-full h-[500px] bg-black/40 border border-slate-700/50 rounded-2xl p-6 font-mono text-xs text-cyan-50/80 focus:outline-none focus:border-cyan-500/30 transition-colors leading-relaxed shadow-inner"
-                        placeholder="Metadata will appear here after analysis..."
-                    ></textarea>
+                    <textarea id="metadata-display" readonly
+                        class="flex-1 w-full h-[75vh] bg-black/40 border border-slate-700/50 rounded-2xl p-6 font-mono text-xs text-cyan-50/80 focus:outline-none focus:border-cyan-500/30 transition-colors leading-relaxed shadow-inner"
+                        placeholder="Metadata will appear here after analysis..."></textarea>
                 </div>
             </div>
 
             <!-- Modal Footer -->
             <div class="p-4 bg-slate-900/60 border-t border-slate-700/50 flex justify-end">
-                <button id="close-metadata-modal-btn" class="px-6 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold transition text-sm">
+                <button id="close-metadata-modal-btn"
+                    class="px-6 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold transition text-sm">
                     Close Viewer
                 </button>
             </div>
@@ -355,4 +456,5 @@
     <script src="js/auth.js"></script>
     <script src="js/renamer.js"></script>
 </body>
+
 </html>

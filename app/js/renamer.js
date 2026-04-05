@@ -656,18 +656,23 @@ async function extractFullMetadata() {
         output += `[2] INFO DICTIONARY (Raw Entries)\n`;
         output += `---------------------------------\n`;
         try {
-            const infoId = pdfDocLib.context.trailer.get(lib.PDFName.of('Info'));
-            if (infoId) {
-                const infoDict = pdfDocLib.context.lookup(infoId);
-                if (infoDict && infoDict.entries) {
+            const trailer = pdfDocLib.context.trailer;
+            const infoRef = (trailer && typeof trailer.get === 'function') ? trailer.get(lib.PDFName.of('Info')) : null;
+            
+            if (infoRef) {
+                const infoDict = pdfDocLib.context.lookup(infoRef);
+                if (infoDict && infoDict.entries && typeof infoDict.entries === 'function') {
                     for (const [key, value] of infoDict.entries()) {
-                        output += `${key.asString().padEnd(12)} : ${value.toString()}\n`;
+                        const keyStr = typeof key.asString === 'function' ? key.asString() : key.toString();
+                        output += `${keyStr.padEnd(12)} : ${value.toString()}\n`;
                     }
+                } else if (infoDict) {
+                    output += `Info dictionary found (raw): ${infoDict.toString()}\n`;
                 } else {
                     output += `No entries found in Info dictionary.\n`;
                 }
             } else {
-                output += `No Info dictionary found in PDF trailer.\n`;
+                output += !trailer ? `PDF context trailer is undefined (possibly non-standard format).\n` : `No '/Info' dictionary reference found in trailer.\n`;
             }
         } catch (e) {
             output += `Error reading Info Dictionary: ${e.message}\n`;
@@ -678,19 +683,22 @@ async function extractFullMetadata() {
         output += `[3] XMP METADATA STREAM\n`;
         output += `-----------------------\n`;
         try {
-            const catalog = pdfDocLib.context.lookup(pdfDocLib.context.trailer.get(lib.PDFName.of('Root')));
-            const metadataStreamRef = catalog.get(lib.PDFName.of('Metadata'));
+            // Direct access to the Root/Catalog is more robust than trailer traversal
+            const catalog = pdfDocLib.catalog; 
+            const metadataStreamRef = (catalog && typeof catalog.get === 'function') ? catalog.get(lib.PDFName.of('Metadata')) : null;
             
             if (metadataStreamRef) {
                 const metadataStream = pdfDocLib.context.lookup(metadataStreamRef);
-                if (metadataStream) {
+                if (metadataStream && typeof metadataStream.getUncompressedContents === 'function') {
                     const xmpContent = new TextDecoder().decode(metadataStream.getUncompressedContents());
                     output += xmpContent;
+                } else if (metadataStream) {
+                    output += `Metadata reference found but stream is unreadable or not a stream: ${metadataStream.toString()}\n`;
                 } else {
                     output += `Root contains Metadata reference but stream is empty/null.\n`;
                 }
             } else {
-                output += `No XMP Metadata stream found in PDF root.\n`;
+                output += catalog ? `No '/Metadata' stream found in PDF root catalog.\n` : `PDF root catalog could not be localized.\n`;
             }
         } catch (e) {
             output += `Error reading XMP Stream: ${e.message}\n`;
