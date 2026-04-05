@@ -538,7 +538,7 @@ if (downloadBtn) {
             if (titleStr)    pdfDocLib.setTitle(titleStr);
             if (authorsStr)  pdfDocLib.setAuthor(authorsStr);
             if (abstractStr) pdfDocLib.setSubject(abstractStr);
-            if (kwStr)       pdfDocLib.setKeywords(kwStr);
+            if (kwStr)       pdfDocLib.setKeywords(kwStr.split(',').map(k => k.trim()).filter(Boolean));
 
             // --- Write custom structured fields into Info Dictionary ---
             // The high-level calls above (setTitle etc.) internally call pdf-lib's
