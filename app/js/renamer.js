@@ -59,6 +59,15 @@ const saveApiBtn = document.getElementById('save-api');
 const clearApiBtn = document.getElementById('clear-api');
 const storageStatus = document.getElementById('storage-status');
 
+// --- Metadata Viewer ---
+const viewMetaBtn = document.getElementById('view-meta-btn');
+const metadataModal = document.getElementById('metadata-modal');
+const metadataDisplay = document.getElementById('metadata-display');
+const metadataFilename = document.getElementById('metadata-filename');
+const closeMetadataModal = document.getElementById('close-metadata-modal');
+const closeMetadataModalBtn = document.getElementById('close-metadata-modal-btn');
+const metadataModalOverlay = document.getElementById('metadata-modal-overlay');
+
 // --- Auth Check ---
 async function initAuth() {
     if (window.DISABLE_SUPABASE_AUTH) {
@@ -597,6 +606,118 @@ if (extractPageBtn) {
         if (extractBtn) extractBtn.click();
     });
 }
+
+// --- Metadata Inspection Logic ---
+async function extractFullMetadata() {
+    if (!currentPdfBlob) {
+        alert('Please upload a PDF first to inspect its metadata.');
+        return;
+    }
+
+    metadataDisplay.value = "Analyzing PDF structure and extracting raw metadata... Please wait.";
+    metadataModal.classList.remove('hidden');
+    metadataFilename.innerText = currentPdfBlob.name;
+
+    try {
+        const arrBuffer = await currentPdfBlob.arrayBuffer();
+        const lib = window.PDFLib || PDFLib;
+        if (!lib) throw new Error("PDF-Lib not found.");
+        
+        const pdfDocLib = await lib.PDFDocument.load(arrBuffer, { 
+            updateMetadata: false, 
+            ignoreEncryption: true 
+        });
+
+        let output = `PDF METADATA ANALYSIS REPORT\n`;
+        output += `============================\n`;
+        output += `File: ${currentPdfBlob.name}\n`;
+        output += `Size: ${(currentPdfBlob.size / 1024).toFixed(2)} KB\n`;
+        output += `Pages: ${pdfDocLib.getPageCount()}\n`;
+        output += `\n`;
+
+        // 1. High-Level PDF-Lib Metadata
+        output += `[1] STANDARD FIELDS (High-Level API)\n`;
+        output += `------------------------------------\n`;
+        output += `Title:    ${pdfDocLib.getTitle() || 'None'}\n`;
+        output += `Author:   ${pdfDocLib.getAuthor() || 'None'}\n`;
+        output += `Subject:  ${pdfDocLib.getSubject() || 'None'}\n`;
+        output += `Creator:  ${pdfDocLib.getCreator() || 'None'}\n`;
+        output += `Producer: ${pdfDocLib.getProducer() || 'None'}\n`;
+        output += `Keywords: ${pdfDocLib.getKeywords() || 'None'}\n`;
+        output += `Created:  ${pdfDocLib.getCreationDate() || 'None'}\n`;
+        output += `Modified: ${pdfDocLib.getModificationDate() || 'None'}\n`;
+        output += `\n`;
+
+        // 2. Info Dictionary (Raw)
+        output += `[2] INFO DICTIONARY (Raw Entries)\n`;
+        output += `---------------------------------\n`;
+        try {
+            const infoId = pdfDocLib.context.trailer.get(lib.PDFName.of('Info'));
+            if (infoId) {
+                const infoDict = pdfDocLib.context.lookup(infoId);
+                if (infoDict && infoDict.entries) {
+                    for (const [key, value] of infoDict.entries()) {
+                        output += `${key.asString().padEnd(12)} : ${value.toString()}\n`;
+                    }
+                } else {
+                    output += `No entries found in Info dictionary.\n`;
+                }
+            } else {
+                output += `No Info dictionary found in PDF trailer.\n`;
+            }
+        } catch (e) {
+            output += `Error reading Info Dictionary: ${e.message}\n`;
+        }
+        output += `\n`;
+
+        // 3. XMP Metadata Stream
+        output += `[3] XMP METADATA STREAM\n`;
+        output += `-----------------------\n`;
+        try {
+            const catalog = pdfDocLib.context.lookup(pdfDocLib.context.trailer.get(lib.PDFName.of('Root')));
+            const metadataStreamRef = catalog.get(lib.PDFName.of('Metadata'));
+            
+            if (metadataStreamRef) {
+                const metadataStream = pdfDocLib.context.lookup(metadataStreamRef);
+                if (metadataStream) {
+                    const xmpContent = new TextDecoder().decode(metadataStream.getUncompressedContents());
+                    output += xmpContent;
+                } else {
+                    output += `Root contains Metadata reference but stream is empty/null.\n`;
+                }
+            } else {
+                output += `No XMP Metadata stream found in PDF root.\n`;
+            }
+        } catch (e) {
+            output += `Error reading XMP Stream: ${e.message}\n`;
+        }
+
+        metadataDisplay.value = output;
+        logToUi(`Full metadata inspection complete for ${currentPdfBlob.name}`);
+
+    } catch (err) {
+        console.error(err);
+        metadataDisplay.value = `CRITICAL ERROR DURING ANALYSIS:\n${err.message}\n\nStack Trace:\n${err.stack}`;
+        logToUi(`Metadata extraction failed: ${err.message}`);
+    }
+}
+
+// Modal Toggle Logic
+if (viewMetaBtn) {
+    viewMetaBtn.addEventListener('click', extractFullMetadata);
+}
+
+const hideMetadataModal = () => metadataModal.classList.add('hidden');
+if (closeMetadataModal) closeMetadataModal.addEventListener('click', hideMetadataModal);
+if (closeMetadataModalBtn) closeMetadataModalBtn.addEventListener('click', hideMetadataModal);
+if (metadataModalOverlay) metadataModalOverlay.addEventListener('click', hideMetadataModal);
+
+// Close modal on Escape key
+window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !metadataModal.classList.contains('hidden')) {
+        hideMetadataModal();
+    }
+});
 
 // --- Init ---
 initAuth();
