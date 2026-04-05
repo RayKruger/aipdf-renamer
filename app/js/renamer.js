@@ -482,7 +482,10 @@ if (extractBtn) {
 
             metaAbstract.value = meta2.abstract || '';
             metaShortTitle.value = meta2.short_title || metaShortTitle.value;
-            if (metaKeywords) metaKeywords.value = meta2.keywords || '';
+            if (metaKeywords) {
+                const kw = meta2.keywords;
+                metaKeywords.value = Array.isArray(kw) ? kw.join(', ') : (kw || '');
+            }
             if (metaAllAuthors) metaAllAuthors.value = meta2.all_authors || '';
 
             updateFilenamePreview();
@@ -538,7 +541,7 @@ if (downloadBtn) {
             if (titleStr)    pdfDocLib.setTitle(titleStr);
             if (authorsStr)  pdfDocLib.setAuthor(authorsStr);
             if (abstractStr) pdfDocLib.setSubject(abstractStr);
-            if (kwStr)       pdfDocLib.setKeywords(kwStr.split(',').map(k => k.trim()).filter(Boolean));
+            if (kwStr)       pdfDocLib.setKeywords([kwStr]);
 
             // --- Write custom structured fields into Info Dictionary ---
             // The high-level calls above (setTitle etc.) internally call pdf-lib's
