@@ -391,7 +391,7 @@
     <footer class="w-full px-5 py-3 bg-slate-900/40 border-t border-slate-800 mt-auto">
         <div
             class="max-w-6xl mx-auto flex flex-col items-center justify-center space-y-1 text-gray-400 text-xs shadow-sm">
-            <p>© Designed & Built by Ray Kruger</p>
+            <p>© Designed & Built by Ray Kruger | Build v2.1.4-fixed-height (2026-04-05 15:31)</p>
             <p>HTML • JS • Tailwind CSS • Supabase • Vercel ⚡⚡</p>
         </div>
     </footer>
@@ -400,7 +400,7 @@
     <div id="metadata-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="metadata-modal-overlay"></div>
         <div
-            class="glass relative w-full max-w-4xl max-h-[90vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-cyan-500/20">
+            class="glass relative w-full max-w-4xl h-[85vh] max-h-[90vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-cyan-500/20">
             <!-- Modal Header -->
             <div class="p-6 border-b border-slate-700/50 flex items-center justify-between bg-slate-900/40">
                 <div class="flex items-center gap-3">
@@ -436,7 +436,7 @@
                         <span id="metadata-filename" class="text-cyan-400/60 lowercase">no file selected</span>
                     </div>
                     <textarea id="metadata-display" readonly
-                        class="flex-1 w-full h-[75vh] bg-black/40 border border-slate-700/50 rounded-2xl p-6 font-mono text-xs text-cyan-50/80 focus:outline-none focus:border-cyan-500/30 transition-colors leading-relaxed shadow-inner"
+                        class="flex-1 w-full h-full min-h-[60vh] bg-black/40 border border-slate-700/50 rounded-2xl p-6 font-mono text-xs text-cyan-50/80 focus:outline-none focus:border-cyan-500/30 transition-colors leading-relaxed shadow-inner"
                         placeholder="Metadata will appear here after analysis..."></textarea>
                 </div>
             </div>
