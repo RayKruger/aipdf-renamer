@@ -61,6 +61,13 @@ const storageStatus = document.getElementById('storage-status');
 
 // --- Auth Check ---
 async function initAuth() {
+    if (window.DISABLE_SUPABASE_AUTH) {
+        // Hide auth UI if disabled
+        const authSection = document.querySelector('.flex.items-center.gap-3.text-sm.border-r.border-slate-700.pr-5');
+        if (authSection) authSection.style.display = 'none';
+        return;
+    }
+
     const session = await window.auth.checkSession();
     if (!session) {
         window.location.href = 'index.html';
@@ -73,6 +80,7 @@ async function initAuth() {
 const logoutBtn = document.getElementById('logout-btn');
 if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {
+        if (window.DISABLE_SUPABASE_AUTH) return;
         await window.auth.signOut();
         window.location.href = 'index.html';
     });

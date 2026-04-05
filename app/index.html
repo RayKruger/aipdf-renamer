@@ -725,6 +725,15 @@
 
             // Initialize session check
             window.addEventListener('load', async () => {
+                if (window.DISABLE_SUPABASE_AUTH) {
+                    authBtn.innerText = 'Go to Renamer';
+                    authBtn.addEventListener('click', (e) => {
+                        e.stopImmediatePropagation();
+                        window.location.href = 'renamer.html';
+                    }, true);
+                    return;
+                }
+
                 const session = await window.auth.checkSession();
                 if (session) {
                     window.user = session.user;
