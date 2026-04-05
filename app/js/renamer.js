@@ -503,63 +503,82 @@ if (extractBtn) {
 if (downloadBtn) {
     downloadBtn.addEventListener('click', async () => {
         if (!currentPdfBlob) { alert('Upload a PDF first!'); return; }
-        
+
         const newName = updateFilenamePreview();
         downloadBtn.disabled = true;
         downloadBtn.innerText = 'Embedding Metadata...';
-        
+
         try {
             logToUi(`Starting metadata embedding...`);
-            
+
             // 1. Read the PDF blob as ArrayBuffer
             const arrBuffer = await currentPdfBlob.arrayBuffer();
-            
+
             // 2. Load the PDF with pdf-lib
-            // Using window.PDFLib to be safe with global scope
             const lib = window.PDFLib || PDFLib;
             if (!lib) throw new Error("PDF-Lib library not found. Please check your connection.");
-            
-            const pdfDocLib = await lib.PDFDocument.load(arrBuffer);
-            
-            // 3. Set standard metadata fields via High-Level API
-            if (metaTitle.value) pdfDocLib.setTitle(metaTitle.value.trim());
-            
-            const authorsStr = (metaAllAuthors && metaAllAuthors.value) ? metaAllAuthors.value.trim() : metaAuthor.value.trim();
-            if (authorsStr) pdfDocLib.setAuthor(authorsStr);
-            
-            let subjectStr = "";
-            if (metaVenue.value) subjectStr += `Published in: ${metaVenue.value.trim()}\n`;
-            if (metaYear.value) subjectStr += `Year: ${metaYear.value.trim()}\n`;
-            if (metaAbstract.value) subjectStr += `Abstract: ${metaAbstract.value.trim()}`;
-            
-            if (subjectStr) pdfDocLib.setSubject(subjectStr); 
 
-            // 3b. FORCE update the Info Dictionary (Acrobat fallback)
+            const pdfDocLib = await lib.PDFDocument.load(arrBuffer);
+
+            // --- Collect field values ---
+            const titleStr      = metaTitle.value.trim();
+            const authorsStr    = (metaAllAuthors?.value?.trim()) || metaAuthor.value.trim();
+            const firstAuthor   = metaAuthor.value.trim();
+            const abstractStr   = metaAbstract.value.trim();
+            const kwStr         = metaKeywords?.value?.trim() || '';
+            const venueStr      = metaVenue.value.trim();
+            const yearStr       = metaYear.value.trim();
+            const shortTitle    = metaShortTitle?.value?.trim() || '';
+
+            // --- Standard High-Level Fields (RAG field mapping) ---
+            // Title   → full paper title
+            // Author  → all authors (full names, comma-separated)
+            // Subject → abstract ONLY (clean text for semantic search)
+            // Keywords→ AI-extracted keywords (replaced, not appended)
+            if (titleStr)    pdfDocLib.setTitle(titleStr);
+            if (authorsStr)  pdfDocLib.setAuthor(authorsStr);
+            if (abstractStr) pdfDocLib.setSubject(abstractStr);
+            if (kwStr)       pdfDocLib.setKeywords(kwStr);
+
+            // --- Write custom structured fields into Info Dictionary ---
+            // The high-level calls above (setTitle etc.) internally call pdf-lib's
+            // getInfoDict() which creates/stores the dict at context.trailerInfo.Info
+            // (NOT context.trailer — that path is undefined for arXiv/pikepdf PDFs).
+            // We access it via the same internal path so custom fields are guaranteed
+            // to land in the same dict that gets saved.
             try {
-                const infoDict = pdfDocLib.context.lookup(pdfDocLib.context.trailer.get(lib.PDFName.of('Info')));
+                const infoRef = pdfDocLib.context.trailerInfo?.Info;
+                const infoDict = infoRef ? pdfDocLib.context.lookup(infoRef) : null;
+
                 if (infoDict) {
-                    if (subjectStr) infoDict.set(lib.PDFName.of('Subject'), lib.PDFString.of(subjectStr));
-                    if (metaTitle.value) infoDict.set(lib.PDFName.of('Title'), lib.PDFString.of(metaTitle.value.trim()));
-                    logToUi("Info Dictionary fields forced.");
+                    const setInfo = (key, val) => {
+                        if (val) infoDict.set(lib.PDFName.of(key), lib.PDFString.of(val));
+                    };
+
+                    // Ensure standard fields are in sync (Acrobat fallback)
+                    setInfo('Title',    titleStr);
+                    setInfo('Author',   authorsStr);
+                    setInfo('Subject',  abstractStr);
+                    setInfo('Keywords', kwStr);
+
+                    // Structured custom fields for RAG field-level queries
+                    setInfo('Year',        yearStr);
+                    setInfo('Venue',       venueStr);
+                    setInfo('ShortTitle',  shortTitle);
+                    setInfo('FirstAuthor', firstAuthor);
+
+                    logToUi("Info Dictionary: all structured fields written.");
+                } else {
+                    logToUi("Info Dictionary: not accessible, standard fields only.");
                 }
             } catch (e) {
                 console.warn("Manual InfoDict update failed, relying on high-level API.", e);
             }
-            
-            // Keywords
-            if (metaKeywords && metaKeywords.value) {
-                const kws = metaKeywords.value.split(',').map(k => k.trim()).filter(k => k);
-                if (kws.length > 0) {
-                    const existing = pdfDocLib.getKeywords() || "";
-                    const newKws = kws.join(', ');
-                    pdfDocLib.setKeywords(existing ? `${existing}, ${newKws}` : newKws);
-                }
-            }
-            
-            // 4. Save and Download
+
+            // 3. Save and Download
             const modifiedPdfBytes = await pdfDocLib.save();
             const modifiedBlob = new Blob([modifiedPdfBytes], { type: 'application/pdf' });
-            
+
             const url = URL.createObjectURL(modifiedBlob);
             const a = document.createElement('a');
             a.href = url;
@@ -568,7 +587,7 @@ if (downloadBtn) {
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            
+
             logToUi(`SUCCESS: Full metadata embedded in ${newName}`);
         } catch (err) {
             console.error(err);
