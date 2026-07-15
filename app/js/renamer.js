@@ -73,6 +73,60 @@ const BASE_URL_MAP = {
     custom: 'http://localhost:11434/v1'
 };
 
+// Extract a JSON object even if the model wrapped it in prose or code fences
+function parseJsonLoose(text) {
+    try { return JSON.parse(text); } catch (e) { /* fall through */ }
+    const match = text.match(/\{[\s\S]*\}/);
+    if (match) return JSON.parse(match[0]);
+    throw new Error('Model response did not contain valid JSON.');
+}
+
+// Provider-aware completion call. Anthropic uses /messages with x-api-key;
+// Gemini is reached through its OpenAI-compatible endpoint; OpenAI/custom
+// use /chat/completions directly.
+async function callLLM(active, prompt) {
+    const base = (active.baseUrl || BASE_URL_MAP[active.type] || '').replace(/\/$/, '');
+
+    if (active.type === 'claude') {
+        const resp = await fetch(`${base}/messages`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': active.key,
+                'anthropic-version': '2023-06-01',
+                'anthropic-dangerous-direct-browser-access': 'true'
+            },
+            body: JSON.stringify({
+                model: active.model,
+                max_tokens: 1024,
+                messages: [{ role: 'user', content: prompt + '\nRespond with ONLY the JSON object, no other text.' }]
+            })
+        });
+        if (!resp.ok) throw new Error(`Anthropic API Error ${resp.status}: ${(await resp.text()).substring(0, 200)}`);
+        const data = await resp.json();
+        const text = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
+        return parseJsonLoose(text);
+    }
+
+    // Gemini exposes an OpenAI-compatible surface under /openai
+    const chatBase = active.type === 'gemini' ? `${base}/openai` : base;
+    const resp = await fetch(`${chatBase}/chat/completions`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${active.key}`
+        },
+        body: JSON.stringify({
+            model: active.model,
+            messages: [{ role: 'user', content: prompt }],
+            response_format: { type: "json_object" }
+        })
+    });
+    if (!resp.ok) throw new Error(`API Error ${resp.status}: ${(await resp.text()).substring(0, 200)}`);
+    const data = await resp.json();
+    return parseJsonLoose(data.choices[0].message.content);
+}
+
 // --- UI Elements ---
 const dropZone = document.getElementById('drop-zone');
 const pdfInput = document.getElementById('pdf-input');
@@ -507,25 +561,7 @@ if (extractBtn) {
                 .replace('{{page}}', currentPage)
                 .replace('{{text}}', extractedText.substring(0, 4000));
 
-            const reqHeaders = {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${active.key}`,
-                ...(active.type === 'claude' ? { 'anthropic-version': '2023-06-01' } : {})
-            };
-
-            const response1 = await fetch(`${active.baseUrl}/chat/completions`, {
-                method: 'POST',
-                headers: reqHeaders,
-                body: JSON.stringify({
-                    model: active.model,
-                    messages: [{ role: 'user', content: prompt1 }],
-                    response_format: { type: "json_object" }
-                })
-            });
-
-            if (!response1.ok) throw new Error(`API Error (Prompt 1): ${response1.status}`);
-            const data1 = await response1.json();
-            const meta1 = JSON.parse(data1.choices[0].message.content);
+            const meta1 = await callLLM(active, prompt1);
 
             metaYear.value = meta1.year || '';
             metaAuthor.value = meta1.author || '';
@@ -541,19 +577,7 @@ if (extractBtn) {
                 .replace('{{page}}', currentPage)
                 .replace('{{text}}', extractedText.substring(0, 4000));
 
-            const response2 = await fetch(`${active.baseUrl}/chat/completions`, {
-                method: 'POST',
-                headers: reqHeaders,
-                body: JSON.stringify({
-                    model: active.model,
-                    messages: [{ role: 'user', content: prompt2 }],
-                    response_format: { type: "json_object" }
-                })
-            });
-
-            if (!response2.ok) throw new Error(`API Error (Prompt 2): ${response2.status}`);
-            const data2 = await response2.json();
-            const meta2 = JSON.parse(data2.choices[0].message.content);
+            const meta2 = await callLLM(active, prompt2);
 
             metaAbstract.value = meta2.abstract || '';
             metaShortTitle.value = meta2.short_title || metaShortTitle.value;
@@ -568,7 +592,7 @@ if (extractBtn) {
         } catch (error) {
             console.error(error);
             logToUi(`Extraction Error: ${error.message}`);
-            alert('Failed to extract metadata. Check your API settings and quota.');
+            alert(`Failed to extract metadata: ${error.message}`);
         } finally {
             extractBtn.disabled = false;
             extractBtn.innerText = 'Extract Fields';
