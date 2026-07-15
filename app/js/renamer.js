@@ -15,10 +15,56 @@ let PROMPTS = {
 
 const MODEL_MAP = {
     openai: ['gpt-5-mini', 'gpt-5-nano', 'gpt-5.4-mini', 'gpt-5.4-nano', 'gpt-5', 'gpt-4o-mini', 'gpt-4o'],
-    claude: ['claude-3-5-sonnet-20240620', 'claude-3-opus-20240229', 'claude-3-haiku-20240307'],
-    gemini: ['gemini-1.5-flash', 'gemini-1.5-pro'],
+    claude: ['claude-haiku-4-5', 'claude-sonnet-5', 'claude-sonnet-4-6', 'claude-opus-4-8'],
+    gemini: ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-1.5-flash', 'gemini-1.5-pro'],
     custom: ['llama3', 'mistral', 'phi3']
 };
+
+// --- Live model lookup ---
+// Queries the provider's models endpoint so the dropdown always shows current model names.
+// Falls back to MODEL_MAP (returns null) when no key is set or the request fails.
+async function fetchLatestModels(type, key, baseUrl) {
+    if (!key && type !== 'custom') return null;
+    try {
+        if (type === 'claude') {
+            const resp = await fetch(`${BASE_URL_MAP.claude}/models?limit=100`, {
+                headers: {
+                    'x-api-key': key,
+                    'anthropic-version': '2023-06-01',
+                    'anthropic-dangerous-direct-browser-access': 'true'
+                }
+            });
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const json = await resp.json();
+            return (json.data || []).map(m => m.id);
+        }
+        if (type === 'gemini') {
+            const resp = await fetch(`${BASE_URL_MAP.gemini}/models?key=${encodeURIComponent(key)}`);
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const json = await resp.json();
+            return (json.models || [])
+                .filter(m => (m.supportedGenerationMethods || []).includes('generateContent'))
+                .map(m => m.name.replace(/^models\//, ''));
+        }
+        // openai + custom (OpenAI-compatible endpoints, incl. Ollama's /v1)
+        const base = (baseUrl || BASE_URL_MAP[type] || '').replace(/\/$/, '');
+        const resp = await fetch(`${base}/models`, {
+            headers: key ? { 'Authorization': `Bearer ${key}` } : {}
+        });
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const json = await resp.json();
+        let ids = (json.data || []).map(m => m.id);
+        if (type === 'openai') {
+            // Keep chat-capable models; drop embeddings/audio/image/moderation variants
+            ids = ids.filter(id => /^(gpt-|o\d)/.test(id) && !/(embedding|audio|realtime|image|tts|whisper|moderation|transcribe|search)/.test(id));
+        }
+        ids.sort().reverse();
+        return ids.length ? ids : null;
+    } catch (e) {
+        console.warn(`Model lookup failed for ${type}:`, e);
+        return null;
+    }
+}
 
 const BASE_URL_MAP = {
     openai: 'https://api.openai.com/v1',
@@ -135,7 +181,10 @@ function createProviderRow(data = {}) {
             </select>
         </div>
         <div class="md:col-span-3 space-y-1">
-            <label class="text-[10px] font-bold text-slate-500 uppercase">Model</label>
+            <div class="flex items-center justify-between">
+                <label class="text-[10px] font-bold text-slate-500 uppercase">Model</label>
+                <button type="button" class="refresh-models text-[10px] font-bold text-cyan-500 hover:text-cyan-300 transition uppercase" title="Fetch the latest model names from this provider">&#8635; Latest</button>
+            </div>
             <div class="model-input-container">
                 ${providerType === 'custom' 
                     ? `<input type="text" value="${data.model || ''}" placeholder="Enter model name" class="provider-model w-full rounded-lg px-3 py-2 text-sm focus:outline-none transition bg-slate-900 border border-slate-700">`
@@ -171,6 +220,28 @@ function createProviderRow(data = {}) {
     const modelSelect = row.querySelector('.provider-model');
     const customUrlContainer = row.querySelector('.custom-url-container');
     const baseUrlInput = row.querySelector('.provider-base-url');
+    const refreshBtn = row.querySelector('.refresh-models');
+    const keyInput = row.querySelector('.provider-key');
+
+    // Look up the latest model names for this row and repopulate the dropdown.
+    // Keeps the current selection if it still exists; falls back to MODEL_MAP silently.
+    async function refreshRowModels() {
+        const type = typeSelect.value;
+        const modelEl = row.querySelector('.provider-model');
+        if (!modelEl || modelEl.tagName !== 'SELECT') return; // custom uses free text
+        refreshBtn.textContent = '… Loading';
+        refreshBtn.disabled = true;
+        const latest = await fetchLatestModels(type, keyInput.value.trim(), baseUrlInput.value.trim());
+        refreshBtn.innerHTML = '&#8635; Latest';
+        refreshBtn.disabled = false;
+        if (!latest || !latest.length) return;
+        const current = modelEl.value;
+        modelEl.innerHTML = latest.map(m => `<option value="${m}" ${m === current ? 'selected' : ''}>${m}</option>`).join('');
+        logToUi(`Loaded ${latest.length} latest ${type} models.`);
+    }
+
+    refreshBtn.addEventListener('click', refreshRowModels);
+    keyInput.addEventListener('change', refreshRowModels);
 
     typeSelect.addEventListener('change', (e) => {
         const type = e.target.value;
@@ -193,7 +264,11 @@ function createProviderRow(data = {}) {
             customUrlContainer.classList.add('hidden');
         }
         baseUrlInput.value = BASE_URL_MAP[type] || '';
+        refreshRowModels();
     });
+
+    // Always attempt a live lookup when the row appears (no-op without an API key)
+    setTimeout(refreshRowModels, 0);
 
     row.querySelector('.remove-provider').addEventListener('click', () => {
         if (document.querySelectorAll('.provider-row').length > 1) {
